@@ -1,0 +1,840 @@
+body{
+  margin:0;
+  font-family:'Poppins',sans-serif;
+  background:radial-gradient(circle at top,#0f172a,#020617);
+  color:white;
+}
+
+.app{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+
+/* portada */
+.cards-top{
+ display:flex;
+ justify-content:center;
+ gap:30px;
+ margin-bottom:30px;
+}
+
+.cards-top img{
+ width:140px;
+ border-radius:16px;
+ box-shadow:0 15px 40px rgba(0,0,0,.6);
+ transition:.3s;
+}
+
+.cards-top img:hover{
+ transform:scale(1.08);
+}
+
+.title{
+ font-size:42px;
+ font-weight:800;
+}
+
+.title span{
+ color:gold;
+ text-shadow:0 0 20px gold;
+}
+
+.subtitle{
+ opacity:.8;
+ margin-bottom:30px;
+}
+
+/* contenedor negro */
+.game-container{
+ display:flex;
+ width:95%;
+ max-width:1350px;
+ border-radius:25px;
+ overflow:hidden;
+ background:rgba(15,23,42,.85);
+ backdrop-filter:blur(12px);
+ box-shadow:0 0 40px rgba(0,255,255,.15);
+}
+
+.sidebar{
+ width:120px;
+ background:rgba(2,6,23,.9);
+ padding:20px;
+ text-align:center;
+ border-right:1px solid rgba(255,255,255,.1);
+}
+
+.sidebar h3{
+ font-size:22px;
+}
+
+.game-main{
+ flex:1;
+ padding:40px;
+ text-align:center;
+ animation:fadeIn .5s;
+}
+
+.game-main h1{
+ font-size:42px;
+ background:linear-gradient(90deg,#00f0ff,#a855f7);
+ -webkit-background-clip:text;
+ -webkit-text-fill-color:transparent;
+}
+
+/* academia */
+.grid{
+ display:grid;
+ grid-template-columns:repeat(4,180px);
+ gap:18px;
+ justify-content:center;
+ padding:30px;
+ width:100%;
+}
+
+.card{
+ width:170px;
+ height:210px;
+ border-radius:25px;
+ background:rgba(255,255,255,.05);
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ overflow:hidden;
+ transition:.3s;
+}
+
+.card:hover{
+ transform:translateY(-6px) scale(1.04);
+ box-shadow:0 0 25px #00f0ff;
+}
+
+.card img{
+ width:150px;
+ height:150px;
+ object-fit:contain;
+ margin-top:5px;
+}
+
+.card p{
+ margin-top:8px;
+ font-size:20px;
+ font-weight:bold;
+}
+
+/* botones */
+button{
+ border:none;
+ padding:14px 30px;
+ border-radius:30px;
+ background:linear-gradient(90deg,#00f0ff,#a855f7);
+ color:white;
+ font-weight:bold;
+ cursor:pointer;
+}
+
+button:hover{
+ transform:scale(1.05);
+ box-shadow:0 0 25px #00f0ff;
+}
+
+.carta{
+ background:rgba(15,23,42,.9);
+ padding:10px;
+ border-radius:16px;
+}
+
+.carta img{
+ width:100%;
+ border-radius:10px;
+}
+
+@keyframes fadeIn{
+ from{
+  opacity:0;
+  transform:translateY(20px);
+ }
+ to{
+  opacity:1;
+  transform:translateY(0);
+ }
+}
+/* ========================= */
+/* ✨ MEJORAS EXTRA SIN ROMPER */
+/* ========================= */
+
+/* brillo suave del panel principal */
+.game-container{
+  box-shadow:
+  0 0 30px rgba(0,255,255,.15),
+  0 0 60px rgba(168,85,247,.12),
+  0 0 90px rgba(0,255,255,.08) !important;
+}
+
+/* tarjetas academia premium */
+.card{
+  border:1px solid rgba(255,255,255,.08);
+  backdrop-filter: blur(8px);
+}
+
+/* luz superior */
+.card::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:40%;
+  background:linear-gradient(
+    to bottom,
+    rgba(255,255,255,.08),
+    transparent
+  );
+  pointer-events:none;
+}
+
+/* brillo imágenes */
+.card img{
+  filter:
+    drop-shadow(0 0 8px rgba(255,255,255,.25))
+    drop-shadow(0 0 18px rgba(0,255,255,.15));
+}
+
+/* hover mejorado */
+.card:hover{
+  transform:translateY(-6px) scale(1.04);
+
+  box-shadow:
+  0 0 20px #00f0ff,
+  0 0 35px rgba(168,85,247,.4);
+}
+
+/* títulos más vivos */
+.card p{
+  text-shadow:
+  0 0 8px rgba(255,255,255,.35);
+}
+
+/* botones más iluminados */
+.game-main button{
+  box-shadow:
+  0 0 15px rgba(0,255,255,.5);
+}
+
+.game-main button:hover{
+  box-shadow:
+  0 0 30px #00f0ff,
+  0 0 50px #a855f7;
+}
+
+/* animación suave flotante */
+.cards-top img{
+  animation:flotar 3s ease-in-out infinite;
+}
+
+@keyframes flotar{
+  0%{
+    transform:translateY(0px);
+  }
+
+  50%{
+    transform:translateY(-6px);
+  }
+
+  100%{
+    transform:translateY(0px);
+  }
+}
+/* ========================= */
+/* 🌌 ULTRA EFECTOS PRO */
+/* ========================= */
+
+/* fondo vivo */
+
+body::before{
+
+content:"";
+
+position:fixed;
+
+top:0;
+left:0;
+
+width:100%;
+height:100%;
+
+background:
+
+radial-gradient(
+circle at 20% 20%,
+rgba(0,255,255,.08),
+transparent 30%
+),
+
+radial-gradient(
+circle at 80% 60%,
+rgba(168,85,247,.08),
+transparent 30%
+),
+
+radial-gradient(
+circle at 50% 90%,
+rgba(255,215,0,.06),
+transparent 30%
+);
+
+pointer-events:none;
+
+animation:fondoMover 15s infinite alternate;
+
+z-index:-1;
+
+}
+
+@keyframes fondoMover{
+
+0%{
+transform:translateX(0);
+}
+
+100%{
+transform:translateX(40px);
+}
+
+}
+
+
+/* brillo alrededor academia */
+
+.grid{
+
+box-shadow:
+
+0 0 25px rgba(0,255,255,.1),
+
+0 0 60px rgba(168,85,247,.1);
+
+}
+
+
+/* tarjetas respirando */
+
+.card{
+
+animation:respirar 4s infinite ease-in-out;
+
+position:relative;
+
+}
+
+@keyframes respirar{
+
+0%{
+transform:scale(1);
+}
+
+50%{
+transform:scale(1.02);
+}
+
+100%{
+transform:scale(1);
+}
+
+}
+
+
+/* línea brillante arriba */
+
+.card::after{
+
+content:"";
+
+position:absolute;
+
+top:0;
+left:-100%;
+
+width:50%;
+
+height:100%;
+
+background:
+
+linear-gradient(
+90deg,
+transparent,
+rgba(255,255,255,.2),
+transparent
+);
+
+transform:skewX(-20deg);
+
+animation:reflejo 4s infinite;
+
+}
+
+@keyframes reflejo{
+
+100%{
+
+left:180%;
+
+}
+
+}
+
+
+/* TITULO SUPER */
+
+.title{
+
+font-size:50px;
+
+letter-spacing:3px;
+
+text-shadow:
+
+0 0 10px cyan,
+
+0 0 20px cyan,
+
+0 0 40px purple;
+
+}
+
+
+/* subtitulo */
+
+.subtitle{
+
+font-size:18px;
+
+letter-spacing:2px;
+
+opacity:.9;
+
+}
+
+
+/* sidebar mejorado */
+
+.sidebar{
+
+box-shadow:
+
+0 0 20px rgba(0,255,255,.15);
+
+}
+
+
+/* numeros sidebar */
+
+.sidebar h3{
+
+padding:10px;
+
+border-radius:15px;
+
+background:rgba(255,255,255,.04);
+
+box-shadow:
+
+0 0 15px rgba(255,255,255,.04);
+
+}
+
+
+/* imágenes arriba */
+
+.cards-top img{
+
+border:2px solid rgba(255,255,255,.08);
+
+}
+
+
+/* cartas colección */
+
+.carta{
+
+background:
+
+linear-gradient(
+180deg,
+rgba(255,255,255,.06),
+rgba(15,23,42,.9)
+);
+
+border:
+
+1px solid rgba(255,255,255,.05);
+
+}
+
+
+.carta:hover{
+
+box-shadow:
+
+0 0 20px cyan,
+
+0 0 50px purple;
+
+}
+
+
+/* botones con pulsación */
+
+button{
+
+animation:pulso 3s infinite;
+
+}
+
+@keyframes pulso{
+
+0%{
+
+box-shadow:
+0 0 0px cyan;
+
+}
+
+50%{
+
+box-shadow:
+0 0 15px cyan;
+
+}
+
+100%{
+
+box-shadow:
+0 0 0px cyan;
+
+}
+
+}
+/* ========================= */
+/* 🌌 PREGUNTAS PRO */
+/* ========================= */
+
+.pregunta-box{
+
+width:80%;
+
+margin:30px auto;
+
+padding:25px;
+
+border-radius:25px;
+
+background:
+linear-gradient(
+180deg,
+rgba(0,255,255,.08),
+rgba(168,85,247,.08)
+);
+
+backdrop-filter:blur(10px);
+
+border:
+
+1px solid rgba(
+255,
+255,
+255,
+0.08
+);
+
+box-shadow:
+
+0 0 25px rgba(
+0,
+255,
+255,
+0.2
+),
+
+0 0 40px rgba(
+168,
+85,
+247,
+0.1
+);
+
+animation:entradaPregunta .5s;
+
+}
+
+.pregunta-header{
+
+font-size:16px;
+
+color:#00f0ff;
+
+font-weight:bold;
+
+margin-bottom:15px;
+
+letter-spacing:2px;
+
+}
+
+.pregunta-texto{
+
+font-size:30px;
+
+font-weight:700;
+
+line-height:1.6;
+
+text-shadow:
+
+0 0 10px rgba(
+255,
+255,
+255,
+0.25
+);
+
+}
+
+.respuesta-box{
+
+margin-top:25px;
+
+padding:18px;
+
+border-radius:20px;
+
+background:
+rgba(
+255,
+255,
+255,
+0.05
+);
+
+font-size:26px;
+
+min-height:45px;
+
+box-shadow:
+
+0 0 20px rgba(
+0,
+255,
+255,
+0.08
+);
+
+}
+
+@keyframes entradaPregunta{
+
+from{
+
+opacity:0;
+
+transform:
+translateY(
+20px
+);
+
+}
+
+to{
+
+opacity:1;
+
+transform:
+translateY(
+0
+);
+
+}
+
+}
+/* ❤️ DUOLINGO */
+
+.sidebar h3{
+
+animation:latido 2s infinite;
+
+}
+
+@keyframes latido{
+
+0%{
+
+transform:scale(1);
+
+}
+
+50%{
+
+transform:scale(1.15);
+
+}
+
+100%{
+
+transform:scale(1);
+
+}
+
+}
+
+/* XP */
+
+.xp-container{
+
+height:18px;
+
+background:#222;
+
+border-radius:20px;
+
+overflow:hidden;
+
+margin-bottom:10px;
+
+}
+
+.xp-fill{
+
+height:100%;
+
+background:
+
+linear-gradient(
+90deg,
+#00ff88,
+#00f0ff
+);
+
+border-radius:20px;
+
+transition:1s;
+
+}
+
+.xp-text{
+
+font-size:14px;
+
+color:#00ff88;
+
+}
+
+
+/* preguntas estilo duolingo */
+
+.pregunta-box{
+
+border:3px solid #58cc02;
+
+background:
+
+linear-gradient(
+180deg,
+rgba(88,204,2,.15),
+rgba(88,204,2,.03)
+);
+
+}
+/* ===== DUOLINGO RPG ===== */
+
+.estado-top{
+
+display:flex;
+
+justify-content:center;
+
+gap:20px;
+
+margin:20px;
+
+}
+
+.cliente-card,
+.clima-card{
+
+padding:12px 25px;
+
+border-radius:30px;
+
+background:
+
+rgba(
+255,
+255,
+255,
+0.08
+);
+
+font-size:22px;
+
+font-weight:bold;
+
+box-shadow:
+
+0 0 20px rgba(
+0,
+255,
+255,
+0.15
+);
+
+}
+
+.feedback-box{
+
+margin-top:20px;
+
+padding:18px;
+
+font-size:26px;
+
+font-weight:bold;
+
+border-radius:20px;
+
+background:
+
+linear-gradient(
+90deg,
+#58cc02,
+#89e219
+);
+
+color:white;
+
+animation:pop .4s;
+
+}
+
+@keyframes pop{
+
+0%{
+
+transform:scale(.7);
+
+opacity:0;
+
+}
+
+100%{
+
+transform:scale(1);
+
+opacity:1;
+
+}
+
+}
