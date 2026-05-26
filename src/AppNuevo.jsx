@@ -57,7 +57,32 @@ console.log(intermedio)
   })
 
   const [cartas, setCartas] = useState([])
+  const [usuario,setUsuario]=useState(
 
+JSON.parse(
+localStorage.getItem("usuario")
+)
+
+||
+
+{
+
+nombre:"Jugador",
+correo:"",
+clan:"",
+animalInicial:""
+
+}
+
+)
+
+  const [recuerdo,setRecuerdo]=useState({
+
+  animal:"",
+  historia:"",
+  emocion:""
+
+   })
 useEffect(() => {
   const guardadas = localStorage.getItem("cartas")
   if (guardadas) {
@@ -1524,44 +1549,7 @@ next
     <div className="game-main">
 
       <h1>🎓 Academia</h1>
-<div
-style={{
-position:"fixed",
-top:"15px",
-right:"15px",
-zIndex:"9999"
-}}
->
 
-<button
-onClick={()=>{
-reproducirMusica("/sounds/menu.mp3")
-setModo("tienda")
-}}
-style={{
-position:"fixed",
-top:"15px",
-right:"35px",
-
-zIndex:"9999",
-width:"90px",
-height:"90px",
-borderRadius:"25px",
-fontSize:"32px",
-border:"none",
-cursor:"pointer",
-background:
-"linear-gradient(135deg,#FFD700,#FFA500)",
-boxShadow:
-"0 6px 18px rgba(255,215,0,.5)"
-}}
->
-
-👑
-
-</button>
-
-</div>
       <p>Selecciona una profesión</p>
 
    <div className="grid">
@@ -1960,11 +1948,189 @@ onClick={()=>setModo("academia")}
 ← volver
 </button>
 
-<button
-onClick={()=>setModo("tienda")}
+
+</div>
+
+</div>
+
+</div>
+
+)}
+
+
+{/* 👤 PERFIL */}
+
+{modo==="perfil" && (
+
+<div className="game-container">
+
+<div className="game-main">
+
+<div
+style={{
+position:"relative",
+display:"inline-block"
+}}
 >
-👑 PRO
-</button>
+
+<img
+src="/perfil-portada.png"
+style={{
+width:"70%",
+maxWidth:"500px",
+height:"auto",
+display:"block",
+margin:"auto",
+borderRadius:"30px"
+}}
+/>
+
+{/* EDITAR PERFIL */}
+
+<button
+onClick={()=>{
+
+const nuevoNombre=prompt(
+"Nuevo nombre:",
+usuario.nombre
+)
+
+if(nuevoNombre){
+
+const nuevoUsuario={
+...usuario,
+nombre:nuevoNombre
+}
+
+setUsuario(nuevoUsuario)
+
+localStorage.setItem(
+"usuario",
+JSON.stringify(nuevoUsuario)
+)
+
+}
+
+}}
+style={{
+position:"absolute",
+left:"35px",
+top:"390px",
+width:"120px",
+height:"70px",
+opacity:0,
+border:"none",
+background:"transparent"
+}}
+/>
+
+{/* AVATAR */}
+
+<button
+onClick={()=>{
+alert("Cambiar avatar")
+}}
+style={{
+position:"absolute",
+left:"170px",
+top:"390px",
+width:"140px",
+height:"70px",
+opacity:0,
+border:"none",
+background:"transparent"
+}}
+/>
+
+{/* INICIO */}
+
+<button
+onClick={()=>{
+setModo("academia")
+}}
+style={{
+position:"absolute",
+left:"0px",
+top:"470px",
+width:"50px",
+height:"50px",
+opacity:0,
+border:"none",
+background:"transparent"
+}}
+/>
+
+{/* ACADEMIA */}
+
+<button
+onClick={()=>{
+setModo("menu")
+}}
+style={{
+position:"absolute",
+left:"78px",
+top:"470px",
+width:"50px",
+height:"50px",
+opacity:0,
+border:"none",
+background:"transparent"
+}}
+/>
+
+{/* BATALLA */}
+
+<button
+onClick={()=>{
+setModo("batalla")
+}}
+style={{
+position:"absolute",
+left:"158px",
+top:"470px",
+width:"50px",
+height:"50px",
+opacity:0,
+border:"none",
+background:"transparent"
+}}
+/>
+
+{/* TIENDA */}
+
+<button
+onClick={()=>{
+setModo("tienda")
+}}
+style={{
+position:"absolute",
+left:"238px",
+top:"470px",
+width:"50px",
+height:"50px",
+opacity:0,
+border:"none",
+background:"transparent"
+}}
+/>
+
+{/* MÁS */}
+
+<button
+onClick={()=>{
+alert("Más opciones")
+}}
+style={{
+position:"absolute",
+left:"318px",
+top:"470px",
+width:"50px",
+height:"50px",
+opacity:0,
+border:"none",
+background:"transparent"
+}}
+/>
 
 </div>
 
@@ -6867,9 +7033,20 @@ zIndex:"9999"
               <img src="/pack.png" />
             </div>
 
-            <div className="card" onClick={() => playSound()}>
-              <img src="/academy.png" />
-            </div>
+            <div
+className="card"
+onClick={()=>{
+setModo("perfil")
+}}
+>
+
+<img src="/perfil.png"/>
+
+<span>
+👤 PERFIL
+</span>
+
+</div>
             <button
 onClick={()=>setModo("tienda")}
 style={{
@@ -6902,6 +7079,11 @@ boxShadow:
 
 
 export default App
+
+
+
+
+
 
 
 

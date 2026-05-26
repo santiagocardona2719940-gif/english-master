@@ -1,11 +1,11 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import AppNuevo from "./AppNuevo.jsx";
+import CardScreen from "./screens/CardScreen";
 
-ReactDOM.createRoot(
-document.getElementById("root")
-).render(
-<React.StrictMode>
-<AppNuevo />
-</React.StrictMode>
-);
+function App() {
+  return (
+    <div>
+      <CardScreen />
+    </div>
+  );
+}
+
+export default App;
