@@ -1960,6 +1960,8 @@ onClick={()=>setModo("academia")}
 
 {/* 👤 PERFIL */}
 
+{/* 👤 PERFIL */}
+
 {modo==="perfil" && (
 
 <div className="game-container">
@@ -1976,8 +1978,8 @@ display:"inline-block"
 <img
 src="/perfil-portada.png"
 style={{
-width:"70%",
-maxWidth:"500px",
+width:"95%",
+maxWidth:"700px",
 height:"auto",
 display:"block",
 margin:"auto",
@@ -2012,35 +2014,43 @@ JSON.stringify(nuevoUsuario)
 }
 
 }}
+
 style={{
 position:"absolute",
-left:"35px",
-top:"390px",
-width:"120px",
-height:"70px",
+left:"50px",
+top:"545px",
+width:"170px",
+height:"95px",
 opacity:0,
 border:"none",
-background:"transparent"
+background:"transparent",
+cursor:"pointer"
 }}
-/>
+>
+</button>
 
-{/* AVATAR */}
+
+{/* CAMBIAR AVATAR */}
 
 <button
 onClick={()=>{
 alert("Cambiar avatar")
 }}
+
 style={{
 position:"absolute",
-left:"170px",
-top:"390px",
-width:"140px",
-height:"70px",
+left:"235px",
+top:"545px",
+width:"220px",
+height:"95px",
 opacity:0,
 border:"none",
-background:"transparent"
+background:"transparent",
+cursor:"pointer"
 }}
-/>
+>
+</button>
+
 
 {/* INICIO */}
 
@@ -2048,17 +2058,21 @@ background:"transparent"
 onClick={()=>{
 setModo("academia")
 }}
+
 style={{
 position:"absolute",
-left:"0px",
-top:"470px",
-width:"50px",
-height:"50px",
+left:"15px",
+top:"650px",
+width:"75px",
+height:"70px",
 opacity:0,
 border:"none",
-background:"transparent"
+background:"transparent",
+cursor:"pointer"
 }}
-/>
+>
+</button>
+
 
 {/* ACADEMIA */}
 
@@ -2066,17 +2080,21 @@ background:"transparent"
 onClick={()=>{
 setModo("menu")
 }}
+
 style={{
 position:"absolute",
-left:"78px",
-top:"470px",
-width:"50px",
-height:"50px",
+left:"120px",
+top:"650px",
+width:"75px",
+height:"70px",
 opacity:0,
 border:"none",
-background:"transparent"
+background:"transparent",
+cursor:"pointer"
 }}
-/>
+>
+</button>
+
 
 {/* BATALLA */}
 
@@ -2084,17 +2102,21 @@ background:"transparent"
 onClick={()=>{
 setModo("batalla")
 }}
+
 style={{
 position:"absolute",
-left:"158px",
-top:"470px",
-width:"50px",
-height:"50px",
+left:"225px",
+top:"650px",
+width:"75px",
+height:"70px",
 opacity:0,
 border:"none",
-background:"transparent"
+background:"transparent",
+cursor:"pointer"
 }}
-/>
+>
+</button>
+
 
 {/* TIENDA */}
 
@@ -2102,17 +2124,21 @@ background:"transparent"
 onClick={()=>{
 setModo("tienda")
 }}
+
 style={{
 position:"absolute",
-left:"238px",
-top:"470px",
-width:"50px",
-height:"50px",
+left:"330px",
+top:"650px",
+width:"75px",
+height:"70px",
 opacity:0,
 border:"none",
-background:"transparent"
+background:"transparent",
+cursor:"pointer"
 }}
-/>
+>
+</button>
+
 
 {/* MÁS */}
 
@@ -2120,17 +2146,20 @@ background:"transparent"
 onClick={()=>{
 alert("Más opciones")
 }}
+
 style={{
 position:"absolute",
-left:"318px",
-top:"470px",
-width:"50px",
-height:"50px",
+left:"435px",
+top:"650px",
+width:"75px",
+height:"70px",
 opacity:0,
 border:"none",
-background:"transparent"
+background:"transparent",
+cursor:"pointer"
 }}
-/>
+>
+</button>
 
 </div>
 
