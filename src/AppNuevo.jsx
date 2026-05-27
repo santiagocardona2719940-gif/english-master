@@ -7210,14 +7210,29 @@ zIndex:"9999"
               <img src="/pack.png" />
             </div>
 
-            <div
+<div
 className="card"
 onClick={()=>{
 setModo("perfil")
 }}
 >
 
-<img src="/perfil.png"/>
+<img
+
+src={
+usuario.foto
+? usuario.foto
+: "/perfil.png"
+}
+
+style={{
+width:"100%",
+height:"100%",
+objectFit:"cover",
+borderRadius:"20px"
+}}
+
+/>
 
 <span>
 👤 PERFIL
