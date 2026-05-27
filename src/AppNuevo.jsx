@@ -1956,7 +1956,13 @@ onClick={()=>setModo("academia")}
 </div>
 
 )}
+{/* 👤 PERFIL */}
 
+{/* 👤 PERFIL */}
+
+{/* 👤 PERFIL */}
+
+{/* 👤 PERFIL */}
 
 {/* 👤 PERFIL */}
 
@@ -1971,25 +1977,299 @@ onClick={()=>setModo("academia")}
 <div
 style={{
 position:"relative",
-display:"inline-block"
+width:"100%",
+maxWidth:"700px",
+margin:"auto"
 }}
 >
+
+{/* FONDO */}
 
 <img
 src="/perfil-portada.png"
 style={{
-width:"95%",
-maxWidth:"700px",
-height:"auto",
-display:"block",
-margin:"auto",
-borderRadius:"30px"
+width:"100%",
+borderRadius:"35px",
+boxShadow:"0 0 35px rgba(132,0,255,.7)"
 }}
 />
 
-{/* EDITAR PERFIL */}
+
+{/* AVATAR */}
+
+<div
+style={{
+position:"absolute",
+top:"40px",
+left:"50%",
+transform:"translateX(-50%)",
+textAlign:"center"
+}}
+>
+
+<div
+style={{
+width:"140px",
+height:"140px",
+borderRadius:"50%",
+overflow:"hidden",
+border:"5px solid gold",
+boxShadow:"0 0 30px gold"
+}}
+>
+
+<label
+style={{
+width:"140px",
+height:"140px",
+borderRadius:"50%",
+overflow:"hidden",
+border:"5px solid gold",
+boxShadow:"0 0 30px gold",
+display:"block",
+cursor:"pointer"
+}}
+>
+
+<img
+src={
+usuario.foto
+? usuario.foto
+: "/perfil.png"
+}
+
+style={{
+width:"100%",
+height:"100%",
+objectFit:"cover"
+}}
+/>
+
+<input
+type="file"
+accept="image/*"
+
+style={{
+display:"none"
+}}
+
+onChange={(e)=>{
+
+const archivo=e.target.files[0]
+
+if(!archivo)return
+
+const reader=new FileReader()
+
+reader.onload=(evento)=>{
+
+const nuevoUsuario={
+
+...usuario,
+
+foto:evento.target.result
+
+}
+
+setUsuario(nuevoUsuario)
+
+localStorage.setItem(
+"usuario",
+JSON.stringify(nuevoUsuario)
+)
+
+}
+
+reader.readAsDataURL(archivo)
+
+}}
+
+/>
+
+</label>
+
+</div>
+
+<h2
+style={{
+color:"white",
+marginTop:"10px",
+textShadow:"0 0 20px black",
+fontSize:"36px"
+}}
+>
+{usuario.nombre}
+</h2>
+
+</div>
+
+
+{/* BARRA XP */}
+
+<div
+style={{
+position:"absolute",
+top:"240px",
+left:"50%",
+transform:"translateX(-50%)",
+width:"60%"
+}}
+>
+
+<div
+style={{
+height:"22px",
+background:"#222",
+borderRadius:"30px",
+overflow:"hidden",
+border:"3px solid #4d00ff",
+boxShadow:"0 0 20px rgba(0,255,255,.6)"
+}}
+>
+
+<div
+style={{
+width:`${(puntos%10)*10}%`,
+height:"100%",
+background:
+"linear-gradient(90deg,#00e5ff,#0066ff)"
+}}
+>
+</div>
+
+</div>
+
+<div
+style={{
+textAlign:"center",
+color:"white",
+fontWeight:"bold",
+marginTop:"8px",
+fontSize:"20px",
+marginBottom:"25px"
+}}
+>
+
+⭐ XP {puntos}
+
+</div>
+
+</div>
+
+
+{/* ESTADISTICAS */}
+
+<div
+style={{
+position:"absolute",
+top:"380px",
+left:"50%",
+transform:"translateX(-50%)",
+display:"flex",
+gap:"18px",
+background:"rgba(0,0,0,.28)",
+padding:"18px",
+borderRadius:"30px",
+backdropFilter:"blur(10px)",
+boxShadow:"0 0 20px rgba(0,255,255,.15)"
+}}
+>
+
+<div className="perfilStat">
+💎
+<span>{gemas}</span>
+</div>
+
+<div className="perfilStat">
+💰
+<span>${dinero}</span>
+</div>
+
+<div className="perfilStat">
+📚
+<span>{cartas.length}</span>
+</div>
+
+<div className="perfilStat">
+❤️
+<span>{vidas}</span>
+</div>
+
+<div className="perfilStat">
+🔥
+<span>{racha}</span>
+</div>
+
+<div className="perfilStat">
+🏆
+<span>{logros.length}</span>
+</div>
+
+</div>
+
+
+{/* MENU INFERIOR */}
+
+<div
+style={{
+position:"absolute",
+bottom:"25px",
+left:"50%",
+transform:"translateX(-50%)",
+display:"flex",
+gap:"18px",
+background:"rgba(0,0,0,.35)",
+padding:"15px 25px",
+borderRadius:"35px",
+backdropFilter:"blur(12px)",
+boxShadow:"0 0 25px rgba(0,255,255,.25)"
+}}
+>
+
+{/* INICIO */}
 
 <button
+className="menuBtn"
+onClick={()=>setModo("menu")}
+>
+🏠
+</button>
+
+
+{/* PERFIL */}
+
+<button
+className="menuBtn"
+>
+👤
+</button>
+
+
+{/* ACADEMIA */}
+
+<button
+className="menuBtn"
+onClick={()=>setModo("academia")}
+>
+🎓
+</button>
+
+
+{/* COFRE */}
+
+<button
+className="menuBtn"
+onClick={()=>setModo("tienda")}
+>
+🎁
+</button>
+
+
+{/* AJUSTES */}
+
+<button
+className="menuBtn"
+
 onClick={()=>{
 
 const nuevoNombre=prompt(
@@ -1997,11 +2277,19 @@ const nuevoNombre=prompt(
 usuario.nombre
 )
 
+const nuevoCorreo=prompt(
+"Nuevo correo:",
+usuario.correo || ""
+)
+
 if(nuevoNombre){
 
 const nuevoUsuario={
+
 ...usuario,
-nombre:nuevoNombre
+nombre:nuevoNombre,
+correo:nuevoCorreo
+
 }
 
 setUsuario(nuevoUsuario)
@@ -2015,151 +2303,11 @@ JSON.stringify(nuevoUsuario)
 
 }}
 
-style={{
-position:"absolute",
-left:"50px",
-top:"545px",
-width:"170px",
-height:"95px",
-opacity:0,
-border:"none",
-background:"transparent",
-cursor:"pointer"
-}}
 >
+⚙️
 </button>
 
-
-{/* CAMBIAR AVATAR */}
-
-<button
-onClick={()=>{
-alert("Cambiar avatar")
-}}
-
-style={{
-position:"absolute",
-left:"235px",
-top:"545px",
-width:"220px",
-height:"95px",
-opacity:0,
-border:"none",
-background:"transparent",
-cursor:"pointer"
-}}
->
-</button>
-
-
-{/* INICIO */}
-
-<button
-onClick={()=>{
-setModo("academia")
-}}
-
-style={{
-position:"absolute",
-left:"15px",
-top:"650px",
-width:"75px",
-height:"70px",
-opacity:0,
-border:"none",
-background:"transparent",
-cursor:"pointer"
-}}
->
-</button>
-
-
-{/* ACADEMIA */}
-
-<button
-onClick={()=>{
-setModo("menu")
-}}
-
-style={{
-position:"absolute",
-left:"120px",
-top:"650px",
-width:"75px",
-height:"70px",
-opacity:0,
-border:"none",
-background:"transparent",
-cursor:"pointer"
-}}
->
-</button>
-
-
-{/* BATALLA */}
-
-<button
-onClick={()=>{
-setModo("batalla")
-}}
-
-style={{
-position:"absolute",
-left:"225px",
-top:"650px",
-width:"75px",
-height:"70px",
-opacity:0,
-border:"none",
-background:"transparent",
-cursor:"pointer"
-}}
->
-</button>
-
-
-{/* TIENDA */}
-
-<button
-onClick={()=>{
-setModo("tienda")
-}}
-
-style={{
-position:"absolute",
-left:"330px",
-top:"650px",
-width:"75px",
-height:"70px",
-opacity:0,
-border:"none",
-background:"transparent",
-cursor:"pointer"
-}}
->
-</button>
-
-
-{/* MÁS */}
-
-<button
-onClick={()=>{
-alert("Más opciones")
-}}
-
-style={{
-position:"absolute",
-left:"435px",
-top:"650px",
-width:"75px",
-height:"70px",
-opacity:0,
-border:"none",
-background:"transparent",
-cursor:"pointer"
-}}
->
-</button>
+</div>
 
 </div>
 
