@@ -10,6 +10,13 @@ import { academiaCajero } from './academiaCajero'
 import { academiaDelivery } from './academiaDelivery'
 import { academiaPeluquero } from './academiaPeluquero'
 import './App.css'
+import {
+movimientoValido,
+esAzul,
+esRojo,
+hayJaque,
+hayJaqueMate
+} from "./chess.js"
 
 function App() {
 
@@ -34,6 +41,363 @@ console.log(intermedio)
 
   const [cartaNueva, setCartaNueva] = useState(null)
   const [modo, setModo] = useState("menu")
+  const tableroInicial = [
+
+["r","n","b","q","k","b","n","r"],
+["p","p","p","p","p","p","p","p"],
+["","","","","","","",""],
+["","","","","","","",""],
+["","","","","","","",""],
+["","","","","","","",""],
+["P","P","P","P","P","P","P","P"],
+["R","N","B","Q","K","B","N","R"]
+
+]
+
+const [tablero,setTablero] =
+useState(tableroInicial)
+
+const [seleccion,setSeleccion] =
+useState(null)
+const movimientoPosible = (fila,col) => {
+
+if(!seleccion) return false
+
+const [f,c] = seleccion
+if(
+f===fila &&
+c===col
+){
+setSeleccion(null)
+return
+}  
+return movimientoValido(
+tablero,
+f,
+c,
+fila,
+col
+)
+
+}
+const [turno,setTurno] =
+useState("azul")
+const [ultimaJugada,setUltimaJugada] =
+useState(null)
+const piezasUnicode = {
+
+P:"♙",
+R:"♖",
+N:"♘",
+B:"♗",
+Q:"♕",
+K:"♔",
+
+p:"♟",
+r:"♜",
+n:"♞",
+b:"♝",
+q:"♛",
+k:"♚"
+
+}
+const moverIA = (
+tableroActual,
+setTablero,
+setTurno,
+playSound,
+hayJaque,
+playLevelUp,
+setDinero,
+setGemas,
+setCartas
+) => {
+
+setTimeout(()=>{
+
+let movimientos=[]
+
+for(let f=0;f<8;f++){
+
+for(let c=0;c<8;c++){
+
+const pieza =
+tableroActual[f][c]
+
+if(!pieza) continue
+
+if(!esRojo(pieza))
+continue
+
+for(let ff=0;ff<8;ff++){
+
+for(let cc=0;cc<8;cc++){
+
+if(
+
+movimientoValido(
+tableroActual,
+f,
+c,
+ff,
+cc
+)
+
+){
+if(
+
+f===ff
+
+&&
+
+c===cc
+
+){
+
+continue
+
+}
+movimientos.push({
+
+from:[f,c],
+to:[ff,cc]
+
+})
+
+}
+
+}
+
+}
+
+}
+
+}
+
+if(movimientos.length===0){
+
+playLevelUp()
+
+setDinero(prev=>prev+100)
+
+setGemas(prev=>prev+5)
+
+alert("♚ JAQUE MATE 🔥")
+
+const nuevaCarta={
+
+animal:"♟️ Rey conquistado",
+
+deseo:"Ganaste una partida",
+
+imagen:"/cards.png",
+
+id:Date.now(),
+
+tipo:"ajedrez"
+
+}
+
+setCartas(prev=>{
+
+const nuevas=[
+...prev,
+nuevaCarta
+]
+
+localStorage.setItem(
+"cartas",
+JSON.stringify(nuevas)
+)
+
+return nuevas
+
+})
+
+return
+
+}
+
+let mejorMovimiento = movimientos[0]
+
+let mejorValor = -999
+
+movimientos.forEach(m => {
+
+const [ff,cc] = m.to
+
+const piezaObjetivo =
+tableroActual[ff][cc]
+
+let valor = 0
+
+if(piezaObjetivo==="P") valor=1
+if(piezaObjetivo==="N") valor=3
+if(piezaObjetivo==="B") valor=3
+if(piezaObjetivo==="R") valor=5
+if(piezaObjetivo==="Q") valor=9
+if(piezaObjetivo==="K") valor=100
+
+if(valor > mejorValor){
+
+mejorValor = valor
+
+mejorMovimiento = m
+
+}
+
+})
+
+const random = mejorMovimiento
+
+const nuevo =
+tableroActual.map(
+row => [...row]
+)
+
+const [f,c] = random.from
+const [ff,cc] = random.to
+
+nuevo[ff][cc] =
+nuevo[f][c]
+
+nuevo[f][c] = ""
+
+setTablero(nuevo)
+
+setUltimaJugada([
+[f,c],
+[ff,cc]
+])
+
+playSound()
+
+try{
+
+if(hayJaque(nuevo,"azul")){
+
+alert("⚠️ JAQUE AL AZUL")
+
+}
+
+}catch(e){
+
+console.log(e)
+
+}
+
+setTurno("azul")
+},700)
+
+}
+
+
+const clickCelda = (fila,col) => {
+
+if(turno!=="azul") return
+
+if(!seleccion){
+
+const pieza = tablero[fila][col]
+
+if(!pieza) return
+
+if(!esAzul(pieza)) return
+
+setSeleccion([fila,col])
+
+return
+
+}
+
+const [f,c] = seleccion
+
+if(
+
+movimientoValido(
+tablero,
+f,
+c,
+fila,
+col
+)
+
+){
+
+const nuevo =
+tablero.map(
+row => [...row]
+)
+const piezaCapturada =
+nuevo[fila][col]
+nuevo[fila][col] =
+nuevo[f][c]
+
+nuevo[f][c] = ""
+
+setTablero(nuevo)
+
+setSeleccion(null)
+
+if(piezaCapturada){
+
+playCapture()
+
+}else{
+
+playSound()
+
+}
+
+if(hayJaqueMate(nuevo,"rojo")){
+
+playLevelUp()
+
+alert("👑 JAQUE MATE 🔥")
+
+setDinero(prev=>prev+200)
+
+setGemas(prev=>prev+10)
+
+setModo("menu")
+
+return
+
+}
+
+setTurno("rojo")
+
+moverIA(
+nuevo,
+setTablero,
+setTurno,
+playSound,
+hayJaque,
+playLevelUp,
+setDinero,
+setGemas,
+setCartas
+)
+
+return
+
+if(hayJaque(nuevo,"rojo")){
+
+alert("⚠️ JAQUE AL ROJO")
+
+}
+
+
+
+}
+
+setSeleccion(null)
+
+}
+
+
+
+
   const [profesion, setProfesion] = useState("")
   const [i, setI] = useState(progreso.i || 0)
   const [vidas, setVidas] = useState(progreso.vidas || 3)
@@ -730,9 +1094,55 @@ const playCoin = () => {
  osc.stop(ctx.currentTime+.1)
 
 }
-const playSound = () => {
+const playCapture = () => {
 
-  if(!ctx) return
+if(!ctx) return
+
+const osc = ctx.createOscillator()
+const gain = ctx.createGain()
+
+osc.connect(gain)
+gain.connect(ctx.destination)
+
+osc.frequency.value = 120
+
+gain.gain.value = 0.12
+
+osc.start()
+
+osc.frequency.exponentialRampToValueAtTime(
+40,
+ctx.currentTime + 0.3
+)
+
+osc.stop(ctx.currentTime + 0.3)
+
+}
+const playSound = () => {
+const playCapture = () => {
+
+if(!ctx) return
+
+const osc = ctx.createOscillator()
+const gain = ctx.createGain()
+
+osc.connect(gain)
+gain.connect(ctx.destination)
+
+osc.frequency.value = 120
+
+gain.gain.value = 0.12
+
+osc.start()
+
+osc.frequency.exponentialRampToValueAtTime(
+40,
+ctx.currentTime + 0.3
+)
+
+osc.stop(ctx.currentTime + 0.3)
+
+}
 
   const osc = ctx.createOscillator()
   const gain = ctx.createGain()
@@ -4763,37 +5173,8 @@ const aleatorio = eventos[
 
 setEvento(aleatorio)     
               playCorrect()
-              const playCoin=()=>{
 
-new Audio(
-"/sounds/coin.mp3"
-).play()
 
-}
-
-const playCard=()=>{
-
-new Audio(
-"/sounds/card.mp3"
-).play()
-
-}
-
-const playLegendary=()=>{
-
-new Audio(
-"/sounds/legendary.mp3"
-).play()
-
-}
-
-const playClick=()=>{
-
-new Audio(
-"/sounds/click.mp3"
-).play()
-
-}
 
            setMensajeMesero(
 "✅ correcto"
@@ -4856,48 +5237,7 @@ if (
     return nuevos
 
   })
-if ((iBarista + 1) % 15 === 0) {
 
-setMostrarCofre(true)
-
-const nuevaCarta = {
-
-animal:
-"🍸 Bartender " +
-(iBarista + 1),
-
-deseo:
-"Checkpoint bartender",
-
-imagen:"/cards.png",
-
-id:Date.now(),
-
-checkpoint:iBarista+1,
-
-tipo:"entrenamientoBartender"
-
-}
-playCard()
-setCartas(prev=>{
-
-const nuevas=[
-
-...prev,
-nuevaCarta
-
-]
-
-localStorage.setItem(
-"cartas",
-JSON.stringify(nuevas)
-)
-
-return nuevas
-
-})
-
-}
   setTimeout(()=>{
 
     setIMesero(0)
@@ -4976,9 +5316,9 @@ academiaMesero[0]
 
       <h1>🎤 Modo Voz</h1>
 
-      <h2>
-        academiaMesero[0]?.frases[iMesero]
-      </h2>
+    <h2>
+{academiaMesero[0]?.frases?.[iMesero]?.personaje}
+</h2>
 
       <p>
         Escucha y pronuncia correctamente
@@ -7152,7 +7492,188 @@ setModo(
           </div>
         </div>
       )}
+{modo==="ajedrez"&&(
 
+<div className="game-container">
+
+<div className="game-main">
+
+<h1>♟️ AJEDREZ</h1>
+
+<h2>
+Turno:
+{
+turno==="azul"
+? " 🔵 Azul"
+: " 🔴 Rojo"
+}
+</h2>
+
+<div
+style={{
+
+display:"grid",
+
+gridTemplateColumns:
+"repeat(8,60px)",
+
+gap:"2px",
+
+justifyContent:"center",
+
+marginTop:"20px"
+
+}}
+>
+
+{tablero.map((fila,f)=>
+
+fila.map((pieza,c)=>(
+
+<button
+
+key={f+"-"+c}
+
+onClick={()=>
+clickCelda(f,c)
+}
+
+style={{
+
+width:"60px",
+
+height:"60px",
+
+fontSize:"28px",
+
+fontWeight:"bold",
+
+border:"none",
+
+cursor:"pointer",
+
+background:
+
+seleccion &&
+seleccion[0]===f &&
+seleccion[1]===c
+
+?
+
+"#00e676"
+
+:
+
+ultimaJugada && (
+
+(
+ultimaJugada[0][0]===f &&
+ultimaJugada[0][1]===c
+)
+
+||
+
+(
+ultimaJugada[1][0]===f &&
+ultimaJugada[1][1]===c
+)
+
+)
+
+?
+
+"#ffd54f"
+
+:
+
+movimientoPosible(f,c)
+
+?
+
+"#81c784"
+
+:
+
+(f+c)%2===0
+? "#f0d9b5"
+: "#b58863",
+
+color:
+esAzul(pieza)
+? "#2196f3"
+: "#ff4444"
+
+}}
+
+>
+
+{piezasUnicode[pieza] || ""}
+
+</button>
+
+))
+
+)}
+
+</div>
+
+<div
+style={{
+marginTop:"20px",
+display:"flex",
+gap:"10px",
+justifyContent:"center"
+}}
+>
+
+<button
+
+onClick={()=>{
+
+setTablero([
+["r","n","b","q","k","b","n","r"],
+["p","p","p","p","p","p","p","p"],
+["","","","","","","",""],
+["","","","","","","",""],
+["","","","","","","",""],
+["","","","","","","",""],
+["P","P","P","P","P","P","P","P"],
+["R","N","B","Q","K","B","N","R"]
+])
+
+setTurno("azul")
+if(hayJaque(nuevo,"azul")){
+
+alert("⚠️ JAQUE AL AZUL")
+
+}
+}}
+
+>
+
+🔄 Reiniciar partida
+
+</button>
+
+<button
+onClick={()=>
+setModo("menu")
+}
+>
+
+← volver
+
+</button>
+
+</div>
+
+
+
+</div>
+
+</div>
+
+)}
       {/* 🏠 MENU */}
       {modo === "menu" && (
         <>
@@ -7191,7 +7712,15 @@ zIndex:"9999"
             </div>
 
             <div className="card" onClick={() => playSound()}>
-              <img src="/game.png" />
+              <div
+className="card"
+onClick={() => setModo("ajedrez")}
+>
+
+<img src="/game.png" />
+
+</div>
+           
             </div>
 
             <div className="card" onClick={() => setModo("academia")}>
