@@ -7720,6 +7720,132 @@ setModo("menu")
 </div>
 
 )}
+{modo === "tienda" && (
+
+<div className="game-container">
+
+<div className="game-main">
+
+<h1>👑 TIENDA DEL REINO</h1>
+
+<div className="shopStats">
+
+<div>💰 {dinero}</div>
+<div>💎 {gemas}</div>
+<div>❤️ {vidas}</div>
+
+</div>
+
+<div className="shopGrid">
+
+<div className="shopCard">
+<h2>❤️ Vida Extra</h2>
+<p>Recupera una vida</p>
+
+<button
+onClick={()=>{
+if(dinero < 50){
+alert("Dinero insuficiente")
+return
+}
+
+setDinero(prev=>prev-50)
+setVidas(prev=>prev+1)
+}}
+>
+Comprar $50
+</button>
+
+</div>
+
+<div className="shopCard">
+<h2>💎 Gemas</h2>
+<p>5 Gemas mágicas</p>
+
+<button
+onClick={()=>{
+if(dinero < 100){
+alert("Dinero insuficiente")
+return
+}
+
+setDinero(prev=>prev-100)
+setGemas(prev=>prev+5)
+}}
+>
+Comprar $100
+</button>
+
+</div>
+
+<div className="shopCard epic">
+<h2>🐉 Carta Épica</h2>
+<p>Animal legendario</p>
+
+<button
+onClick={()=>{
+if(gemas < 10){
+alert("Gemas insuficientes")
+return
+}
+
+setGemas(prev=>prev-10)
+
+const nuevaCarta={
+animal:"🐉 Dragón Épico",
+poder:"+50 XP",
+deseo:"Carta exclusiva",
+imagen:"/cards.png",
+id:Date.now(),
+tipo:"epica"
+}
+
+setCartas(prev=>{
+
+const nuevas=[...prev,nuevaCarta]
+
+localStorage.setItem(
+"cartas",
+JSON.stringify(nuevas)
+)
+
+return nuevas
+})
+
+}}
+>
+10 💎
+</button>
+
+</div>
+
+<div className="shopCard legendary">
+<h2>👑 Sobre Legendario</h2>
+<p>Garantiza carta rara</p>
+
+<button
+onClick={()=>{
+alert("Próximamente")
+}}
+>
+25 💎
+</button>
+
+</div>
+
+</div>
+
+<button
+onClick={()=>setModo("menu")}
+>
+← volver
+</button>
+
+</div>
+
+</div>
+
+)}
       {/* 🏠 MENU */}
       {modo === "menu" && (
         <>
@@ -7781,9 +7907,12 @@ onClick={() => setModo("ajedrez")}
               <img src="/cards.png" />
             </div>
 
-            <div className="card" onClick={() => playSound()}>
-              <img src="/pack.png" />
-            </div>
+            <div
+  className="card"
+  onClick={() => setModo("tienda")}
+>
+  <img src="/pack.png" />
+</div>
 
 <div
 className="card"
