@@ -717,7 +717,46 @@ r.modo===modoActual
 r.nivel===nivelActual
 
 )
+if(nivelActual % 15 === 0){
 
+const nuevaCarta={
+
+animal:"🏆 Checkpoint "+nivelActual,
+
+poder:"+100 XP",
+
+deseo:"Has alcanzado el nivel "+nivelActual,
+
+imagen:"/cards.png",
+
+id:Date.now(),
+
+checkpoint:nivelActual,
+
+tipo:modoActual
+
+}
+
+setCartas(prev=>{
+
+const nuevas=[...prev,nuevaCarta]
+
+localStorage.setItem(
+"cartas",
+JSON.stringify(nuevas)
+)
+
+return nuevas
+
+})
+
+setCartaNueva(nuevaCarta)
+
+setMostrarCofre(true)
+
+return
+
+}
 if(!recompensa)return
 
 const existe=
@@ -937,10 +976,14 @@ useEffect(() => {
 
     setVidas(v => {
 
-      if (v <= 1) {
-        setModo("mesero")
-        return 3
-      }
+    if (v <= 1) {
+
+  alert("💀 Game Over")
+
+  setModo("menu")
+
+  return 0
+}
 
       return v - 1
 
@@ -1737,7 +1780,10 @@ setPuntos(prev=>prev+1)
 setGemas(prev=>prev+1)
 
 setRacha(prev=>prev+1)
-
+desbloquearCarta(
+  "aprender",
+  i + 1
+)
 playCoin()
   setI(next)
   setRespuesta([])
@@ -1763,19 +1809,14 @@ playCoin()
 
   const nuevas = v - 1
 
-  if (nuevas <= 0) {
+ if (nuevas <= 0) {
 
-    const guardado = JSON.parse(
-      localStorage.getItem("progreso")
-    )
+  alert("💀 GAME OVER")
 
-    if (guardado) {
-      setI(guardado.i || 0)
-      setPuntos(guardado.puntos || 0)
-    }
+  setModo("menu")
 
-    return 3
-  }
+  return 0
+}
 
   return nuevas
 })
@@ -1932,12 +1973,17 @@ next
 </div>
 
 )}
-
-      {mensajeIntermedio === "✅ correcto" && (
-        <p style={{ color: "#00ff88", fontWeight: "bold" }}>
-          🇪🇸 {intermedio[iIntermedio]?.traduccionRespuesta}
-        </p>
-      )}
+{mensajeIntermedio && mensajeIntermedio !== "❌ incorrecto" && (
+  <p
+    style={{
+      color:"#00ff88",
+      fontWeight:"bold",
+      marginTop:"10px"
+    }}
+  >
+    🇪🇸 {intermedio[iIntermedio]?.traduccionRespuesta}
+  </p>
+)}
 
       <button onClick={() => {
 
