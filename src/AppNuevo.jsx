@@ -1917,10 +1917,15 @@ playCoin()
       {modo === "intermedio" && (
   <div className="game-container">
 
-    <div className="sidebar">
-      <h3>❤️ {vidas}</h3>
-      <h3>⭐ {puntos}</h3>
-    </div>
+   <div className="sidebar">
+
+  <h3>❤️ {vidas}</h3>
+  <h3>⭐ {puntos}</h3>
+  <h3>💵 ${dinero}</h3>
+  <h3>💎 {gemas}</h3>
+  <h3>🔥 {racha}</h3>
+
+</div>
 
     <div className="game-main">
 
