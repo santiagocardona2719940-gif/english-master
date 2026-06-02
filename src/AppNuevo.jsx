@@ -1681,31 +1681,28 @@ Continuar
           
 
           {/* SIDEBAR */}
-          <div className="sidebar">
-            <div className="xp-container">
+         <div className="sidebar">
 
-<div
-className="xp-fill"
+  <div className="xp-container">
+    <div
+      className="xp-fill"
+      style={{
+        width:`${(puntos%10)*10}%`
+      }}
+    ></div>
+  </div>
 
-style={{
+  <p className="xp-text">
+    ⭐ Nivel {Math.floor(puntos/10)+1}
+  </p>
 
-width:`${(puntos%10)*10}%`
-
-}}
-></div>
+  <h3>❤️ {vidas}</h3>
+  <h3>⭐ {puntos}</h3>
+  <h3>💵 ${dinero}</h3>
+  <h3>💎 {gemas}</h3>
+  <h3>🔥 {racha}</h3>
 
 </div>
-
-<p className="xp-text">
-
-⭐ Nivel {Math.floor(puntos/10)+1}
-
-</p>
-            <h3>❤️ {vidas}</h3>
-            <h3>⭐ {puntos}</h3>
-            <h3>💵 ${dinero}</h3>
-          </div>
-
           {/* MAIN */}
           <div className="game-main">
 
