@@ -24,6 +24,7 @@ hayJaqueMate
 
 function App() {
 
+  const [checkpoint, setCheckpoint] = useState(0)
   const mezclarArray = (array) => {
   return [...array].sort(() => Math.random() - 0.5)
 }
@@ -1724,7 +1725,20 @@ lineHeight:"1.8",
 marginTop:"15px"
 }}
 >
-Capítulo 1 - Llegando a Nueva York
+<div
+style={{
+fontSize:"20px",
+marginBottom:"20px"
+}}
+>
+
+<p>🇪🇸 {historia[i]?.es}</p>
+
+<p style={{color:"#8be9fd"}}>
+🇺🇸 {historia[i]?.en}
+</p>
+
+</div>
 </p>
 
 
@@ -1732,7 +1746,7 @@ Capítulo 1 - Llegando a Nueva York
 
 
 
-{i === 0 && (
+{(
 <div
 style={{
 fontSize:"22px",
@@ -1743,15 +1757,7 @@ whiteSpace:"pre-wrap",
 lineHeight:"1.8"
 }}
 >
-{
-i < 10
-? "Santiago acaba de llegar a Nueva York. No conoce a nadie y está intentando aprender inglés para comenzar una nueva vida."
 
-: i < 20
-? "Mientras explora la ciudad descubre una librería antigua llena de secretos. Cada nueva frase le ayuda a entender mejor lo que ocurre."
-
-: "Después de mucho esfuerzo consigue una entrevista de trabajo. Ahora deberá demostrar todo lo que ha aprendido."
-}
 </div>
 )}
                       {terminado && (
@@ -1840,6 +1846,7 @@ desbloquearCarta(
 )
 playCoin()
   setI(next)
+  setCheckpoint(next)
   setRespuesta([])
   setTerminado(false)
 
@@ -1867,9 +1874,18 @@ playCoin()
 
   alert("💀 GAME OVER")
 
+  setI(0)
+
+  setRespuesta([])
+
+  setMezcladas(
+    [...frases[0][0].split(" ")]
+      .sort(() => Math.random() - 0.5)
+  )
+
   setModo("menu")
 
-  return 0
+  return 3
 }
 
   return nuevas
@@ -2003,10 +2019,23 @@ next
             setVidas(v => {
               const nuevas = v - 1
 
-              if (nuevas <= 0) {
-                setModo("menu")
-                return 3
-              }
+             if (nuevas <= 0) {
+
+  alert("💀 Perdiste")
+
+  setI(checkpoint)
+
+  setVidas(3)
+
+  setRespuesta([])
+
+  setMezcladas(
+    [...frases[checkpoint][0].split(" ")]
+      .sort(() => Math.random() - 0.5)
+  )
+
+  return 3
+}
 
               return nuevas
             })
@@ -7577,18 +7606,28 @@ c=>c.tipo==="epica"
               <div
   key={carta.id}
   className={`carta ${carta.tipo}`}
-  onClick={() => {
+onClick={() => {
 
-   setIIntermedio(
-  Math.min(
-    carta.checkpoint || 0,
-    intermedio.length - 1
-  )
-)
+  if (carta.tipo === "aprender") {
 
-    setModo("intermedio")
+    const pos = carta.checkpoint || 0
 
-  }}
+    setI(pos)
+
+    setRespuesta([])
+
+    setMezcladas(
+      [...frases[pos][0].split(" ")]
+      .sort(() => Math.random() - 0.5)
+    )
+
+    setModo("aprender")
+
+    hablar(frases[pos][0])
+
+  }
+
+}}
 >
                   <img
                     src={
