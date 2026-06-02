@@ -434,6 +434,7 @@ setSeleccion(null)
   const [estres, setEstres] = useState(0)
   const [respuesta, setRespuesta] = useState([])
   const [mezcladas, setMezcladas] = useState([])
+  const [repeticiones, setRepeticiones] = useState(0)
   console.log("FRASE:", frases[i])
 console.log("MEZCLADAS:", mezcladas)
   const [mensaje, setMensaje] = useState("")
@@ -1054,7 +1055,7 @@ const hablar = (texto, onEnd) => {
     setVidas(3)
     setRespuesta([])
     setMensaje("")
-
+   setRepeticiones(0)
    hablar(frases[i][0])
 
 const palabras = frases[i][0].split(" ")
@@ -1792,6 +1793,39 @@ setRespuesta(prev=>prev.slice(0,-1))
 >
 ⌫ Borrar última palabra
 </button>
+<button
+onClick={() => {
+
+  if(repeticiones < 3){
+
+    hablar(frases[i][0])
+
+    setRepeticiones(prev => prev + 1)
+
+    return
+
+  }
+
+  // compras extra
+
+  if(dinero < 25){
+
+    setMensaje("💰 Necesitas $25")
+
+    return
+
+  }
+
+  setDinero(prev => prev - 25)
+
+  hablar(frases[i][0])
+
+  setMensaje("🔊 Repetición comprada por $25")
+
+}}
+>
+🔊 Repetir frase
+</button>
             <button onClick={() => {
 
               if (respuesta.length === 0) {
@@ -1843,6 +1877,7 @@ desbloquearCarta(
 )
 playCoin()
   setI(next)
+  setRepeticiones(0)
   setCheckpoint(next)
   setRespuesta([])
   setTerminado(false)
