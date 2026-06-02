@@ -1,82 +1,42 @@
 export const frases = [
-  
 
-  ["i am running late", "voy tarde"],
-  ["i will call you later", "te llamo luego"],
-  ["what are you doing", "que estas haciendo"],
-  ["i do not understand", "no entiendo"],
-  ["can you help me", "puedes ayudarme"],
-  ["i am on my way", "voy en camino"],
-  ["just a moment please", "solo un momento por favor"],
-  ["i am very busy today", "estoy muy ocupado hoy"],
-  ["let me think about it", "dejame pensarlo"],
-  ["that sounds good to me", "eso suena bien para mi"],
+["I just arrived in New York.","Acabo de llegar a Nueva York."],
 
-  ["i will be right back", "vuelvo enseguida"],
-  ["i need to go now", "necesito irme ahora"],
-  ["what time is it", "que hora es"],
-  ["i am not sure", "no estoy seguro"],
-  ["it depends on you", "depende de ti"],
-  ["i totally agree with you", "estoy totalmente de acuerdo contigo"],
-  ["i am looking for something", "estoy buscando algo"],
-  ["can you repeat that please", "puedes repetir eso por favor"],
-  ["i forgot about that", "olvide eso"],
-  ["it is not a big deal", "no es gran cosa"],
+["This city is huge.","Esta ciudad es enorme."],
 
-  ["i am getting ready now", "me estoy preparando ahora"],
-  ["i will see you tomorrow", "te veo manana"],
-  ["that makes sense", "eso tiene sentido"],
-  ["i need more time", "necesito mas tiempo"],
-  ["i am trying to learn english", "estoy intentando aprender ingles"],
+["I feel a little nervous.","Me siento un poco nervioso."],
 
-  ["stand by", "mantente atento"],
-  ["show me", "muestrame"],
-  ["teach me", "enseñame"],
-  ["wait up", "espera"],
-  ["cheer up", "animo"],
-  ["trust me", "confia en mi"],
-  ["just play", "solo juega"],
-  ["are you afraid", "tienes miedo"],
-  ["do you work here", "trabajas aqui"],
-  ["can you teach me", "puedes enseñarme"],
-  ["can i tag along", "puedo ir contigo"],
-  ["i cant help it", "no puedo evitarlo"],
-  ["i cant wait", "no puedo esperar"],
-  ["hear me out please", "escuchame por favor"],
-  ["we are short handed", "tenemos poco personal"],
-  ["what are you up to", "que estas haciendo"],
-  ["are you done with that", "ya terminaste eso"],
-  ["still working on it", "aun trabajando en eso"],
-  ["can i have a word", "podemos hablar"],
-  ["i am just rambling", "solo estoy hablando sin sentido"],
-  ["i missed a call", "perdi una llamada"],
-  ["we ran out of milk", "se acabo la leche"],
-  ["check on the kids", "revisa a los niños"],
-  ["i dont feel like working", "no tengo ganas de trabajar"],
-  ["cut down on sugar", "reduce el azucar"],
-  ["the baby is a handful", "el bebe es dificil"],
-  ["its your call", "es tu decision"],
-  ["make the call", "haz la llamada"],
-  ["she is very frugal", "ella es muy ahorrativa"],
+["I don't know anyone here.","No conozco a nadie aquí."],
 
-  ["what kind of car do you drive", "que tipo de carro manejas"],
-  ["can you show me how to do it", "puedes mostrarme como hacerlo"],
-  ["i have been here numerous times", "he estado aqui muchas veces"],
-  ["my wife is a good cook", "mi esposa cocina bien"],
-  ["my mom is a good cook", "mi mama cocina bien"],
-  ["you have very cute kids", "tienes hijos muy lindos"],
-  ["i am starting to go crazy", "estoy empezando a volverme loco"],
-  ["i think i missed a call", "creo que perdi una llamada"],
-  ["we will find a way", "encontraremos una forma"],
-  ["are you excited about that", "estas emocionado por eso"],
-  ["i dont feel like working today", "no tengo ganas de trabajar hoy"],
-  ["they were swamped today at work", "estaban muy ocupados hoy"],
-  ["i was lost in my thoughts", "estaba perdido en mis pensamientos"],
-  ["can you validate parking here", "puedes validar el estacionamiento"],
-  ["they brought a housewarming gift", "trajeron un regalo"],
-  ["i have really bad heartburn", "tengo acidez fuerte"],
-  ["can you handle this for me", "puedes encargarte de esto"],
-  ["i am in the zone right now", "estoy concentrado ahora"],
-  ["keep me posted about that", "mantenme informado"],
-  ["my son just turned five years old", "mi hijo cumplio cinco años"]
-  ]
+["I need to find a place to stay.","Necesito encontrar un lugar donde quedarme."],
+
+["Excuse me, can you help me?","Disculpe, ¿puede ayudarme?"],
+
+["I am looking for this address.","Estoy buscando esta dirección."],
+
+["Thank you very much.","Muchas gracias."],
+
+["I want to learn English.","Quiero aprender inglés."],
+
+["This is the beginning of my journey.","Este es el comienzo de mi viaje."],
+
+["I found an old bookstore.","Encontré una librería antigua."],
+
+["The owner looks mysterious.","El dueño parece misterioso."],
+
+["There are many ancient books here.","Hay muchos libros antiguos aquí."],
+
+["What is this place?","¿Qué es este lugar?"],
+
+["I would like to know more.","Me gustaría saber más."],
+
+["This book looks important.","Este libro parece importante."],
+
+["Can I read this book?","¿Puedo leer este libro?"],
+
+["Knowledge is power.","El conocimiento es poder."],
+
+["I think I discovered a secret.","Creo que descubrí un secreto."],
+
+["My adventure continues.","Mi aventura continúa."]
+]

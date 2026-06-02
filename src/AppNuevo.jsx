@@ -9,6 +9,10 @@ import { academiaUber } from './academiaUber'
 import { academiaCajero } from './academiaCajero'
 import { academiaDelivery } from './academiaDelivery'
 import { academiaPeluquero } from './academiaPeluquero'
+import { cartasIniciales } from "./chessCards"
+import { historia } from "./historia.js";
+
+
 import './App.css'
 import {
 movimientoValido,
@@ -23,7 +27,7 @@ function App() {
   const mezclarArray = (array) => {
   return [...array].sort(() => Math.random() - 0.5)
 }
-  // 🔐 progreso seguro
+  // 🔐 progreso segurof
   let progreso = {}
   try {
     progreso = JSON.parse(localStorage.getItem("progreso")) || {}
@@ -80,10 +84,29 @@ col
 )
 
 }
+
+const [energia,setEnergia] =
+useState(10)
+
+const [cartasAjedrez,setCartasAjedrez] =
+useState(cartasIniciales)
+const [mazoBatalla,setMazoBatalla] =
+useState([])
+
+const [coleccionCartas,setColeccionCartas] =
+useState(cartasIniciales)
+
+const [cartaSeleccionada,setCartaSeleccionada] =
+useState(null)
+const [categoriaCarta,setCategoriaCarta] =
+useState("")
 const [turno,setTurno] =
 useState("azul")
+
 const [ultimaJugada,setUltimaJugada] =
 useState(null)
+
+
 const piezasUnicode = {
 
 P:"♙",
@@ -127,7 +150,7 @@ tableroActual[f][c]
 if(!pieza) continue
 
 if(!esRojo(pieza))
-continue
+continuefPRUEBA
 
 for(let ff=0;ff<8;ff++){
 
@@ -410,6 +433,8 @@ setSeleccion(null)
   const [estres, setEstres] = useState(0)
   const [respuesta, setRespuesta] = useState([])
   const [mezcladas, setMezcladas] = useState([])
+  console.log("FRASE:", frases[i])
+console.log("MEZCLADAS:", mezcladas)
   const [mensaje, setMensaje] = useState("")
   const [terminado, setTerminado] = useState(false)
   const [mostrarCofre, setMostrarCofre] = useState(false)
@@ -543,7 +568,7 @@ useState("☀️ Soleado")
 
 {
 modo:"aprender",
-nivel:5,
+nivel:10,
 animal:"📘 Primeras palabras",
 poder:"+10 XP",
 deseo:"Has aprendido frases básicas",
@@ -552,7 +577,7 @@ imagen:"/principiante1.png"
 
 {
 modo:"aprender",
-nivel:10,
+nivel:20,
 animal:"🗣️ Conversador",
 poder:"+20 XP",
 deseo:"Ahora entiendes conversaciones",
@@ -1029,9 +1054,9 @@ const hablar = (texto, onEnd) => {
     setRespuesta([])
     setMensaje("")
 
-    hablar(frases[i][0])
+   hablar(frases[i][0])
 
-    const palabras = frases[i][0].split(" ")
+const palabras = frases[i][0].split(" ")
     setMezcladas([...palabras].sort(() => Math.random() - 0.5))
   }
 
@@ -1162,30 +1187,8 @@ osc.stop(ctx.currentTime + 0.3)
 
 }
 const playSound = () => {
-const playCapture = () => {
 
-if(!ctx) return
-
-const osc = ctx.createOscillator()
-const gain = ctx.createGain()
-
-osc.connect(gain)
-gain.connect(ctx.destination)
-
-osc.frequency.value = 120
-
-gain.gain.value = 0.12
-
-osc.start()
-
-osc.frequency.exponentialRampToValueAtTime(
-40,
-ctx.currentTime + 0.3
-)
-
-osc.stop(ctx.currentTime + 0.3)
-
-}
+  if(!ctx) return
 
   const osc = ctx.createOscillator()
   const gain = ctx.createGain()
@@ -1706,6 +1709,51 @@ width:`${(puntos%10)*10}%`
           <div className="game-main">
 
             <h1>Modo Principiante</h1>
+            
+            <h2>
+<h2>
+{historia[0]?.titulo}
+</h2>
+</h2>
+<p
+style={{
+fontSize:"20px",
+color:"#ffd54f",
+whiteSpace:"pre-wrap",
+lineHeight:"1.8",
+marginTop:"15px"
+}}
+>
+Capítulo 1 - Llegando a Nueva York
+</p>
+
+
+
+
+
+
+{i === 0 && (
+<div
+style={{
+fontSize:"22px",
+fontFamily:"Georgia, serif",
+color:"#ffd54f",
+marginBottom:"25px",
+whiteSpace:"pre-wrap",
+lineHeight:"1.8"
+}}
+>
+{
+i < 10
+? "Santiago acaba de llegar a Nueva York. No conoce a nadie y está intentando aprender inglés para comenzar una nueva vida."
+
+: i < 20
+? "Mientras explora la ciudad descubre una librería antigua llena de secretos. Cada nueva frase le ayuda a entender mejor lo que ocurre."
+
+: "Después de mucho esfuerzo consigue una entrevista de trabajo. Ahora deberá demostrar todo lo que ha aprendido."
+}
+</div>
+)}
                       {terminado && (
             <div style={{ color: "#00ff88", marginTop: "10px" }}>
               {frases[i]?.[1]}
@@ -1734,7 +1782,13 @@ width:`${(puntos%10)*10}%`
 ✍️ {respuesta.join(" ")}
 
 </div>
-
+<button
+onClick={()=>{
+setRespuesta(prev=>prev.slice(0,-1))
+}}
+>
+⌫ Borrar última palabra
+</button>
             <button onClick={() => {
 
               if (respuesta.length === 0) {
@@ -7492,7 +7546,27 @@ setModo(
             <h1>🃏 Mis Cartas</h1>
                  <p>Total cartas: {cartas.length}</p>
             {cartas.length === 0 && <p>No tienes cartas todavía</p>}
+<div className="shopStats">
 
+<div>📚 {cartas.length}</div>
+
+<div>
+🏆 {
+cartas.filter(
+c=>c.tipo==="legendaria"
+).length
+}
+</div>
+
+<div>
+💎 {
+cartas.filter(
+c=>c.tipo==="epica"
+).length
+}
+</div>
+
+</div>
             <div style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fit, 200px)",
@@ -7500,10 +7574,9 @@ setModo(
               justifyContent: "center"
             }}>
               {cartas.map((carta) => (
-               <div
+              <div
   key={carta.id}
-  className={`carta ${carta.rareza}`}
-
+  className={`carta ${carta.tipo}`}
   onClick={() => {
 
    setIIntermedio(
@@ -7526,6 +7599,19 @@ setModo(
                     loading="lazy"
                   />
                   <h3>{carta.animal}</h3>
+                  <p>
+
+{
+carta.tipo==="legendaria"
+? "👑 Legendaria"
+
+: carta.tipo==="epica"
+? "💎 Épica"
+
+: "⭐ Común"
+}
+
+</p>
                   <p>{carta.deseo}</p>
                 </div>
               ))}
@@ -7538,6 +7624,134 @@ setModo(
           </div>
         </div>
       )}
+      {modo==="mazo"&&(
+
+<div className="game-container">
+
+<div className="game-main">
+
+<h1>🎴 Constructor de Mazo</h1>
+
+<h2>
+Cartas seleccionadas:
+{mazoBatalla.length}/10
+</h2>
+
+<div
+style={{
+display:"grid",
+gridTemplateColumns:"repeat(auto-fit,200px)",
+gap:"10px"
+}}
+>
+
+{coleccionCartas.map((carta)=>(
+
+<button
+key={carta.id}
+
+onClick={()=>{
+
+if(mazoBatalla.length>=10){
+alert("Máximo 10 cartas")
+return
+}
+
+if(
+mazoBatalla.some(
+c=>c.id===carta.id
+)
+){
+return
+}
+
+setMazoBatalla(prev=>[
+...prev,
+carta
+])
+
+}}
+
+>
+
+{carta.nombre}
+
+⚡ {carta.energia}
+
+</button>
+
+))}
+
+</div>
+
+<h3>
+Mazo actual
+</h3>
+
+{mazoBatalla.map((carta)=>(
+
+<div
+key={carta.id}
+style={{
+margin:"5px"
+}}
+>
+
+{carta.nombre}
+
+<button
+onClick={()=>{
+
+setMazoBatalla(
+
+mazoBatalla.filter(
+c=>c.id!==carta.id
+)
+
+)
+
+}}
+>
+
+❌
+
+</button>
+
+</div>
+
+))}
+
+<button
+
+disabled={
+mazoBatalla.length===0
+}
+
+onClick={()=>
+setModo("ajedrez")
+}
+
+>
+
+♟️ JUGAR
+
+</button>
+
+<button
+onClick={()=>
+setModo("menu")
+}
+>
+
+← volver
+
+</button>
+
+</div>
+
+</div>
+
+)}
 {modo==="ajedrez"&&(
 
 <div className="game-container">
@@ -7554,7 +7768,15 @@ turno==="azul"
 : " 🔴 Rojo"
 }
 </h2>
-
+<div
+style={{
+fontSize:"22px",
+fontWeight:"bold",
+marginBottom:"10px"
+}}
+>
+⚡ Energía: {energia}
+</div>
 <div
 style={{
 
@@ -7665,6 +7887,134 @@ esAzul(pieza)
 
 <div
 style={{
+display:"flex",
+flexWrap:"wrap",
+justifyContent:"center",
+gap:"10px",
+marginTop:"20px"
+}}
+>
+
+<div
+style={{
+display:"flex",
+justifyContent:"center",
+gap:"10px",
+marginTop:"20px"
+}}
+>
+
+<button
+onClick={()=>
+setCategoriaCarta(
+categoriaCarta==="defensa"
+? ""
+: "defensa"
+)
+}
+>
+🛡️ Defender
+</button>
+
+<button
+onClick={()=>
+setCategoriaCarta(
+categoriaCarta==="movimiento"
+? ""
+: "movimiento"
+)
+}
+>
+⚡ Movimiento
+</button>
+
+<button
+onClick={()=>
+setCategoriaCarta(
+categoriaCarta==="especial"
+? ""
+: "especial"
+)
+}
+>
+✨ Especiales
+</button>
+
+</div>
+
+{categoriaCarta && (
+
+<div
+style={{
+display:"flex",
+flexWrap:"wrap",
+justifyContent:"center",
+gap:"10px",
+marginTop:"15px"
+}}
+>
+
+{cartasAjedrez
+.filter(
+carta =>
+carta.tipo === categoriaCarta
+)
+.map(carta=>(
+
+<button
+key={carta.id}
+
+onClick={()=>
+setCartaSeleccionada(carta)
+}
+
+style={{
+padding:"10px",
+borderRadius:"12px",
+background:"#222",
+color:"white",
+border:
+cartaSeleccionada?.id===carta.id
+? "3px solid gold"
+: "2px solid #555"
+}}
+>
+
+<div>{carta.nombre}</div>
+
+<div>
+⚡ {carta.energia}
+</div>
+
+</button>
+
+))}
+
+</div>
+
+)}
+
+</div>
+
+
+<h3
+style={{
+textAlign:"center",
+marginTop:"20px"
+}}
+>
+
+🎴 Carta activa:
+
+{
+cartaSeleccionada
+? cartaSeleccionada.nombre
+: " Ninguna"
+}
+
+</h3>
+<div
+style={{
 marginTop:"20px",
 display:"flex",
 gap:"10px",
@@ -7688,11 +8038,9 @@ setTablero([
 ])
 
 setTurno("azul")
-if(hayJaque(nuevo,"azul")){
-
-alert("⚠️ JAQUE AL AZUL")
-
-}
+setTurno("azul")
+setSeleccion(null)
+setUltimaJugada(null)
 }}
 
 >
@@ -7886,7 +8234,7 @@ zIndex:"9999"
             <div className="card" onClick={() => playSound()}>
               <div
 className="card"
-onClick={() => setModo("ajedrez")}
+onClick={() => setModo("mazo")}
 >
 
 <img src="/game.png" />
