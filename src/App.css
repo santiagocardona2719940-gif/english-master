@@ -11,6 +11,9 @@ body{
   flex-direction:column;
   align-items:center;
   justify-content:center;
+  .app {
+  zoom: 0.8;
+}
 }
 
 /* portada */
@@ -57,6 +60,10 @@ body{
  background:rgba(15,23,42,.85);
  backdrop-filter:blur(12px);
  box-shadow:0 0 40px rgba(0,255,255,.15);
+ .game-container {
+  transform: scale(0.85);
+  transform-origin: top center;
+}
 }
 
 .sidebar{
@@ -1049,4 +1056,16 @@ box-shadow:0 0 25px rgba(160,32,240,.6);
 .legendary{
 border:2px solid gold;
 box-shadow:0 0 30px gold;
+}
+@media (max-width: 600px) {
+
+  .game-container {
+    transform: scale(0.88);
+    transform-origin: top center;
+  }
+
+  .game-main {
+    width: 95%;
+  }
+
 }
