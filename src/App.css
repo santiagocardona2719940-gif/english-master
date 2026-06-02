@@ -84,7 +84,12 @@ body{
  text-align:center;
  animation:fadeIn .5s;
 }
-
+.game-main{
+  width:100%;
+  max-width:900px;
+  margin:auto;
+  overflow-x:hidden;
+}
 .game-main h1{
  font-size:42px;
  background:linear-gradient(90deg,#00f0ff,#a855f7);
@@ -180,7 +185,10 @@ button:hover{
   0 0 60px rgba(168,85,247,.12),
   0 0 90px rgba(0,255,255,.08) !important;
 }
-
+.game-container{
+  width:100%;
+  overflow-x:hidden;
+}
 /* tarjetas academia premium */
 .card{
   border:1px solid rgba(255,255,255,.08);
@@ -1066,6 +1074,26 @@ box-shadow:0 0 30px gold;
 
   .game-main {
     width: 95%;
+  }
+
+}
+@media (max-width:600px){
+
+  .game-main{
+    width:95%;
+    padding:10px;
+  }
+
+  h1{
+    font-size:48px !important;
+  }
+
+  h2{
+    font-size:32px !important;
+  }
+
+  button{
+    max-width:100%;
   }
 
 }
