@@ -7621,11 +7621,21 @@ marginBottom:"40px"
 }}
 >
 
-{cartasHistoria.map(carta => (
+{cartasHistoria.map(carta => {
+
+const desbloqueada =
+cartas.some(
+c => c.imagen === carta.imagen
+)
+
+return (
 
 <div
 key={carta.id}
 className="carta"
+style={{
+position:"relative"
+}}
 >
 
 <img
@@ -7633,26 +7643,55 @@ src={carta.imagen}
 alt={carta.nombre}
 style={{
 width:"100%",
-borderRadius:"20px"
+height:"320px",
+objectFit:"cover",
+borderRadius:"20px",
+filter: desbloqueada
+? "none"
+: "brightness(0.2) blur(5px)"
 }}
 />
 
-<h3
-  style={{
-    minHeight: "90px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    textAlign: "center",
-    margin: "10px 0"
-  }}
+{!desbloqueada && (
+
+<div
+style={{
+position:"absolute",
+top:"50%",
+left:"50%",
+transform:"translate(-50%,-50%)",
+fontSize:"60px",
+textShadow:"0 0 20px black"
+}}
 >
-  {carta.nombre}
+🔒
+</div>
+
+)}
+
+<h3
+style={{
+minHeight:"90px",
+display:"flex",
+alignItems:"center",
+justifyContent:"center",
+textAlign:"center",
+margin:"10px 0",
+color: desbloqueada
+? "white"
+: "#777"
+}}
+>
+{desbloqueada
+? carta.nombre
+: "Carta Misteriosa"}
 </h3>
 
 </div>
 
-))}
+)
+
+})}
 
 </div>
                  <p>Total cartas: {cartas.length}</p>
