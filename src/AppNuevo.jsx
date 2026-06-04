@@ -798,19 +798,14 @@ c.animal===recompensa.animal
 )
 
 if(existe)return
+const imagenCarta = cartasHistoria[0].imagen
 
-const nuevaCarta={
-
-...recompensa,
-
-id:Date.now(),
-
-checkpoint:nivelActual,
-
-tipo:modoActual
-
-
-
+const nuevaCarta = {
+  ...recompensa,
+  imagen: imagenCarta,
+  id: Date.now(),
+  checkpoint: nivelActual,
+  tipo: modoActual
 }
 
 setCartas(prev=>{
@@ -1631,7 +1626,7 @@ background:"#222"
 <h1>
 🎁 Carta desbloqueada
 </h1>
-
+<p>{cartaNueva.imagen}</p>
 <img
   src={cartaNueva.imagen}
   alt={cartaNueva.animal}
@@ -8264,7 +8259,7 @@ return
 }
 
 setGemas(prev=>prev-10)
-
+console.log("CARTA NUEVA", nuevaCarta)
 const nuevaCarta={
 animal:"🐉 Dragón Épico",
 poder:"+50 XP",
