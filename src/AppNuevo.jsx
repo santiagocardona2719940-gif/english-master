@@ -11,6 +11,7 @@ import { academiaDelivery } from './academiaDelivery'
 import { academiaPeluquero } from './academiaPeluquero'
 import { cartasIniciales } from "./chessCards"
 import { historia } from "./historia.js";
+import { cartasHistoria } from "../public/cartasHistoria/assets/cartasHistoria.js";
 
 
 import './App.css'
@@ -1632,13 +1633,17 @@ background:"#222"
 </h1>
 
 <img
-src={cartaNueva.imagen}
-style={{
-width:"200px",
-borderRadius:"20px"
-}}
+  src={cartaNueva.imagen}
+  alt={cartaNueva.animal}
+  style={{
+    width: "220px",
+    height: "320px",
+    objectFit: "cover",
+    borderRadius: "20px",
+    display: "block",
+    margin: "0 auto"
+  }}
 />
-
 <h2>
 
 {cartaNueva.animal}
@@ -7610,6 +7615,51 @@ setModo(
           <div className="game-main">
 
             <h1>🃏 Mis Cartas</h1>
+            <h2>📖 Cartas de la Historia</h2>
+
+<div
+style={{
+display:"grid",
+gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))",
+gap:"20px",
+marginBottom:"40px"
+}}
+>
+
+{cartasHistoria.map(carta => (
+
+<div
+key={carta.id}
+className="carta"
+>
+
+<img
+src={carta.imagen}
+alt={carta.nombre}
+style={{
+width:"100%",
+borderRadius:"20px"
+}}
+/>
+
+<h3
+  style={{
+    minHeight: "90px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center",
+    margin: "10px 0"
+  }}
+>
+  {carta.nombre}
+</h3>
+
+</div>
+
+))}
+
+</div>
                  <p>Total cartas: {cartas.length}</p>
             {cartas.length === 0 && <p>No tienes cartas todavía</p>}
 <div className="shopStats">
