@@ -88,8 +88,7 @@ col
 
 }
 
-const [energia,setEnergia] =
-useState(10)
+const [energia,setEnergia,] = useState(20)
 
 const [cartasAjedrez,setCartasAjedrez] =
 useState([])
@@ -107,6 +106,7 @@ const [categoriaCarta,setCategoriaCarta] =
 useState("")
 const [turno,setTurno] =
 useState("azul")
+const [efectosActivos,setEfectosActivos] = useState({})
 const [modoAjedrez,setModoAjedrez] =
 useState("ia")
 const [ultimaJugada,setUltimaJugada] =
@@ -333,10 +333,15 @@ modoCarta &&
 cartaSeleccionada
 ){
 
-alert(
-"Poder activado: " +
-cartaSeleccionada.nombre
-)
+if(cartaSeleccionada.id===1){
+
+setEfectosActivos(prev=>({
+...prev,
+miradaExploradora:true
+}))
+
+
+}
 
 setModoCarta(false)
 
@@ -358,12 +363,9 @@ setSeleccion([fila,col])
 return
 
 }
-
 const [f,c] = seleccion
 
-if(
-
-movimientoValido(
+let movimientoOk = movimientoValido(
 tablero,
 f,
 c,
@@ -371,7 +373,30 @@ fila,
 col
 )
 
+if(
+tablero[f][c] === "P" &&
+c === col &&
+f === 6 &&
+fila === 3 &&
+!tablero[5][c] &&
+!tablero[4][c]
 ){
+
+
+if(energia < 1){
+
+alert("⚡ Sin energía")
+
+return
+
+}
+
+setEnergia(prev=>prev-1)
+movimientoOk = true
+
+}
+
+if(movimientoOk){
 
 const nuevo =
 tablero.map(
@@ -379,13 +404,42 @@ row => [...row]
 )
 const piezaCapturada =
 nuevo[fila][col]
+if(piezaCapturada){
+
+const pieza =
+piezaCapturada.toLowerCase()
+
+if(pieza==="p"){
+setEnergia(prev=>Math.min(20, prev+1))
+}
+
+if(pieza==="n"){
+setEnergia(prev=>Math.min(20, prev+3))
+}
+
+if(pieza==="b"){
+setEnergia(prev=>Math.min(20, prev+3))
+}
+
+if(pieza==="r"){
+setEnergia(prev=>Math.min(20, prev+4))
+}
+
+if(pieza==="q"){
+setEnergia(prev=>Math.min(20, prev+5))
+}
+
+}
 nuevo[fila][col] =
 nuevo[f][c]
 
 nuevo[f][c] = ""
 
 setTablero(nuevo)
-
+setEfectosActivos(prev=>({
+  ...prev,
+  miradaExploradora:false
+}))
 setSeleccion(null)
 
 if(piezaCapturada){
@@ -466,7 +520,9 @@ setSeleccion(null)
   const [combo,setCombo]=useState(0)
   const [racha,setRacha]=useState(1)
   const [dinero, setDinero] = useState(0)
+  
   const [gemas,setGemas]=useState(0)
+  
   const [tiempo, setTiempo] = useState(500)
   const [estres, setEstres] = useState(0)
   const [respuesta, setRespuesta] = useState([])
@@ -7994,6 +8050,7 @@ setModo("menu")
 </div>
 
 )}
+
 {modo==="ajedrez"&&(
 
 <div className="game-container">
@@ -8017,7 +8074,48 @@ fontWeight:"bold",
 marginBottom:"10px"
 }}
 >
+<div
+style={{
+width:"320px",
+margin:"10px auto 20px auto",
+textAlign:"center"
+}}
+>
+
+<div
+style={{
+fontSize:"24px",
+fontWeight:"bold",
+color:"#FFD700",
+marginBottom:"8px"
+}}
+>
 ⚡ Energía: {energia}
+</div>
+
+<div
+style={{
+height:"24px",
+background:"#222",
+borderRadius:"20px",
+overflow:"hidden",
+border:"2px solid #FFD700"
+}}
+>
+
+<div
+style={{
+width:`${(energia/20)*100}%`,
+height:"100%",
+background:
+"linear-gradient(90deg,#00E5FF,#00FF99)",
+transition:"0.3s"
+}}
+/>
+
+</div>
+
+</div>
 </div>
 <div
 style={{
@@ -8253,6 +8351,13 @@ borderRadius:"20px"
 
 <h2>
 ✨ Poder Especial
+<h3
+style={{
+color:"#FFD700"
+}}
+>
+⚡ Costo: {cartaSeleccionada?.costo || 1}
+</h3>
 </h2>
 
 <p>
@@ -8271,21 +8376,7 @@ fontWeight:"bold"
 Selecciona una pieza para activar el poder.
 
 </p>
-<button
-onClick={()=>{
 
-setModoCarta(true)
-
-alert(
-"Selecciona una pieza para usar el poder"
-)
-
-}}
->
-
-⚡ Usar Carta
-
-</button>
 
 </div>
 
@@ -8296,7 +8387,19 @@ cartaSeleccionada
 ? cartaSeleccionada.nombre
 : " Ninguna"
 }
-
+<button
+onClick={()=>setModo("menu")}
+style={{
+position:"fixed",
+top:"15px",
+left:"15px",
+zIndex:"9999",
+padding:"10px 20px",
+borderRadius:"10px"
+}}
+>
+← Menú
+</button>
 </h3>
 <div
 style={{
@@ -8323,9 +8426,8 @@ setTablero([
 ])
 
 setTurno("azul")
-setTurno("azul")
 setSeleccion(null)
-setUltimaJugada(null)
+setEnergia(20)
 }}
 
 >
@@ -8337,6 +8439,37 @@ setUltimaJugada(null)
 <button
 onClick={()=>{
 
+if(energia < 1){
+
+alert("⚡ Energía insuficiente")
+
+return
+
+}
+
+setEnergia(prev => prev - 1)
+
+setModoCarta(true)
+
+alert(
+"Selecciona una pieza para usar el poder"
+)
+
+}}
+>
+<button
+onClick={()=>{
+
+if(energia < 1){
+
+alert("⚡ Energía insuficiente")
+
+return
+
+}
+
+setEnergia(prev => prev - 1)
+
 setModoCarta(true)
 
 alert(
@@ -8346,8 +8479,9 @@ alert(
 }}
 >
 
-← volver
+⚡ Usar Carta (-1)
 
+</button>
 </button>
 
 </div>
@@ -8368,7 +8502,20 @@ alert(
 <h1>👑 TIENDA DEL REINO</h1>
 
 <div className="shopStats">
+<div
+style={{
+display:"flex",
+justifyContent:"center",
+gap:"20px",
+fontSize:"24px",
+fontWeight:"bold",
+marginBottom:"15px"
+}}
+>
 
+<span>⚡ {energia}</span>
+
+</div>
 <div>💰 {dinero}</div>
 <div>💎 {gemas}</div>
 <div>❤️ {vidas}</div>
