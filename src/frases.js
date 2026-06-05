@@ -38,7 +38,8 @@ export const frases = [
 
 ["I think I discovered a secret.","Creo que descubrí un secreto."],
 
-["My adventure continues.","Mi aventura continúa."]
+["My adventure continues.","Mi aventura continúa."],
+
 ["I need a job.","Necesito un trabajo."],
 
 ["Money is running low.","El dinero se está acabando."],

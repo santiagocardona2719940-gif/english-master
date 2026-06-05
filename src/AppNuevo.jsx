@@ -323,7 +323,16 @@ setTurno("azul")
 
 const clickCelda = (fila,col) => {
 
+/*
+██████╗  ██████╗ ██████╗ ███████╗██████╗ ███████╗
+██╔══██╗██╔═══██╗██╔══██╗██╔════╝██╔══██╗██╔════╝
+██████╔╝██║   ██║██║  ██║█████╗  ██████╔╝███████╗
+██╔═══╝ ██║   ██║██║  ██║██╔══╝  ██╔══██╗╚════██║
+██║     ╚██████╔╝██████╔╝███████╗██║  ██║███████║
+╚═╝      ╚═════╝ ╚═════╝ ╚══════╝╚═╝  ╚═╝╚══════╝
 
+🎴 AQUI ESTAN LOS PODERES DE LAS CARTAS 🎴
+*/
 
 if(!seleccion){
 
@@ -333,13 +342,47 @@ modoCarta &&
 cartaSeleccionada
 ){
 
-if(cartaSeleccionada.id===1){
+if(
+cartaSeleccionada?.nombre?.includes(
+"Guardián de los Secretos"
+)
+){
+
+
+
+
+setEfectosActivos(prev=>({
+...prev,
+guardianSecretos:true
+}))
+
+alert(
+"🗝️ Intuición del Mapa activada"
+)
+
+setModoCarta(false)
+
+return
+
+}
+if(
+modoCarta &&
+cartaSeleccionada &&
+cartaSeleccionada.id===1
+){
 
 setEfectosActivos(prev=>({
 ...prev,
 miradaExploradora:true
 }))
 
+alert(
+"✨ Mirada Exploradora activada"
+)
+
+setModoCarta(false)
+
+return
 
 }
 
@@ -374,6 +417,7 @@ col
 )
 
 if(
+efectosActivos.miradaExploradora &&
 tablero[f][c] === "P" &&
 c === col &&
 f === 6 &&
@@ -382,9 +426,12 @@ fila === 3 &&
 !tablero[4][c]
 ){
 
-
+alert("🚀 PODER ACTIVADO")
 if(energia < 1){
-
+setEfectosActivos(prev=>({
+...prev,
+miradaExploradora:false
+}))
 alert("⚡ Sin energía")
 
 return
@@ -393,9 +440,33 @@ return
 
 setEnergia(prev=>prev-1)
 movimientoOk = true
+console.log("APAGANDO MIRADA")
+}
+if(
+efectosActivos.guardianSecretos &&
+tablero[f][c] === "P" &&
+c === col &&
+Math.abs(fila - f) <= 3 &&
+!tablero[fila][col]
+){
+
+movimientoOk = true
+
+setEfectosActivos(prev=>({
+...prev,
+guardianSecretos:false
+}))
+
+alert("🗝️ Salto del Guardián")
+}
+if(efectosActivos.miradaExploradora){
+
+setEfectosActivos(prev=>({
+...prev,
+miradaExploradora:false
+}))
 
 }
-
 if(movimientoOk){
 
 const nuevo =
@@ -436,9 +507,10 @@ nuevo[f][c]
 nuevo[f][c] = ""
 
 setTablero(nuevo)
+console.log(efectosActivos)
 setEfectosActivos(prev=>({
   ...prev,
-  miradaExploradora:false
+
 }))
 setSeleccion(null)
 
@@ -685,21 +757,47 @@ useState("☀️ Soleado")
 {
 modo:"aprender",
 nivel:10,
-animal:"📘 Primeras palabras",
+animal:"📘 Explorador de Nueva York",
 poder:"+10 XP",
 deseo:"Has aprendido frases básicas",
-imagen:"/principiante1.png"
+imagen:"/explorador-new-york.webp"
 },
 
 {
 modo:"aprender",
 nivel:20,
-animal:"🗣️ Conversador",
+animal:"🗣️ Guardián de los Secretos",
 poder:"+20 XP",
 deseo:"Ahora entiendes conversaciones",
-imagen:"/principiante2.png"
+imagen:"/cartasHistoria/guardian-secretos.webp"
 },
 
+{
+modo:"aprender",
+nivel:30,
+animal:"🐺 Lobo del Destino",
+poder:"+30 XP",
+deseo:"Dominas conversaciones básicas",
+imagen:"/cartasHistoria/lobo-destino.webp"
+},
+
+{
+modo:"aprender",
+nivel:40,
+animal:"🐢 Tortuga del Aprendizaje",
+poder:"+40 XP",
+deseo:"Avanzas con paciencia",
+imagen:"/tortuga-aprendizaje.webp"
+},
+
+{
+modo:"aprender",
+nivel:50,
+animal:"🦅 Águila del Horizonte",
+poder:"+50 XP",
+deseo:"Ves más lejos en tu aprendizaje",
+imagen:"/aguila-horizonte.webp"
+},
 // INTERMEDIO
 
 {
@@ -858,46 +956,7 @@ r.modo===modoActual
 r.nivel===nivelActual
 
 )
-if(nivelActual % 15 === 0){
 
-const nuevaCarta={
-
-animal:"🏆 Checkpoint "+nivelActual,
-
-poder:"+100 XP",
-
-deseo:"Has alcanzado el nivel "+nivelActual,
-
-imagen:"/cards.png",
-
-id:Date.now(),
-
-checkpoint:nivelActual,
-
-tipo:modoActual
-
-}
-
-setCartas(prev=>{
-
-const nuevas=[...prev,nuevaCarta]
-
-localStorage.setItem(
-"cartas",
-JSON.stringify(nuevas)
-)
-
-return nuevas
-
-})
-
-setCartaNueva(nuevaCarta)
-
-setMostrarCofre(true)
-
-return
-
-}
 if(!recompensa)return
 
 const existe=
@@ -909,11 +968,119 @@ c=>
 c.animal===recompensa.animal
 
 )
+console.log(
+"RECOMPENSA",
+recompensa?.animal
+)
 
+console.log(
+"EXISTE",
+existe
+)
 if(existe)return
-const imagenCarta = cartasHistoria[0].imagen
+
+
+
+
+
+
+
+
+let imagenCarta = cartasHistoria[0].imagen
+
+if (recompensa.animal.includes("Guardián de los Secretos")) {
+  imagenCarta = "/cartasHistoria/assets/guardian-secretos.webp"
+}
+
+if (recompensa.animal.includes("Lobo del Destino")) {
+  imagenCarta = "/cartasHistoria/assets/lobo-destino.webp"
+}
+
+if (recompensa.animal.includes("Tortuga del Aprendizaje")) {
+  imagenCarta = "/cartasHistoria/assets/tortuga-aprendizaje.webp"
+}
+
+if (recompensa.animal.includes("Águila del Horizonte")) {
+  imagenCarta = "/cartasHistoria/assets/aguila-horizonte.webp"
+}
+
+if (recompensa.animal.includes("Oso de la Perseverancia")) {
+  imagenCarta = "/cartasHistoria/assets/oso-perseverancia.webp"
+}
+
+if (recompensa.animal.includes("Tigre del Coraje")) {
+  imagenCarta = "/cartasHistoria/assets/tigre-coraje.webp"
+}
+
+if (recompensa.animal.includes("Guardián del Conocimiento")) {
+  imagenCarta = "/cartasHistoria/assets/guardian-conocimiento.webp"
+}
+
+if (recompensa.animal.includes("Arquitecto de Sueños")) {
+  imagenCarta = "/cartasHistoria/assets/arquitecto-suenos.webp"
+}
+
+if (recompensa.animal.includes("León del Destino")) {
+  imagenCarta = "/cartasHistoria/assets/leon-destino.webp"
+}
+
+if (recompensa.animal.includes("Pulpo Estratega")) {
+  imagenCarta = "/cartasHistoria/assets/pulpo-estratega.webp"
+}
+
+if (recompensa.animal.includes("Rinoceronte Protector")) {
+  imagenCarta = "/cartasHistoria/assets/rinoceronte-protector.webp"
+}
+
+if (recompensa.animal.includes("Halcón del Renacimiento")) {
+  imagenCarta = "/cartasHistoria/assets/halcon-renacimiento.webp.png"
+}
+
+if (recompensa.animal.includes("Delfín de la Sabiduría")) {
+  imagenCarta = "/cartasHistoria/assets/delfin-sabiduria.webp"
+}
+
+if (recompensa.animal.includes("Lince Observador")) {
+  imagenCarta = "/cartasHistoria/assets/lince-observador.webp.png"
+}
+
+if (recompensa.animal.includes("Bisonte de la Voluntad")) {
+  imagenCarta = "/cartasHistoria/assets/bisonte-voluntad.webp"
+}
+
+if (recompensa.animal.includes("Elefante de la Memoria")) {
+  imagenCarta = "/cartasHistoria/assets/elefante-memoria.webp.png"
+}
+
+if (recompensa.animal.includes("Orca de la Intuición")) {
+  imagenCarta = "/cartasHistoria/assets/orca-intuicion.webp.png"
+}
+
+if (recompensa.animal.includes("Cóndor Celestial")) {
+  imagenCarta = "/cartasHistoria/assets/condor-celestial.webp"
+}
+
+if (recompensa.animal.includes("Ballena Azul Ancestral")) {
+  imagenCarta = "/cartasHistoria/assets/ballena-azul-ancestral.webp"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const nuevaCarta = {
+
   ...recompensa,
   imagen: imagenCarta,
   id: Date.now(),
@@ -7755,8 +7922,16 @@ position:"relative"
 >
 
 <img
-src={carta.imagen}
-alt={carta.nombre}
+src={
+desbloqueada
+? carta.imagen
+: "/cards.png"
+}
+alt={
+desbloqueada
+? carta.nombre
+: "🎴 Carta Misteriosa"
+}
 style={{
 width:"220px",
 height:"320px",
@@ -7765,6 +7940,7 @@ borderRadius:"15px",
 display:"block"
 }}
 />
+
 
 {!desbloqueada && (
 
@@ -8050,7 +8226,6 @@ setModo("menu")
 </div>
 
 )}
-
 {modo==="ajedrez"&&(
 
 <div className="game-container">
@@ -8387,6 +8562,8 @@ cartaSeleccionada
 ? cartaSeleccionada.nombre
 : " Ninguna"
 }
+
+</h3>
 <button
 onClick={()=>setModo("menu")}
 style={{
@@ -8400,7 +8577,6 @@ borderRadius:"10px"
 >
 ← Menú
 </button>
-</h3>
 <div
 style={{
 marginTop:"20px",
