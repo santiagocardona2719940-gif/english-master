@@ -15,6 +15,7 @@ import { cartasHistoria } from "../public/cartasHistoria/assets/cartasHistoria.j
 
 
 import './App.css'
+
 import {
 movimientoValido,
 esAzul,
@@ -22,7 +23,7 @@ esRojo,
 hayJaque,
 hayJaqueMate
 } from "./chess.js"
-
+import { poderes } from "./poderes"
 function App() {
 
   const [checkpoint, setCheckpoint] = useState(0)
@@ -91,20 +92,23 @@ const [energia,setEnergia] =
 useState(10)
 
 const [cartasAjedrez,setCartasAjedrez] =
-useState(cartasIniciales)
+useState([])
 const [mazoBatalla,setMazoBatalla] =
 useState([])
 
 const [coleccionCartas,setColeccionCartas] =
-useState(cartasIniciales)
+useState([])
 
 const [cartaSeleccionada,setCartaSeleccionada] =
 useState(null)
+const [modoCarta,setModoCarta] =
+useState(false)
 const [categoriaCarta,setCategoriaCarta] =
 useState("")
 const [turno,setTurno] =
 useState("azul")
-
+const [modoAjedrez,setModoAjedrez] =
+useState("ia")
 const [ultimaJugada,setUltimaJugada] =
 useState(null)
 
@@ -152,7 +156,7 @@ tableroActual[f][c]
 if(!pieza) continue
 
 if(!esRojo(pieza))
-continuefPRUEBA
+continue
 
 for(let ff=0;ff<8;ff++){
 
@@ -319,15 +323,35 @@ setTurno("azul")
 
 const clickCelda = (fila,col) => {
 
-if(turno!=="azul") return
+
 
 if(!seleccion){
 
 const pieza = tablero[fila][col]
+if(
+modoCarta &&
+cartaSeleccionada
+){
 
+alert(
+"Poder activado: " +
+cartaSeleccionada.nombre
+)
+
+setModoCarta(false)
+
+return
+
+}
 if(!pieza) return
 
-if(!esAzul(pieza)) return
+if(
+(turno==="azul" && !esAzul(pieza))
+||
+(turno==="rojo" && esAzul(pieza))
+){
+return
+}
 
 setSeleccion([fila,col])
 
@@ -390,8 +414,10 @@ return
 
 }
 
-setTurno("rojo")
+if(modoAjedrez==="ia"){
 
+setTurno("rojo")
+console.log("LLAMANDO IA")
 moverIA(
 nuevo,
 setTablero,
@@ -403,6 +429,16 @@ setDinero,
 setGemas,
 setCartas
 )
+
+}else{
+
+setTurno(
+turno==="azul"
+? "rojo"
+: "azul"
+)
+
+}
 
 return
 
@@ -477,11 +513,32 @@ animalInicial:""
    })
 useEffect(() => {
   const guardadas = localStorage.getItem("cartas")
+
   if (guardadas) {
-    setCartas(JSON.parse(guardadas))
-    
+
+    const cartasGuardadas =
+      JSON.parse(guardadas)
+
+    setCartas(cartasGuardadas)
+
+    setColeccionCartas(
+      cartasGuardadas.map((carta,index)=>({
+
+        id:index+1,
+
+        nombre:carta.animal,
+
+        energia:1,
+
+        imagen:carta.imagen,
+
+        descripcion:carta.deseo
+
+      }))
+    )
+
   }
-  
+
 }, [])
 
   const [imgUrl, setImgUrl] = useState("")
@@ -3443,6 +3500,9 @@ setMensajeBarista(
 
 setTimeout(()=>{
 
+console.log("IA INICIADA")
+
+let movimientos=[]
 const next=iBarista+1
 desbloquearCarta(
 "uberJuego",
@@ -7642,13 +7702,11 @@ position:"relative"
 src={carta.imagen}
 alt={carta.nombre}
 style={{
-width:"100%",
+width:"220px",
 height:"320px",
 objectFit:"cover",
-borderRadius:"20px",
-filter: desbloqueada
-? "none"
-: "brightness(0.2) blur(5px)"
+borderRadius:"15px",
+display:"block"
 }}
 />
 
@@ -7805,7 +7863,9 @@ gap:"10px"
 }}
 >
 
-{coleccionCartas.map((carta)=>(
+{coleccionCartas
+.slice(0, cartas.length)
+.map((carta)=>(
 
 <button
 key={carta.id}
@@ -7887,13 +7947,35 @@ disabled={
 mazoBatalla.length===0
 }
 
-onClick={()=>
+onClick={()=>{
+
+setModoAjedrez("ia")
 setModo("ajedrez")
-}
+
+}}
 
 >
 
-♟️ JUGAR
+🤖 VS IA
+
+</button>
+
+<button
+
+disabled={
+mazoBatalla.length===0
+}
+
+onClick={()=>{
+
+setModoAjedrez("humano")
+setModo("ajedrez")
+
+}}
+
+>
+
+👥 2 JUGADORES
 
 </button>
 
@@ -8064,64 +8146,30 @@ marginTop:"20px"
 }}
 >
 
-<button
-onClick={()=>
-setCategoriaCarta(
-categoriaCarta==="defensa"
-? ""
-: "defensa"
-)
-}
->
-🛡️ Defender
-</button>
 
-<button
-onClick={()=>
-setCategoriaCarta(
-categoriaCarta==="movimiento"
-? ""
-: "movimiento"
-)
-}
->
-⚡ Movimiento
-</button>
-
-<button
-onClick={()=>
-setCategoriaCarta(
-categoriaCarta==="especial"
-? ""
-: "especial"
-)
-}
->
-✨ Especiales
-</button>
 
 </div>
-
-{categoriaCarta && (
-
+<h2
+style={{
+textAlign:"center",
+marginTop:"20px"
+}}
+>
+🎴 TUS CARTAS
+</h2>
 <div
 style={{
 display:"flex",
 flexWrap:"wrap",
 justifyContent:"center",
-gap:"10px",
-marginTop:"15px"
+gap:"15px",
+marginTop:"20px"
 }}
 >
 
-{cartasAjedrez
-.filter(
-carta =>
-carta.tipo === categoriaCarta
-)
-.map(carta=>(
+{mazoBatalla.map(carta=>(
 
-<button
+<div
 key={carta.id}
 
 onClick={()=>
@@ -8129,30 +8177,39 @@ setCartaSeleccionada(carta)
 }
 
 style={{
-padding:"10px",
-borderRadius:"12px",
-background:"#222",
-color:"white",
+cursor:"pointer",
 border:
 cartaSeleccionada?.id===carta.id
-? "3px solid gold"
-: "2px solid #555"
+? "4px solid gold"
+: "2px solid #555",
+borderRadius:"15px",
+padding:"10px",
+background:"#111",
+width:"150px",
+textAlign:"center"
 }}
 >
 
-<div>{carta.nombre}</div>
+<img
+src={carta.imagen}
+alt={carta.nombre}
+style={{
+width:"100%",
+height:"200px",
+objectFit:"cover",
+borderRadius:"10px"
+}}
+/>
 
-<div>
-⚡ {carta.energia}
+<h4>
+{carta.nombre}
+</h4>
+
 </div>
-
-</button>
 
 ))}
 
 </div>
-
-)}
 
 </div>
 
@@ -8164,7 +8221,75 @@ marginTop:"20px"
 }}
 >
 
+<h3>
 🎴 Carta activa:
+{
+cartaSeleccionada
+? cartaSeleccionada.nombre
+: " Ninguna"
+}
+</h3>
+
+{cartaSeleccionada && (
+
+<div
+style={{
+background:"#111",
+padding:"15px",
+borderRadius:"15px",
+marginTop:"10px"
+}}
+>
+
+<img
+src={cartaSeleccionada.imagen}
+style={{
+width:"1500px",
+maxWidth:"90%",
+borderRadius:"20px",
+borderRadius:"20px"
+}}
+/>
+
+<h2>
+✨ Poder Especial
+</h2>
+
+<p>
+
+{cartaSeleccionada.descripcion}
+
+</p>
+
+<p
+style={{
+color:"#FFD700",
+fontWeight:"bold"
+}}
+>
+
+Selecciona una pieza para activar el poder.
+
+</p>
+<button
+onClick={()=>{
+
+setModoCarta(true)
+
+alert(
+"Selecciona una pieza para usar el poder"
+)
+
+}}
+>
+
+⚡ Usar Carta
+
+</button>
+
+</div>
+
+)}
 
 {
 cartaSeleccionada
@@ -8210,9 +8335,15 @@ setUltimaJugada(null)
 </button>
 
 <button
-onClick={()=>
-setModo("menu")
-}
+onClick={()=>{
+
+setModoCarta(true)
+
+alert(
+"Selecciona una pieza para usar el poder"
+)
+
+}}
 >
 
 ← volver
