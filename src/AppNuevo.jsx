@@ -9056,7 +9056,7 @@ onClick={()=>setModo("menu")}
             onClick={() => ciudadFrameRef.current?.focus()}
             style={{position:"fixed",top:"20px",left:"50%",transform:"translateX(-50%)",zIndex:100001,padding:"12px 22px",borderRadius:"14px",border:"2px solid rgba(255,255,255,.35)",background:"rgba(0,0,0,.72)",color:"white",fontSize:"15px",fontWeight:"bold",cursor:"pointer",backdropFilter:"blur(8px)"}}
           >
-            🎮 HAZ CLIC AQUÍ Y USA W A S D
+          
           </button>
 
           <button
