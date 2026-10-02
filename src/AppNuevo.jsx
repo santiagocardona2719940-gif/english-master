@@ -9112,7 +9112,7 @@ zIndex:"9999"
             {/* 🌆 CIUDAD */}
             <div
               className="card"
-              onClick={() => setModo("ciudad")}
+              onClick={() => window.location.href = "/juego/mobile/index.html"}
             >
               <img src="/ciudad.png" />
               <span>🌆 CIUDAD</span>
