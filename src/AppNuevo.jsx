@@ -9114,14 +9114,14 @@ zIndex:"9999"
               <span>🎮 MAZO</span>
             </div>
 
-            {/* 🌆 CIUDAD */}
-            <div
-              className="card"
-              onClick={() => setModo("ciudad")}
-            >
-              <img src="/ciudad.png" />
-              <span>🌆 CIUDAD</span>
-            </div>
+          {/* 🎮 JUEGO */}
+<div
+  className="card"
+  onClick={() => setModo("ciudad")}
+>
+  <img src="/game.png" />
+  <span>🎮 JUEGO</span>
+</div>
 
             <div className="card" onClick={() => setModo("academia")}>
             <img src="/academy.png" />
