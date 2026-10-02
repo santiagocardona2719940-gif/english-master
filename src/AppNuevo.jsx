@@ -48,6 +48,7 @@ console.log(intermedio)
 
   const [cartaNueva, setCartaNueva] = useState(null)
   const [modo, setModo] = useState("menu")
+  const ciudadFrameRef = useRef(null)
   const tableroInicial = [
 
 ["r","n","b","q","k","b","n","r"],
@@ -340,8 +341,49 @@ const pieza = tablero[fila][col]
 if(
 modoCarta &&
 cartaSeleccionada
+){alert(cartaSeleccionada?.nombre)
+if(
+cartaSeleccionada?.nombre?.includes(
+"Peón de Hierro"
+)
+
+){
+console.log("CARTA:", cartaSeleccionada)
+alert(JSON.stringify(cartaSeleccionada))
+setEfectosActivos(prev=>({
+...prev,
+peonHierro:true
+}))
+
+alert(
+"🛡️ Peón de Hierro activado"
+)
+
+setModoCarta(false)
+
+return
+
+}
+if(
+cartaSeleccionada?.nombre?.includes(
+"Lobo del Destino"
+)
 ){
 
+setEfectosActivos(prev=>({
+...prev,
+loboDestino:true
+}))
+
+alert(
+"🐺 Lobo del Destino activado"
+)
+
+setModoCarta(false)
+
+return
+
+}
 if(
 cartaSeleccionada?.nombre?.includes(
 "Guardián de los Secretos"
@@ -441,6 +483,23 @@ return
 setEnergia(prev=>prev-1)
 movimientoOk = true
 console.log("APAGANDO MIRADA")
+}
+if(
+efectosActivos.loboDestino &&
+tablero[f][c] === "P" &&
+c === col &&
+Math.abs(fila - f) <= 3 &&
+!tablero[fila][col]
+){
+
+movimientoOk = true
+
+setEfectosActivos(prev=>({
+...prev,
+loboDestino:false
+}))
+
+alert("🐺 Lobo del Destino")
 }
 if(
 efectosActivos.guardianSecretos &&
@@ -760,7 +819,7 @@ nivel:10,
 animal:"📘 Explorador de Nueva York",
 poder:"+10 XP",
 deseo:"Has aprendido frases básicas",
-imagen:"/explorador-new-york.webp"
+imagen:"/cartasHistoria/explorador-new-york.webp"
 },
 
 {
@@ -787,7 +846,7 @@ nivel:40,
 animal:"🐢 Tortuga del Aprendizaje",
 poder:"+40 XP",
 deseo:"Avanzas con paciencia",
-imagen:"/tortuga-aprendizaje.webp"
+imagen:"/cartasHistoria/tortuga-aprendizaje.webp.png"
 },
 
 {
@@ -796,7 +855,142 @@ nivel:50,
 animal:"🦅 Águila del Horizonte",
 poder:"+50 XP",
 deseo:"Ves más lejos en tu aprendizaje",
-imagen:"/aguila-horizonte.webp"
+imagen:"/cartasHistoria/aguila-horizonte.webp"
+},
+
+{
+modo:"aprender",
+nivel:60,
+animal:"🦁 León del Coraje",
+poder:"+60 XP",
+deseo:"Hablas sin miedo",
+imagen:"/cartasHistoria/leon-coraje.webp"
+},
+
+{
+modo:"aprender",
+nivel:70,
+animal:"🐬 Delfín Sabio",
+poder:"+70 XP",
+deseo:"Fluyes en las conversaciones",
+imagen:"/cartasHistoria/delfin-sabio.webp"
+},
+
+{
+modo:"aprender",
+nivel:80,
+animal:"🦉 Búho del Conocimiento",
+poder:"+80 XP",
+deseo:"Comprendes ideas complejas",
+imagen:"/cartasHistoria/buho-conocimiento.webp"
+},
+
+{
+modo:"aprender",
+nivel:90,
+animal:"🐆 Jaguar del Instinto",
+poder:"+90 XP",
+deseo:"Respondes rápidamente",
+imagen:"/cartasHistoria/jaguar-instinto.webp"
+},
+
+{
+modo:"aprender",
+nivel:100,
+animal:"🐉 Dragón del Idioma",
+poder:"+100 XP",
+deseo:"Has dominado el nivel básico",
+imagen:"/cartasHistoria/dragon-idioma.webp"
+},
+
+{
+modo:"aprender",
+nivel:110,
+animal:"🦊 Zorro Estratega",
+poder:"+110 XP",
+deseo:"Piensas antes de hablar",
+imagen:"/cartasHistoria/zorro-estratega.webp"
+},
+
+{
+modo:"aprender",
+nivel:120,
+animal:"🐻 Oso Protector",
+poder:"+120 XP",
+deseo:"Tu confianza crece",
+imagen:"/cartasHistoria/oso-protector.webp"
+},
+
+{
+modo:"aprender",
+nivel:130,
+animal:"🦌 Ciervo de la Calma",
+poder:"+130 XP",
+deseo:"Hablas con tranquilidad",
+imagen:"/cartasHistoria/ciervo-calma.webp"
+},
+
+{
+modo:"aprender",
+nivel:140,
+animal:"🦈 Tiburón del Éxito",
+poder:"+140 XP",
+deseo:"Avanzas sin detenerte",
+imagen:"/cartasHistoria/tiburon-exito.webp"
+},
+
+{
+modo:"aprender",
+nivel:150,
+animal:"🦍 Gorila de la Disciplina",
+poder:"+150 XP",
+deseo:"Nunca abandonas",
+imagen:"/cartasHistoria/gorila-disciplina.webp"
+},
+
+{
+modo:"aprender",
+nivel:160,
+animal:"🦄 Unicornio Legendario",
+poder:"+160 XP",
+deseo:"Crees en tus sueños",
+imagen:"/cartasHistoria/unicornio-legendario.webp"
+},
+
+{
+modo:"aprender",
+nivel:170,
+animal:"🐺 Señor de los Lobos",
+poder:"+170 XP",
+deseo:"Guías a otros estudiantes",
+imagen:"/cartasHistoria/senor-lobos.webp"
+},
+
+{
+modo:"aprender",
+nivel:180,
+animal:"👑 Rey del Aprendizaje",
+poder:"+180 XP",
+deseo:"Tu conocimiento inspira",
+imagen:"/cartasHistoria/rey-aprendizaje.webp"
+},
+
+{
+modo:"aprender",
+nivel:190,
+animal:"🌟 Maestro Supremo",
+poder:"+190 XP",
+deseo:"Has alcanzado la excelencia",
+imagen:"/cartasHistoria/maestro-supremo.webp"
+},
+
+{
+modo:"aprender",
+nivel:200,
+animal:"🌌 Guardián del Destino",
+poder:"+200 XP",
+deseo:"Tu viaje apenas comienza",
+imagen:"/cartasHistoria/guardian-destino.webp"
 },
 // INTERMEDIO
 
@@ -8013,7 +8207,8 @@ c=>c.tipo==="epica"
               gap: "20px",
               justifyContent: "center"
             }}>
-              {cartas.map((carta) => (
+            {cartas.map((carta,index) => (
+                
               <div
   key={carta.id}
   className={`carta ${carta.tipo}`}
@@ -8039,6 +8234,7 @@ onClick={() => {
   }
 
 }}
+
 >
                   <img
                     src={
@@ -8060,7 +8256,21 @@ carta.tipo==="legendaria"
 
 : "⭐ Común"
 }
+<button
+onClick={()=>{
+const nuevasCartas =
+cartas.filter((_,i)=>i!==index)
 
+setCartas(nuevasCartas)
+
+localStorage.setItem(
+"cartas",
+JSON.stringify(nuevasCartas)
+)
+}}
+>
+🗑️ Eliminar
+</button>
 </p>
                   <p>{carta.deseo}</p>
                 </div>
@@ -8074,159 +8284,180 @@ carta.tipo==="legendaria"
           </div>
         </div>
       )}
-      {modo==="mazo"&&(
+{modo === "mazo" && (
 
-<div className="game-container">
+  <div className="game-container">
 
-<div className="game-main">
+    <div className="game-main">
 
-<h1>🎴 Constructor de Mazo</h1>
+      <h1>🎴 Constructor de Mazo</h1>
 
-<h2>
-Cartas seleccionadas:
-{mazoBatalla.length}/10
-</h2>
+      <h2>
+        Cartas seleccionadas: {mazoBatalla.length}/10
+      </h2>
 
-<div
-style={{
-display:"grid",
-gridTemplateColumns:"repeat(auto-fit,200px)",
-gap:"10px"
-}}
->
+      <h3>Mis cartas</h3>
 
-{coleccionCartas
-.slice(0, cartas.length)
-.map((carta)=>(
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+          gap: "15px",
+          justifyContent: "center"
+        }}
+      >
 
-<button
-key={carta.id}
+        {coleccionCartas.length === 0 && (
+          <p>
+            🔒 Todavía no tienes cartas desbloqueadas
+          </p>
+        )}
 
-onClick={()=>{
+        {coleccionCartas.map((carta) => {
 
-if(mazoBatalla.length>=10){
-alert("Máximo 10 cartas")
-return
-}
+          const seleccionada = mazoBatalla.some(
+            c => c.id === carta.id
+          )
 
-if(
-mazoBatalla.some(
-c=>c.id===carta.id
-)
-){
-return
-}
+          return (
 
-setMazoBatalla(prev=>[
-...prev,
-carta
-])
+            <div
+              key={carta.id}
+              className="carta"
+              onClick={() => {
 
-}}
+                if (seleccionada) {
 
->
+                  setMazoBatalla(prev =>
+                    prev.filter(c => c.id !== carta.id)
+                  )
 
-{carta.nombre}
+                  return
+                }
 
-⚡ {carta.energia}
+                if (mazoBatalla.length >= 10) {
 
-</button>
+                  alert("⚠️ Solo puedes seleccionar 10 cartas")
 
-))}
+                  return
+                }
 
-</div>
+                setMazoBatalla(prev => [
+                  ...prev,
+                  carta
+                ])
 
-<h3>
-Mazo actual
-</h3>
+              }}
+              style={{
+                cursor: "pointer",
+                border: seleccionada
+                  ? "4px solid #00ff88"
+                  : "2px solid transparent",
+                padding: "10px",
+                borderRadius: "20px",
+                opacity: seleccionada ? 0.7 : 1
+              }}
+            >
 
-{mazoBatalla.map((carta)=>(
+              <img
+                src={carta.imagen || "/cards.png"}
+                alt={carta.nombre}
+                style={{
+                  width: "160px",
+                  height: "230px",
+                  objectFit: "cover",
+                  borderRadius: "15px"
+                }}
+              />
 
-<div
-key={carta.id}
-style={{
-margin:"5px"
-}}
->
+              <h3>{carta.nombre}</h3>
 
-{carta.nombre}
+              <p>
+                ⚡ Energía: {carta.energia || 1}
+              </p>
 
-<button
-onClick={()=>{
+              <button>
+                {seleccionada
+                  ? "✅ Seleccionada"
+                  : "➕ Agregar al mazo"}
+              </button>
 
-setMazoBatalla(
+            </div>
 
-mazoBatalla.filter(
-c=>c.id!==carta.id
-)
+          )
 
-)
+        })}
 
-}}
->
+      </div>
 
-❌
+      <h3>
+        Mazo actual ({mazoBatalla.length}/10)
+      </h3>
 
-</button>
+      {mazoBatalla.map((carta) => (
 
-</div>
+        <div
+          key={carta.id}
+          style={{
+            margin: "5px"
+          }}
+        >
 
-))}
+          {carta.nombre}
 
-<button
+          <button
+            onClick={() => {
 
-disabled={
-mazoBatalla.length===0
-}
+              setMazoBatalla(prev =>
+                prev.filter(c => c.id !== carta.id)
+              )
 
-onClick={()=>{
+            }}
+          >
+            ❌
+          </button>
 
-setModoAjedrez("ia")
-setModo("ajedrez")
+        </div>
 
-}}
+      ))}
 
->
+      <button
+        disabled={mazoBatalla.length === 0}
+        onClick={() => {
 
-🤖 VS IA
+          setModoAjedrez("ia")
+          setModo("ajedrez")
 
-</button>
+        }}
+      >
+        🤖 VS IA
+      </button>
 
-<button
+      <button
+        disabled={mazoBatalla.length === 0}
+        onClick={() => {
 
-disabled={
-mazoBatalla.length===0
-}
+          setModoAjedrez("humano")
+          setModo("ajedrez")
 
-onClick={()=>{
+        }}
+      >
+        👥 2 JUGADORES
+      </button>
 
-setModoAjedrez("humano")
-setModo("ajedrez")
+      <button
+        onClick={() => setModo("menu")}
+      >
+        ← volver
+      </button>
 
-}}
+    </div>
 
->
-
-👥 2 JUGADORES
-
-</button>
-
-<button
-onClick={()=>
-setModo("menu")
-}
->
-
-← volver
-
-</button>
-
-</div>
-
-</div>
+  </div>
 
 )}
-{modo==="ajedrez"&&(
+
+{modo === "ajedrez" && (
 
 <div className="game-container">
 
@@ -8667,7 +8898,6 @@ alert(
 </div>
 
 </div>
-
 )}
 {modo === "tienda" && (
 
@@ -8808,6 +9038,36 @@ onClick={()=>setModo("menu")}
 </div>
 
 )}
+      {/* 🌆 CIUDAD UNITY */}
+      {modo === "ciudad" && (
+        <div style={{position:"fixed",inset:0,width:"100vw",height:"100vh",background:"#000",zIndex:99999,overflow:"hidden"}}>
+          <iframe
+            ref={ciudadFrameRef}
+            src="http://localhost:8001"
+            title="NUMIND Ciudad"
+            tabIndex={0}
+            onLoad={() => setTimeout(() => ciudadFrameRef.current?.focus(), 300)}
+            onMouseDown={() => ciudadFrameRef.current?.focus()}
+            style={{display:"block",width:"100%",height:"100%",border:"none",outline:"none"}}
+            allow="fullscreen; autoplay; gamepad"
+          />
+
+          <button
+            onClick={() => ciudadFrameRef.current?.focus()}
+            style={{position:"fixed",top:"20px",left:"50%",transform:"translateX(-50%)",zIndex:100001,padding:"12px 22px",borderRadius:"14px",border:"2px solid rgba(255,255,255,.35)",background:"rgba(0,0,0,.72)",color:"white",fontSize:"15px",fontWeight:"bold",cursor:"pointer",backdropFilter:"blur(8px)"}}
+          >
+            🎮 HAZ CLIC AQUÍ Y USA W A S D
+          </button>
+
+          <button
+            onClick={() => setModo("menu")}
+            style={{position:"fixed",top:"20px",left:"20px",zIndex:100002,padding:"12px 20px",borderRadius:"14px",border:"none",background:"linear-gradient(135deg,#20d9ff,#9b5cff)",color:"white",fontSize:"15px",fontWeight:"bold",cursor:"pointer"}}
+          >
+            ← MENÚ
+          </button>
+        </div>
+      )}
+
       {/* 🏠 MENU */}
       {modo === "menu" && (
         <>
@@ -8845,16 +9105,22 @@ zIndex:"9999"
               <img src="/book2.png" />
             </div>
 
-            <div className="card" onClick={() => playSound()}>
-              <div
-className="card"
-onClick={() => setModo("mazo")}
->
+            {/* 🎮 MAZO */}
+            <div
+              className="card"
+              onClick={() => setModo("mazo")}
+            >
+              <img src="/game.png" />
+              <span>🎮 MAZO</span>
+            </div>
 
-<img src="/game.png" />
-
-</div>
-           
+            {/* 🌆 CIUDAD */}
+            <div
+              className="card"
+              onClick={() => setModo("ciudad")}
+            >
+              <img src="/ciudad.png" />
+              <span>🌆 CIUDAD</span>
             </div>
 
             <div className="card" onClick={() => setModo("academia")}>
@@ -8937,13 +9203,6 @@ boxShadow:
 
 
 export default App
-
-
-
-
-
-
-
 
 
 

@@ -75,9 +75,9 @@ export const cartasHistoria = [
     imagen: "/cartasHistoria/assets/lince-observador.webp.png"
   },
   {
-    id: 16,
-    nombre: "Bisonte de la Voluntad",
-    imagen: "/cartasHistoria/assets/bisonte-voluntad.webp"
+  id: 16,
+  nombre: "Bisonte de la Voluntad",
+  imagen: "/cartasHistoria/assets/bisonte-voluntad.webp"
   },
   {
     id: 17,
