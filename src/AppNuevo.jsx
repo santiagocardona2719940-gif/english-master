@@ -9105,7 +9105,156 @@ zIndex:"9999"
               <img src="/book2.png" />
             </div>
 
-            {/* 🎮 MAZO */}
+            {/* 🎮 SELECCIÓN DE JUEGO */}
+{modo === "juego" && (
+  <div
+    style={{
+      position: "fixed",
+      inset: 0,
+      width: "100vw",
+      height: "100vh",
+      background: "#111",
+      zIndex: 99999,
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: "25px",
+    }}
+  >
+    <h1 style={{color:"#fff", margin:0}}>🎮 JUEGO</h1>
+
+    <button
+      onClick={() => setModo("juegoPC")}
+      style={{
+        width:"280px",
+        padding:"20px",
+        fontSize:"22px",
+        borderRadius:"15px",
+        border:"none",
+        cursor:"pointer",
+      }}
+    >
+      💻 PC
+    </button>
+
+    <button
+      onClick={() => setModo("juegoMobile")}
+      style={{
+        width:"280px",
+        padding:"20px",
+        fontSize:"22px",
+        borderRadius:"15px",
+        border:"none",
+        cursor:"pointer",
+      }}
+    >
+      📱 MÓVIL
+    </button>
+
+    <button
+      onClick={() => setModo("menu")}
+      style={{
+        marginTop:"10px",
+        padding:"12px 25px",
+        fontSize:"18px",
+        borderRadius:"10px",
+        border:"none",
+        cursor:"pointer",
+      }}
+    >
+      ← VOLVER
+    </button>
+  </div>
+)}
+
+{/* 💻 JUEGO PC */}
+{modo === "juegoPC" && (
+  <div
+    style={{
+      position:"fixed",
+      inset:0,
+      width:"100vw",
+      height:"100vh",
+      background:"#000",
+      zIndex:99999,
+      overflow:"hidden",
+    }}
+  >
+    <iframe
+      src="/juego/pc/index.html"
+      title="NUMIND Juego PC"
+      style={{
+        display:"block",
+        width:"100%",
+        height:"100%",
+        border:"none",
+      }}
+      allow="fullscreen; autoplay; gamepad"
+    />
+
+    <button
+      onClick={() => setModo("juego")}
+      style={{
+        position:"fixed",
+        top:"15px",
+        left:"15px",
+        zIndex:100000,
+        padding:"10px 18px",
+        borderRadius:"10px",
+        border:"none",
+        cursor:"pointer",
+      }}
+    >
+      ← VOLVER
+    </button>
+  </div>
+)}
+
+{/* 📱 JUEGO MÓVIL */}
+{modo === "juegoMobile" && (
+  <div
+    style={{
+      position:"fixed",
+      inset:0,
+      width:"100vw",
+      height:"100vh",
+      background:"#000",
+      zIndex:99999,
+      overflow:"hidden",
+    }}
+  >
+    <iframe
+      src="/juego/mobile/index.html"
+      title="NUMIND Juego Móvil"
+      style={{
+        display:"block",
+        width:"100%",
+        height:"100%",
+        border:"none",
+      }}
+      allow="fullscreen; autoplay; gamepad"
+    />
+
+    <button
+      onClick={() => setModo("juego")}
+      style={{
+        position:"fixed",
+        top:"15px",
+        left:"15px",
+        zIndex:100000,
+        padding:"10px 18px",
+        borderRadius:"10px",
+        border:"none",
+        cursor:"pointer",
+      }}
+    >
+      ← VOLVER
+    </button>
+  </div>
+)}
+
+{/* 🎮 MAZO */}
             <div
               className="card"
               onClick={() => setModo("mazo")}
@@ -9117,7 +9266,7 @@ zIndex:"9999"
             {/* 🎮 JUEGO */}
             <div
               className="card"
-              onClick={() => setModo("ciudad")}
+              onClick={() => setModo("juego")}
             >
               <img src="/game.png" />
               <span>🎮 JUEGO</span>
