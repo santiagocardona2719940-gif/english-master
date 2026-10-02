@@ -9044,7 +9044,7 @@ onClick={()=>setModo("menu")}
         <div style={{position:"fixed",inset:0,width:"100vw",height:"100vh",background:"#000",zIndex:99999,overflow:"hidden"}}>
           <iframe
             ref={ciudadFrameRef}
-            src="/ciudad/index.html"
+            src="/juego/mobile/index.html"
             title="NUMIND Ciudad"
             tabIndex={0}
             onLoad={() => setTimeout(() => ciudadFrameRef.current?.focus(), 300)}
