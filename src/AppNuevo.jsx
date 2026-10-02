@@ -9039,34 +9039,7 @@ onClick={()=>setModo("menu")}
 
 )}
       {/* 🌆 CIUDAD UNITY */}
-      {modo === "ciudad" && (
-        <div style={{position:"fixed",inset:0,width:"100vw",height:"100vh",background:"#000",zIndex:99999,overflow:"hidden"}}>
-          <iframe
-            ref={ciudadFrameRef}
-            src="/ciudad/index.html"
-            title="NUMIND Ciudad"
-            tabIndex={0}
-            onLoad={() => setTimeout(() => ciudadFrameRef.current?.focus(), 300)}
-            onMouseDown={() => ciudadFrameRef.current?.focus()}
-            style={{display:"block",width:"100%",height:"100%",border:"none",outline:"none"}}
-            allow="fullscreen; autoplay; gamepad"
-          />
-
-          <button
-            onClick={() => ciudadFrameRef.current?.focus()}
-            style={{position:"fixed",top:"20px",left:"50%",transform:"translateX(-50%)",zIndex:100001,padding:"12px 22px",borderRadius:"14px",border:"2px solid rgba(255,255,255,.35)",background:"rgba(0,0,0,.72)",color:"white",fontSize:"15px",fontWeight:"bold",cursor:"pointer",backdropFilter:"blur(8px)"}}
-          >
-          
-          </button>
-
-          <button
-            onClick={() => setModo("menu")}
-            style={{position:"fixed",top:"20px",left:"20px",zIndex:100002,padding:"12px 20px",borderRadius:"14px",border:"none",background:"linear-gradient(135deg,#20d9ff,#9b5cff)",color:"white",fontSize:"15px",fontWeight:"bold",cursor:"pointer"}}
-          >
-            ← MENÚ
-          </button>
-        </div>
-      )}
+  
 
       {/* 🏠 MENU */}
       {modo === "menu" && (
