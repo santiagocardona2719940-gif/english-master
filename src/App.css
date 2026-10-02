@@ -1394,118 +1394,153 @@ body {
     transform: none !important;
   }
 }
+
 /* =========================================================
-   📱 CELULAR EN HORIZONTAL / LANDSCAPE
+   📱 iPHONE 16 PRO MAX - HORIZONTAL / LANDSCAPE
    ========================================================= */
 
-@media screen and (max-width: 900px) and (orientation: landscape) {
+@media screen and (orientation: landscape) and (max-width: 1000px) {
 
   html,
   body,
   #root {
-    width: 100%;
-    min-width: 100%;
-    height: 100%;
-    min-height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-    overflow-y: auto;
+    width: 100vw !important;
+    height: 100dvh !important;
+    min-width: 100vw !important;
+    min-height: 100dvh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
   }
 
   .app {
-    width: 100%;
-    min-width: 100%;
-    min-height: 100dvh;
-    height: auto;
-    margin: 0;
-    padding: 0;
+    width: 100vw !important;
+    height: 100dvh !important;
+    min-height: 100dvh !important;
+    margin: 0 !important;
+    padding: 0 !important;
     zoom: 1 !important;
-    justify-content: flex-start;
-    align-items: stretch;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    align-items: stretch !important;
   }
 
   .cards-top {
-    width: 100%;
-    margin: 5px 0 10px;
+    width: 100% !important;
+    box-sizing: border-box;
     gap: 10px;
+    margin: 5px 0 8px;
+    padding: 0 10px;
     flex-wrap: nowrap;
   }
 
   .cards-top img {
-    width: clamp(55px, 10vw, 100px);
+    width: clamp(55px, 10vw, 95px) !important;
     height: auto;
   }
 
   .title {
-    font-size: clamp(24px, 5vw, 42px) !important;
-    margin: 5px 0 10px;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: clamp(24px, 5vw, 38px) !important;
+    line-height: 1.05;
+    margin: 3px 0 7px;
+    padding: 0 10px;
+  }
+
+  .subtitle {
+    margin: 0 0 6px;
+    font-size: 13px;
   }
 
   .game-container {
-    width: 100% !important;
+    width: 100vw !important;
     max-width: none !important;
-    min-width: 0 !important;
-    min-height: calc(100dvh - 10px);
-    height: auto;
-    margin: 0;
-    border-radius: 0;
+    min-width: 100vw !important;
+    height: calc(100dvh - 45px) !important;
+    min-height: calc(100dvh - 45px) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
     transform: none !important;
-    overflow: visible;
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: stretch !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
   }
 
   .sidebar {
-    width: 75px;
-    min-width: 75px;
-    height: auto;
-    min-height: 100%;
-    flex-shrink: 0;
+    width: 82px !important;
+    min-width: 82px !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    padding: 10px 6px !important;
+    flex-shrink: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .sidebar h3 {
+    font-size: 18px !important;
+    margin: 4px 0 !important;
   }
 
   .game-main {
+    flex: 1 1 auto !important;
     width: auto !important;
     max-width: none !important;
-    min-width: 0;
-    flex: 1;
-    padding: 15px 20px;
-    margin: 0;
-    overflow-x: hidden;
+    min-width: 0 !important;
+    height: 100% !important;
+    padding: 16px 20px !important;
+    margin: 0 !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    box-sizing: border-box !important;
+  }
+
+  .game-main h1,
+  h1 {
+    font-size: clamp(28px, 5vw, 42px) !important;
+    margin: 8px 0 12px;
+  }
+
+  h2 {
+    font-size: clamp(22px, 4vw, 32px) !important;
   }
 
   .grid {
-    width: 100%;
-    max-width: none;
-    box-sizing: border-box;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 10px;
-    padding: 10px;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    grid-template-columns: repeat(4, minmax(145px, 1fr)) !important;
+    gap: 14px !important;
+    padding: 12px !important;
   }
 
   .card {
-    width: 100%;
-    min-width: 0;
-    height: auto;
-    min-height: 145px;
-    box-sizing: border-box;
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 180px !important;
+    min-height: 180px !important;
+    box-sizing: border-box !important;
   }
 
   .card img {
-    max-width: 75%;
-    height: auto;
-    max-height: 95px;
-    object-fit: contain;
+    width: auto !important;
+    max-width: 82% !important;
+    height: 100px !important;
+    max-height: 100px !important;
+    object-fit: contain !important;
   }
 
-  .card span {
-    font-size: clamp(13px, 2vw, 20px);
+  .card p {
+    font-size: 17px !important;
+    line-height: 1.15;
   }
 
   button {
-    max-width: 100%;
-    box-sizing: border-box;
+    font-size: 17px !important;
+    min-height: 44px;
   }
 
   img,
@@ -1514,7 +1549,6 @@ body {
     max-width: 100%;
   }
 
-  /* CIUDAD en horizontal */
   iframe[title="NUMIND Ciudad"] {
     position: fixed !important;
     inset: 0 !important;
@@ -1532,40 +1566,40 @@ body {
   }
 }
 
-/* =========================================================
-   📱 TELÉFONOS MUY BAJOS EN HORIZONTAL
-   ========================================================= */
-
-@media screen and (max-width: 900px)
-       and (orientation: landscape)
-       and (max-height: 500px) {
+/* 📱 Horizontal muy bajo: aprovecha toda la altura disponible */
+@media screen and (orientation: landscape) and (max-width: 1000px) and (max-height: 500px) {
 
   .cards-top {
-    display: none;
+    display: none !important;
   }
 
-  .title {
-    display: none;
+  .title,
+  .subtitle {
+    display: none !important;
   }
 
   .game-container {
-    min-height: 100dvh;
+    height: 100dvh !important;
+    min-height: 100dvh !important;
   }
 
   .game-main {
-    padding: 8px 12px;
+    padding: 10px 16px !important;
   }
 
   .grid {
-    gap: 8px;
-    padding: 8px;
+    grid-template-columns: repeat(4, minmax(150px, 1fr)) !important;
+    gap: 12px !important;
+    padding: 10px !important;
   }
 
   .card {
-    min-height: 120px;
+    height: 175px !important;
+    min-height: 175px !important;
   }
 
   .card img {
-    max-height: 70px;
+    height: 95px !important;
+    max-height: 95px !important;
   }
 }
