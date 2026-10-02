@@ -1394,3 +1394,178 @@ body {
     transform: none !important;
   }
 }
+/* =========================================================
+   📱 CELULAR EN HORIZONTAL / LANDSCAPE
+   ========================================================= */
+
+@media screen and (max-width: 900px) and (orientation: landscape) {
+
+  html,
+  body,
+  #root {
+    width: 100%;
+    min-width: 100%;
+    height: 100%;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .app {
+    width: 100%;
+    min-width: 100%;
+    min-height: 100dvh;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    zoom: 1 !important;
+    justify-content: flex-start;
+    align-items: stretch;
+  }
+
+  .cards-top {
+    width: 100%;
+    margin: 5px 0 10px;
+    gap: 10px;
+    flex-wrap: nowrap;
+  }
+
+  .cards-top img {
+    width: clamp(55px, 10vw, 100px);
+    height: auto;
+  }
+
+  .title {
+    font-size: clamp(24px, 5vw, 42px) !important;
+    margin: 5px 0 10px;
+  }
+
+  .game-container {
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    min-height: calc(100dvh - 10px);
+    height: auto;
+    margin: 0;
+    border-radius: 0;
+    transform: none !important;
+    overflow: visible;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .sidebar {
+    width: 75px;
+    min-width: 75px;
+    height: auto;
+    min-height: 100%;
+    flex-shrink: 0;
+  }
+
+  .game-main {
+    width: auto !important;
+    max-width: none !important;
+    min-width: 0;
+    flex: 1;
+    padding: 15px 20px;
+    margin: 0;
+    overflow-x: hidden;
+  }
+
+  .grid {
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .card {
+    width: 100%;
+    min-width: 0;
+    height: auto;
+    min-height: 145px;
+    box-sizing: border-box;
+  }
+
+  .card img {
+    max-width: 75%;
+    height: auto;
+    max-height: 95px;
+    object-fit: contain;
+  }
+
+  .card span {
+    font-size: clamp(13px, 2vw, 20px);
+  }
+
+  button {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  img,
+  video,
+  canvas {
+    max-width: 100%;
+  }
+
+  /* CIUDAD en horizontal */
+  iframe[title="NUMIND Ciudad"] {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100dvh !important;
+    min-width: 100vw !important;
+    min-height: 100dvh !important;
+    max-width: none !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    display: block !important;
+    transform: none !important;
+  }
+}
+
+/* =========================================================
+   📱 TELÉFONOS MUY BAJOS EN HORIZONTAL
+   ========================================================= */
+
+@media screen and (max-width: 900px)
+       and (orientation: landscape)
+       and (max-height: 500px) {
+
+  .cards-top {
+    display: none;
+  }
+
+  .title {
+    display: none;
+  }
+
+  .game-container {
+    min-height: 100dvh;
+  }
+
+  .game-main {
+    padding: 8px 12px;
+  }
+
+  .grid {
+    gap: 8px;
+    padding: 8px;
+  }
+
+  .card {
+    min-height: 120px;
+  }
+
+  .card img {
+    max-height: 70px;
+  }
+}
