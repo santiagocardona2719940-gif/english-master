@@ -1,19 +1,20 @@
 
 import { useState, useEffect, useRef } from 'react'
-import { frases } from './frases'
-import { intermedio } from './intermedio'
-import { academiaMesero } from './academiaMesero'
-import { academiaBarista } from './academiaBarista'
-import { academiaBartender } from './academiaBartender'
-import { academiaHotel } from './academiaHotel'
-import { academiaUber } from './academiaUber'
-import { academiaCajero } from './academiaCajero'
-import { academiaDelivery } from './academiaDelivery'
-import { academiaPeluquero } from './academiaPeluquero'
-import { cartasIniciales } from "./chessCards"
+import { frases } from './frases.js'
+import { intermedio } from './intermedio.js'
+import { academiaMesero } from './academiaMesero.js'
+import { academiaBarista } from './academiaBarista.js'
+import { academiaBartender } from './academiaBartender.js'
+import { academiaHotel } from './academiaHotel.js'
+import { academiaUber } from './academiaUber.js'
+import { academiaCajero } from './academiaCajero.js'
+import { academiaDelivery } from './academiaDelivery.js'
+import { academiaPeluquero } from './academiaPeluquero.js'
+import { cartasIniciales } from "./chessCards.js"
 import { historia } from "./historia.js";
 import { cartasHistoria } from "../public/cartasHistoria/assets/cartasHistoria.js";
-
+import Historias from "./Historias.jsx";
+import "./Historias.css";
 
 import './App.css'
 
@@ -24,7 +25,7 @@ esRojo,
 hayJaque,
 hayJaqueMate
 } from "./chess.js"
-import { poderes } from "./poderes"
+import { poderes } from "./poderes/index.js"
 function App() {
 
   const [checkpoint, setCheckpoint] = useState(0)
@@ -49,6 +50,7 @@ console.log(intermedio)
 
   const [cartaNueva, setCartaNueva] = useState(null)
   const [modo, setModo] = useState("menu")
+
   const ciudadFrameRef = useRef(null)
   const tableroInicial = [
 
@@ -9063,6 +9065,11 @@ onClick={()=>setModo("menu")}
         </div>
       )}
 
+      {/* 📖 HISTORIAS */}
+      {modo === "historias" && (
+        <Historias volver={() => setModo("menu")} />
+      )}
+
       {/* 🏠 MENU */}
       {modo === "menu" && (
         <>
@@ -9099,6 +9106,19 @@ zIndex:"9999"
             <div className="card" onClick={iniciarIntermedio}>
               <img src="/book2.png" />
             </div>
+
+            {/* 📖 HISTORIAS */}
+            <div
+              className="card"
+              onClick={() => setModo("historias")}
+              style={{ cursor: "pointer" }}
+            >
+              <div style={{ fontSize: "70px", lineHeight: 1 }}>📖</div>
+              <h3>HISTORIAS</h3>
+              <p>Escucha, entiende y piensa en inglés</p>
+            </div>
+
+
 
             {/* 🎮 MAZO */}
             <div

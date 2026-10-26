@@ -1,0 +1,350 @@
+.historias-page {
+  min-height: 100vh;
+  padding: 28px;
+  color: #f1f8ff;
+  background:
+    radial-gradient(ellipse at top left, rgba(0, 180, 255, 0.2), transparent 42%),
+    linear-gradient(135deg, #061522 0%, #0b2034 50%, #07111f 100%);
+  font-family: Inter, system-ui, -apple-system, sans-serif;
+}
+
+.historias-page * {
+  box-sizing: border-box;
+}
+
+.historias-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin: 0 auto 28px;
+  max-width: 1500px;
+}
+
+.historias-header h1 {
+  margin: 4px 0 8px;
+  color: #ffffff;
+  font-size: clamp(25px, 3vw, 38px);
+}
+
+.historias-header p {
+  margin: 0;
+  color: #a9c4d9;
+}
+
+.historias-kicker {
+  color: #65e6ff !important;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.historias-count {
+  margin-left: auto;
+  padding: 10px 15px;
+  border: 1px solid rgba(101, 230, 255, .35);
+  border-radius: 30px;
+  color: #80edff;
+  white-space: nowrap;
+}
+
+.historias-layout {
+  display: grid;
+  grid-template-columns: minmax(260px, 340px) minmax(0, 1fr);
+  gap: 22px;
+  max-width: 1500px;
+  margin: auto;
+  align-items: start;
+}
+
+.historias-library,
+.historias-player {
+  min-width: 0;
+  padding: 22px;
+  border: 1px solid rgba(130, 207, 255, .17);
+  border-radius: 22px;
+  background: rgba(12, 34, 53, .88);
+  box-shadow: 0 18px 55px rgba(0, 0, 0, .18);
+}
+
+.historias-library h2,
+.historias-player h2 {
+  margin-top: 0;
+  color: #ffffff;
+}
+
+.hist-input {
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 12px 13px;
+  border: 1px solid rgba(130, 207, 255, .22);
+  border-radius: 12px;
+  outline: none;
+  background: #0a1c2c;
+  color: #f1f8ff;
+  font: inherit;
+}
+
+.hist-input:focus {
+  border-color: #43d9ff;
+  box-shadow: 0 0 0 3px rgba(67, 217, 255, .1);
+}
+
+.hist-input option {
+  background: #0a1c2c;
+  color: #fff;
+}
+
+.historias-list {
+  display: grid;
+  gap: 8px;
+  max-height: 62vh;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.hist-chapter {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid transparent;
+  border-radius: 13px;
+  background: rgba(255, 255, 255, .035);
+  color: #d9eafa;
+  text-align: left;
+  cursor: pointer;
+  transition: background .18s, border-color .18s;
+}
+
+.hist-chapter:hover,
+.hist-chapter.active {
+  border-color: rgba(77, 222, 255, .45);
+  background: rgba(0, 180, 255, .15);
+}
+
+.hist-chapter-number {
+  display: grid;
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 11px;
+  background: rgba(0, 184, 255, .12);
+  color: #68e6ff;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.hist-chapter-text {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+.hist-chapter-text strong {
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.hist-chapter-text small {
+  color: #91aec4;
+  font-size: 11px;
+}
+
+.hist-player-top {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.hist-pill {
+  padding: 7px 11px;
+  border-radius: 30px;
+  background: rgba(0, 194, 255, .14);
+  color: #6ce8ff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.hist-pill.muted {
+  background: rgba(255, 255, 255, .07);
+  color: #c0d3e3;
+}
+
+.historias-player h2 {
+  margin-bottom: 8px;
+  font-size: clamp(22px, 2.5vw, 32px);
+}
+
+.hist-subtitle {
+  margin-top: 0;
+  color: #9eb8cc;
+}
+
+.hist-mode-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin: 22px 0;
+}
+
+.hist-mode-row button,
+.hist-btn,
+.hist-small-play {
+  border: 1px solid rgba(115, 211, 255, .25);
+  border-radius: 11px;
+  padding: 11px 14px;
+  background: #102b40;
+  color: #e7f7ff;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: .18s ease;
+}
+
+.hist-mode-row button:hover,
+.hist-btn.secondary:hover,
+.hist-small-play:hover {
+  border-color: #62e5ff;
+  background: #153c55;
+}
+
+.hist-mode-row button.selected {
+  border-color: #48dfff;
+  background: rgba(0, 190, 255, .2);
+  color: #8bedff;
+}
+
+.hist-speed {
+  display: grid;
+  gap: 10px;
+  margin: 20px 0;
+  color: #b6d2e6;
+  font-size: 13px;
+}
+
+.hist-speed input {
+  width: 100%;
+  accent-color: #43d9ff;
+  cursor: pointer;
+}
+
+.hist-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.hist-btn.primary {
+  border-color: #34d9ff;
+  background: linear-gradient(135deg, #087ba9, #07557e);
+  color: #ffffff;
+  font-weight: 800;
+}
+
+.hist-btn.primary:hover {
+  background: linear-gradient(135deg, #0a98c9, #086a9a);
+  transform: translateY(-1px);
+}
+
+.hist-btn:disabled {
+  opacity: .35;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.hist-dialogue {
+  display: grid;
+  gap: 12px;
+}
+
+.hist-line {
+  padding: 17px;
+  border: 1px solid rgba(143, 202, 235, .14);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, .035);
+  transition: background .2s, border-color .2s;
+}
+
+.hist-line.current {
+  border-color: rgba(77, 222, 255, .7);
+  background: rgba(0, 180, 255, .13);
+  box-shadow: 0 0 25px rgba(0, 180, 255, .07);
+}
+
+.hist-speaker {
+  margin-bottom: 8px;
+  color: #63e4ff;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .8px;
+}
+
+.hist-english {
+  margin: 0 0 8px;
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: 650;
+  line-height: 1.55;
+}
+
+.hist-spanish {
+  margin: 0 0 12px;
+  color: #b5c9d9;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.hist-small-play {
+  margin-right: 8px;
+  margin-bottom: 3px;
+  padding: 7px 10px;
+  font-size: 12px;
+}
+
+.hist-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(143, 202, 235, .15);
+}
+
+.hist-navigation span {
+  color: #a9c4d9;
+  font-size: 13px;
+}
+
+@media (max-width: 850px) {
+  .historias-page {
+    padding: 14px;
+  }
+
+  .historias-header {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .historias-count {
+    margin-left: 0;
+  }
+
+  .historias-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .historias-list {
+    max-height: 300px;
+  }
+
+  .historias-library,
+  .historias-player {
+    padding: 16px;
+  }
+}

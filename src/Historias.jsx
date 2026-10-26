@@ -1,0 +1,1204 @@
+import { useEffect, useMemo, useRef, useState } from "react";
+
+import "./Historias.css";
+
+
+
+const temas = [
+
+  ["Saludos y nuevas amistades", "Vida diaria"],
+
+  ["Conociendo a un vecino", "Vida diaria"],
+
+  ["Una conversación en el parque", "Vida diaria"],
+
+  ["Hablar sobre la familia", "Familia"],
+
+  ["Una llamada a mamá", "Familia"],
+
+  ["Planes para el fin de semana", "Vida diaria"],
+
+  ["Preparando el desayuno", "Comida"],
+
+  ["Pidiendo café", "Restaurantes"],
+
+  ["Ordenando en un restaurante", "Restaurantes"],
+
+  ["Pidiendo la cuenta", "Restaurantes"],
+
+  ["En el supermercado", "Compras"],
+
+  ["Preguntando por un precio", "Compras"],
+
+  ["Devolviendo un producto", "Compras"],
+
+  ["Comprando ropa", "Compras"],
+
+  ["Buscando zapatos", "Compras"],
+
+  ["Tomando el metro", "Transporte"],
+
+  ["Preguntando por una dirección", "Transporte"],
+
+  ["Tomando un taxi", "Transporte"],
+
+  ["En el aeropuerto", "Viajes"],
+
+  ["Registrándose en un hotel", "Viajes"],
+
+  ["Perdiendo una maleta", "Viajes"],
+
+  ["Reservando una habitación", "Viajes"],
+
+  ["Conociendo una ciudad", "Viajes"],
+
+  ["Pidiendo ayuda", "Vida diaria"],
+
+  ["Hablando con un compañero", "Trabajo"],
+
+  ["La primera entrevista de trabajo", "Trabajo"],
+
+  ["Preguntas en una entrevista", "Trabajo"],
+
+  ["El primer día de trabajo", "Trabajo"],
+
+  ["Hablando con el jefe", "Trabajo"],
+
+  ["Organizando una reunión", "Trabajo"],
+
+  ["Llegando tarde al trabajo", "Trabajo"],
+
+  ["Explicando un problema", "Trabajo"],
+
+  ["Pidiendo vacaciones", "Trabajo"],
+
+  ["Buscando empleo", "Trabajo"],
+
+  ["Una llamada profesional", "Trabajo"],
+
+  ["Trabajando en equipo", "Trabajo"],
+
+  ["Resolviendo un desacuerdo", "Trabajo"],
+
+  ["Haciendo una presentación", "Trabajo"],
+
+  ["Hablando de un proyecto", "Trabajo"],
+
+  ["Despidiéndose de un compañero", "Trabajo"],
+
+  ["En una cafetería", "Restaurantes"],
+
+  ["Pidiendo comida para llevar", "Restaurantes"],
+
+  ["Una alergia alimentaria", "Salud"],
+
+  ["Cocinando con un amigo", "Comida"],
+
+  ["Una receta familiar", "Comida"],
+
+  ["Invitando a cenar", "Familia"],
+
+  ["Organizando una fiesta", "Eventos"],
+
+  ["Comprando un regalo", "Compras"],
+
+  ["En una tienda de tecnología", "Compras"],
+
+  ["Preguntando por una oferta", "Compras"],
+
+  ["En la farmacia", "Salud"],
+
+  ["Pidiendo una cita médica", "Salud"],
+
+  ["Describiendo síntomas", "Salud"],
+
+  ["En el consultorio del dentista", "Salud"],
+
+  ["Hablando sobre el ejercicio", "Salud"],
+
+  ["En el gimnasio", "Salud"],
+
+  ["Conociendo a un entrenador", "Salud"],
+
+  ["Hablando sobre el sueño", "Salud"],
+
+  ["Buscando una dirección médica", "Salud"],
+
+  ["Llamando a emergencias", "Emergencias"],
+
+  ["En una estación de gasolina", "Transporte"],
+
+  ["Problemas con el automóvil", "Transporte"],
+
+  ["Alquilando un carro", "Viajes"],
+
+  ["Hablando con un mecánico", "Transporte"],
+
+  ["Buscando estacionamiento", "Transporte"],
+
+  ["Conduciendo en otra ciudad", "Transporte"],
+
+  ["Pidiendo indicaciones en carretera", "Transporte"],
+
+  ["Tomando un autobús", "Transporte"],
+
+  ["Comprando un boleto de tren", "Transporte"],
+
+  ["Perdiendo el tren", "Transporte"],
+
+  ["Conociendo a un compañero de clase", "Estudios"],
+
+  ["Preguntando al profesor", "Estudios"],
+
+  ["Estudiando para un examen", "Estudios"],
+
+  ["Trabajando en un proyecto escolar", "Estudios"],
+
+  ["Aprendiendo inglés", "Estudios"],
+
+  ["Practicando la pronunciación", "Estudios"],
+
+  ["Pidiendo que repitan algo", "Estudios"],
+
+  ["Haciendo una pregunta en clase", "Estudios"],
+
+  ["Inscribiéndose en un curso", "Estudios"],
+
+  ["Hablando sobre una carrera", "Estudios"],
+
+  ["Haciendo nuevos amigos", "Amistad"],
+
+  ["Invitando a salir", "Relaciones"],
+
+  ["Organizando una cita", "Relaciones"],
+
+  ["Hablando de sentimientos", "Relaciones"],
+
+  ["Pidiendo disculpas", "Relaciones"],
+
+  ["Resolviendo un malentendido", "Relaciones"],
+
+  ["Hablando de confianza", "Relaciones"],
+
+  ["Conociendo a los padres de alguien", "Familia"],
+
+  ["Celebrando un aniversario", "Eventos"],
+
+  ["Dando las gracias", "Vida diaria"],
+
+  ["Hablando del clima", "Vida diaria"],
+
+  ["Planeando un día de playa", "Viajes"],
+
+  ["En un parque nacional", "Viajes"],
+
+  ["Reservando una excursión", "Viajes"],
+
+  ["Alquilando una bicicleta", "Transporte"],
+
+  ["Haciendo senderismo", "Viajes"],
+
+  ["Preguntando por una actividad", "Viajes"],
+
+  ["Comprando entradas para un concierto", "Eventos"],
+
+  ["En el cine", "Entretenimiento"],
+
+  ["Hablando sobre una película", "Entretenimiento"],
+
+  ["Comprando entradas para un partido", "Deportes"],
+
+  ["Hablando de fútbol", "Deportes"],
+
+  ["Jugando al baloncesto", "Deportes"],
+
+  ["En una piscina", "Deportes"],
+
+  ["Organizando un viaje con amigos", "Viajes"],
+
+  ["Haciendo una reserva por teléfono", "Viajes"],
+
+  ["Cambiando una reserva", "Viajes"],
+
+  ["Preguntando por el desayuno del hotel", "Viajes"],
+
+  ["Solicitando una habitación diferente", "Viajes"],
+
+  ["Usando el servicio de lavandería", "Viajes"],
+
+  ["Pidiendo una recomendación", "Viajes"],
+
+  ["Hablando con el recepcionista", "Viajes"],
+
+  ["En una oficina de correos", "Servicios"],
+
+  ["Enviando un paquete", "Servicios"],
+
+  ["Abriendo una cuenta bancaria", "Dinero"],
+
+  ["Preguntando por una transferencia", "Dinero"],
+
+  ["Pagando con tarjeta", "Compras"],
+
+  ["Retirando dinero de un cajero", "Dinero"],
+
+  ["Haciendo un presupuesto", "Dinero"],
+
+  ["Hablando sobre el alquiler", "Vivienda"],
+
+  ["Buscando un apartamento", "Vivienda"],
+
+  ["Visitando una vivienda", "Vivienda"],
+
+  ["Hablando con el propietario", "Vivienda"],
+
+  ["Reportando una reparación", "Vivienda"],
+
+  ["Compartiendo un apartamento", "Vivienda"],
+
+  ["Comprando muebles", "Vivienda"],
+
+  ["Decorando una habitación", "Vivienda"],
+
+  ["Haciendo una mudanza", "Vivienda"],
+
+  ["Conociendo a los nuevos vecinos", "Vivienda"],
+
+  ["Una videollamada", "Tecnología"],
+
+  ["Problemas con el internet", "Tecnología"],
+
+  ["Configurando un teléfono", "Tecnología"],
+
+  ["Olvidando una contraseña", "Tecnología"],
+
+  ["Pidiendo soporte técnico", "Tecnología"],
+
+  ["Comprando una computadora", "Tecnología"],
+
+  ["Hablando por mensajes", "Tecnología"],
+
+  ["Organizando una reunión virtual", "Trabajo"],
+
+  ["Protegiendo información personal", "Tecnología"],
+
+  ["Aprendiendo a usar una aplicación", "Tecnología"],
+
+  ["Cuidando una mascota", "Animales"],
+
+  ["En una clínica veterinaria", "Animales"],
+
+  ["Paseando al perro", "Animales"],
+
+  ["Adoptando un animal", "Animales"],
+
+  ["Hablando sobre mascotas", "Animales"],
+
+  ["Pidiendo ayuda a un desconocido", "Vida diaria"],
+
+  ["Devolviendo una cartera encontrada", "Vida diaria"],
+
+  ["Perdiendo las llaves", "Vida diaria"],
+
+  ["Quedándose sin batería", "Tecnología"],
+
+  ["Haciendo una denuncia", "Servicios"],
+
+  ["Hablando con un policía", "Servicios"],
+
+  ["Buscando un objeto perdido", "Servicios"],
+
+  ["En una oficina de atención al cliente", "Servicios"],
+
+  ["Presentando una queja", "Servicios"],
+
+  ["Resolviendo un cobro incorrecto", "Dinero"],
+
+  ["Haciendo una compra por internet", "Compras"],
+
+  ["Recibiendo una entrega", "Compras"],
+
+  ["Cambiando la fecha de entrega", "Compras"],
+
+  ["Hablando con el repartidor", "Servicios"],
+
+  ["Preparando una celebración", "Eventos"],
+
+  ["Organizando una boda", "Eventos"],
+
+  ["Dando un discurso", "Eventos"],
+
+  ["Felicitar a un amigo", "Eventos"],
+
+  ["Celebrando un cumpleaños", "Eventos"],
+
+  ["Hablando de tradiciones", "Cultura"],
+
+  ["Conociendo otra cultura", "Cultura"],
+
+  ["Explicando una costumbre", "Cultura"],
+
+  ["Hablando sobre música", "Entretenimiento"],
+
+  ["Recomendando una canción", "Entretenimiento"],
+
+  ["Visitando un museo", "Cultura"],
+
+  ["Comprando un recuerdo", "Viajes"],
+
+  ["Preguntando sobre una obra de arte", "Cultura"],
+
+  ["Hablando de libros", "Entretenimiento"],
+
+  ["En una biblioteca", "Estudios"],
+
+  ["Hablando de metas personales", "Vida diaria"],
+
+  ["Organizando la semana", "Vida diaria"],
+
+  ["Haciendo una lista de tareas", "Vida diaria"],
+
+  ["Administrando el tiempo", "Trabajo"],
+
+  ["Tomando una decisión", "Vida diaria"],
+
+  ["Expresando una opinión", "Conversación"],
+
+  ["No estar de acuerdo con respeto", "Conversación"],
+
+  ["Debatiendo una idea", "Conversación"],
+
+  ["Explicando una experiencia", "Conversación"],
+
+  ["Contando una anécdota", "Conversación"],
+
+  ["Hablando de recuerdos de infancia", "Familia"],
+
+  ["Conversando sobre el futuro", "Conversación"],
+
+  ["Hablando de tecnología futura", "Conversación"],
+
+  ["Conversando sobre el medio ambiente", "Conversación"],
+
+  ["Ahorrando energía en casa", "Vivienda"],
+
+  ["Reciclando con los vecinos", "Vivienda"],
+
+  ["Participando en voluntariado", "Comunidad"],
+
+  ["Ayudando en un refugio", "Comunidad"],
+
+  ["Organizando una actividad comunitaria", "Comunidad"],
+
+  ["Conociendo a un nuevo compañero", "Trabajo"],
+
+  ["Negociando un horario", "Trabajo"],
+
+  ["Explicando un error", "Trabajo"],
+
+  ["Pidiendo retroalimentación", "Trabajo"],
+
+  ["Preparándose para una promoción", "Trabajo"],
+
+  ["Atendiendo a un cliente difícil", "Trabajo"],
+
+  ["Ofreciendo un servicio", "Negocios"],
+
+  ["Hablando de un emprendimiento", "Negocios"],
+
+  ["Negociando un precio", "Negocios"],
+
+  ["Presentando una idea de negocio", "Negocios"],
+
+  ["Hablando con un proveedor", "Negocios"],
+
+  ["Programando una entrega", "Negocios"],
+
+  ["Organizando un equipo", "Negocios"],
+
+  ["Hablando de objetivos de ventas", "Negocios"],
+
+  ["Resolviendo un problema con un cliente", "Negocios"],
+
+  ["Cerrando un acuerdo", "Negocios"],
+
+  ["Haciendo una llamada de seguimiento", "Negocios"],
+
+  ["Preparando una entrevista importante", "Trabajo"],
+
+  ["Practicando respuestas profesionales", "Trabajo"],
+
+  ["Hablando de experiencia laboral", "Trabajo"],
+
+  ["Explicando habilidades personales", "Trabajo"],
+
+  ["Buscando oportunidades de crecimiento", "Trabajo"],
+
+  ["Hablando de hábitos saludables", "Salud"],
+
+  ["Preparando comidas para la semana", "Comida"],
+
+  ["Comprando ingredientes frescos", "Comida"],
+
+  ["Pidiendo una opción vegetariana", "Restaurantes"],
+
+  ["Explicando una preferencia alimentaria", "Comida"],
+
+  ["Planeando unas vacaciones", "Viajes"],
+
+  ["Comparando destinos turísticos", "Viajes"],
+
+  ["Haciendo el registro de un vuelo", "Viajes"],
+
+  ["Pasando por seguridad del aeropuerto", "Viajes"],
+
+  ["Preguntando por una conexión", "Viajes"],
+
+  ["Cambiando dinero en otro país", "Viajes"],
+
+  ["Hablando con un guía turístico", "Viajes"],
+
+  ["Pidiendo ayuda en otro idioma", "Viajes"],
+
+  ["Conociendo a alguien en un evento", "Amistad"],
+
+  ["Manteniendo una conversación informal", "Conversación"],
+
+  ["Cambiando de tema con naturalidad", "Conversación"],
+
+  ["Haciendo preguntas abiertas", "Conversación"],
+
+  ["Terminando una conversación educadamente", "Conversación"]
+
+];
+
+
+
+
+// Biblioteca ampliada estilo streaming: 10.000 capítulos buscables y clasificados.
+const escenarios = [
+  ["en casa", "Vida diaria"], ["con un amigo", "Amistad"], ["con la familia", "Familia"],
+  ["en el trabajo", "Trabajo"], ["con un cliente", "Negocios"], ["durante un viaje", "Viajes"],
+  ["en una tienda", "Compras"], ["en una cafetería", "Restaurantes"], ["en una clase", "Estudios"],
+  ["por teléfono", "Tecnología"], ["en una oficina", "Servicios"], ["en la ciudad", "Vida diaria"],
+  ["en el vecindario", "Comunidad"], ["en el aeropuerto", "Viajes"], ["en un hotel", "Viajes"],
+  ["en una clínica", "Salud"], ["en un restaurante", "Restaurantes"], ["en una reunión", "Trabajo"],
+  ["en una entrevista", "Trabajo"], ["durante una emergencia", "Emergencias"], ["en el gimnasio", "Salud"],
+  ["en el banco", "Dinero"], ["en el supermercado", "Compras"], ["en el transporte público", "Transporte"],
+  ["en carretera", "Transporte"], ["en una cita", "Relaciones"], ["en una fiesta", "Eventos"],
+  ["en un concierto", "Entretenimiento"], ["en el cine", "Entretenimiento"], ["en un museo", "Cultura"],
+  ["en la universidad", "Estudios"], ["con un vecino", "Comunidad"], ["con un desconocido", "Vida diaria"],
+  ["en una videollamada", "Tecnología"], ["en una aplicación", "Tecnología"], ["con el propietario", "Vivienda"],
+  ["en un apartamento", "Vivienda"], ["en una boda", "Eventos"], ["en un cumpleaños", "Eventos"],
+  ["en la playa", "Viajes"], ["en la montaña", "Viajes"], ["en un parque", "Viajes"],
+  ["en una farmacia", "Salud"], ["con un médico", "Salud"], ["con un mecánico", "Transporte"],
+  ["con un repartidor", "Servicios"], ["en atención al cliente", "Servicios"], ["con un proveedor", "Negocios"],
+  ["en una negociación", "Negocios"], ["en una presentación", "Trabajo"], ["en una entrevista de trabajo", "Trabajo"],
+  ["en una mudanza", "Vivienda"], ["cuidando una mascota", "Animales"], ["en una veterinaria", "Animales"],
+  ["en una biblioteca", "Estudios"], ["en una clase de inglés", "Estudios"], ["en una oficina de correos", "Servicios"],
+  ["en una estación de tren", "Transporte"], ["en el metro", "Transporte"], ["en un taxi", "Transporte"],
+  ["en un vuelo", "Viajes"], ["en una excursión", "Viajes"], ["en una tienda de ropa", "Compras"],
+  ["en una tienda de tecnología", "Compras"], ["en una cocina", "Comida"], ["preparando una receta", "Comida"],
+  ["en una cena formal", "Restaurantes"], ["en una entrevista de radio", "Entretenimiento"], ["en un partido", "Deportes"],
+  ["jugando al baloncesto", "Deportes"], ["jugando al fútbol", "Deportes"], ["en una actividad comunitaria", "Comunidad"],
+  ["haciendo voluntariado", "Comunidad"], ["en una oficina de gobierno", "Servicios"], ["al resolver un trámite", "Servicios"],
+  ["en una conversación difícil", "Relaciones"], ["al pedir disculpas", "Relaciones"], ["al hacer nuevos amigos", "Amistad"],
+  ["hablando de sentimientos", "Relaciones"], ["hablando del futuro", "Conversación"], ["debatiendo una idea", "Conversación"],
+  ["compartiendo un recuerdo", "Familia"], ["planeando el fin de semana", "Vida diaria"], ["organizando unas vacaciones", "Viajes"],
+  ["buscando una vivienda", "Vivienda"], ["haciendo un presupuesto", "Dinero"], ["pagando una factura", "Dinero"],
+  ["en una entrevista de podcast", "Entretenimiento"], ["hablando de una serie", "Entretenimiento"], ["hablando de una película", "Entretenimiento"],
+  ["hablando de música", "Entretenimiento"], ["aprendiendo una habilidad", "Estudios"], ["en un curso profesional", "Estudios"],
+  ["con un entrenador", "Salud"], ["en una situación inesperada", "Vida diaria"], ["cuando algo sale mal", "Vida diaria"],
+  ["al celebrar una buena noticia", "Eventos"], ["al tomar una decisión", "Conversación"], ["al resolver un conflicto", "Relaciones"],
+  ["al organizar un negocio", "Negocios"], ["al negociar un contrato", "Negocios"], ["al buscar empleo", "Trabajo"]
+];
+const acciones = [
+  "Saludos y presentación", "Conocer a alguien", "Pedir información", "Explicar una situación", "Hacer una pregunta",
+  "Buscar una solución", "Organizar los planes", "Confirmar los detalles", "Cambiar una cita", "Resolver un problema",
+  "Dar una recomendación", "Compartir una experiencia", "Expresar una preferencia", "Hacer una comparación", "Pedir una aclaración",
+  "Ofrecer ayuda", "Aceptar una invitación", "Rechazar con educación", "Llegar a un acuerdo", "Explicar una demora",
+  "Solicitar un servicio", "Agradecer la ayuda", "Hablar de los planes", "Describir un lugar", "Contar lo que pasó",
+  "Prepararse para algo importante", "Hacer una compra", "Verificar una reserva", "Pedir instrucciones", "Expresar una opinión",
+  "Hablar de metas", "Aprender algo nuevo", "Presentar a otra persona", "Dar una actualización", "Hacer seguimiento",
+  "Negociar una solución", "Compartir buenas noticias", "Dar una noticia difícil", "Pedir permiso", "Hacer una sugerencia",
+  "Aclarar un malentendido", "Preparar una actividad", "Celebrar un logro", "Hablar de un cambio", "Explicar las reglas",
+  "Aprender a usar algo", "Buscar una alternativa", "Pedir una devolución", "Confirmar una dirección", "Hablar de costos",
+  "Organizar el tiempo", "Describir un inconveniente", "Contar una historia divertida", "Resolver una discusión", "Dar consejos",
+  "Pedir una opinión", "Compartir una preocupación", "Hacer planes de última hora", "Hablar sobre el clima", "Recordar la infancia",
+  "Hablar de cultura", "Explicar una costumbre", "Comparar opciones", "Hacer una reserva", "Cambiar una reserva",
+  "Presentar una queja", "Responder a una queja", "Pedir una oportunidad", "Preparar una entrevista", "Hablar de experiencia",
+  "Explicar habilidades", "Pedir retroalimentación", "Dar retroalimentación", "Coordinar un equipo", "Repartir tareas",
+  "Explicar un error", "Pedir disculpas", "Aceptar una disculpa", "Hablar de confianza", "Expresar emociones",
+  "Hacer una invitación", "Organizar una celebración", "Elegir un regalo", "Contar una anécdota", "Hablar de una meta futura",
+  "Resolver una urgencia", "Pedir ayuda profesional", "Dar indicaciones", "Seguir instrucciones", "Explicar un procedimiento",
+  "Aprender una expresión nueva", "Practicar una conversación", "Hablar con naturalidad", "Terminar una conversación", "Despedirse con amabilidad"
+];
+// Biblioteca amplia: aprendizaje, cultura, información, pensamiento, historias y ocio.
+const colecciones = [
+  ["Inglés y comunicación", ["Saludos y presentaciones", "Conversaciones cotidianas", "Pronunciación y acento", "Gramática sin complicaciones", "Vocabulario práctico", "Expresiones idiomáticas", "Inglés para el trabajo", "Inglés para viajar", "Comprensión auditiva", "Cómo contar una historia"]],
+  ["Ciencia y naturaleza", ["El sistema solar", "Cómo funciona el cerebro", "El cuerpo humano", "El océano profundo", "Los volcanes", "El cambio climático", "Los animales y sus sentidos", "La evolución", "La electricidad", "La física cotidiana", "La química en casa", "El origen de la vida", "Los agujeros negros", "El agua en la Tierra", "Los ecosistemas"]],
+  ["Historia y civilizaciones", ["El antiguo Egipto", "La antigua Grecia", "El Imperio romano", "La Ruta de la Seda", "La Edad Media", "El Renacimiento", "La Revolución Industrial", "La historia de Nueva York", "La historia de Colombia", "Las grandes exploraciones", "La invención de la imprenta", "La historia de la medicina", "Civilizaciones precolombinas", "La historia de la música", "Grandes descubrimientos"]],
+  ["Filosofía y pensamiento", ["Qué significa vivir bien", "Cómo pensar críticamente", "La ética en la vida diaria", "Libertad y responsabilidad", "Cómo reconocer falacias", "El arte de hacer preguntas", "La lógica de los argumentos", "Diferentes ideas de felicidad", "Qué es la justicia", "Cómo cambiar de opinión", "El conocimiento y la duda", "Dilemas morales", "La mente y la conciencia", "El sentido del tiempo", "Cómo tomar mejores decisiones"]],
+  ["Matemáticas y lógica", ["Matemáticas cotidianas", "Probabilidad y azar", "Acertijos de lógica", "Patrones y secuencias", "Estadística para todos", "Cómo leer gráficos", "Porcentajes y descuentos", "Pensamiento espacial", "Estrategias para resolver problemas", "Números sorprendentes"]],
+  ["Tecnología e innovación", ["Cómo funciona internet", "Inteligencia artificial", "Robots en la vida diaria", "Ciberseguridad básica", "Privacidad digital", "Cómo funcionan los videojuegos", "La historia de las computadoras", "Exploración espacial moderna", "Energías renovables", "Tecnologías del futuro", "Cómo crear una aplicación", "Redes sociales y atención"]],
+  ["Arte y literatura", ["Cómo apreciar una pintura", "Grandes novelas del mundo", "Poesía para principiantes", "Cómo se crea una película", "La historia del teatro", "Fotografía y composición", "Arquitectura alrededor del mundo", "Mitos y leyendas", "Cómo escribir un cuento", "Símbolos en el arte", "La música clásica", "La evolución del cine"]],
+  ["Entretenimiento y cultura pop", ["Misterios para resolver", "Aventura en una ciudad desconocida", "Historias de detectives", "Comedia de situaciones", "Ciencia ficción", "Fantasía y mundos imaginarios", "Historias de amistad", "Leyendas urbanas", "Un viaje inesperado", "El secreto del museo", "El caso de la llave perdida", "Supervivencia en la naturaleza", "Un concurso sorprendente", "Detrás de cámaras", "Curiosidades del cine"]],
+  ["Sociedad y cultura", ["Costumbres de distintos países", "Cómo funcionan las ciudades", "Tradiciones familiares", "Idiomas del mundo", "Comida y cultura", "Festivales internacionales", "Cómo se forman las comunidades", "Comunicación entre culturas", "La vida en otros países", "Cómo cambian las sociedades"]],
+  ["Vida práctica y bienestar", ["Organizar el tiempo", "Hábitos y rutinas", "Comunicación asertiva", "Resolver conflictos", "Cocina sencilla", "Nutrición básica", "Dormir mejor", "Ejercicio y movimiento", "Primeros auxilios informativos", "Administrar un presupuesto", "Cómo comparar productos", "Seguridad al viajar", "Cuidar el medio ambiente", "Aprender una habilidad", "Planear objetivos"]],
+  ["Negocios y finanzas", ["Cómo funciona una empresa", "Presupuestos personales", "Ahorro e interés compuesto", "Marketing básico", "Negociación respetuosa", "Emprendimiento desde cero", "Servicio al cliente", "Liderazgo y equipos", "Economía en la vida diaria", "Cómo leer una factura", "Conceptos básicos de impuestos", "Planear un proyecto"]],
+  ["Geografía y viajes", ["Maravillas naturales", "Capitales del mundo", "Montañas famosas", "Desiertos y oasis", "Islas sorprendentes", "Viajar con poco presupuesto", "Cómo leer un mapa", "Parques nacionales", "Climas del planeta", "Rutas históricas", "Ciudades subterráneas", "Pueblos y tradiciones"]],
+  ["Mente y aprendizaje", ["Cómo funciona la memoria", "Técnicas de estudio", "Aprender con repetición", "Cómo concentrarse", "Creatividad y resolución", "Cómo evaluar una fuente", "Detectar información falsa", "Tomar apuntes útiles", "Aprendizaje durante toda la vida", "Cómo explicar ideas difíciles"]]
+];
+const formatos = ["Introducción a", "Curiosidades sobre", "Una historia sobre", "Preguntas y respuestas sobre", "Mitos y realidades de", "Aprende paso a paso:", "Un reto intelectual sobre", "Una conversación sobre", "Un caso para analizar:", "Ideas esenciales de", "Explorando", "Lo que conviene saber de", "Un episodio para descubrir", "Ejemplos prácticos de", "Debate y reflexión sobre", "Un misterio relacionado con", "Guía para principiantes:", "Nivel intermedio:", "Nivel avanzado:", "Datos sorprendentes de"];
+const temasUnicos = new Map();
+for (const [categoria, asuntos] of colecciones) {
+  for (const asunto of asuntos) temasUnicos.set(asunto, categoria);
+}
+for (const tema of temas) temasUnicos.set(tema[0], tema[1]);
+for (const accion of acciones) for (const [escenario, categoria] of escenarios) {
+  const titulo = `${accion} ${escenario}`;
+  if (!temasUnicos.has(titulo)) temasUnicos.set(titulo, categoria || "Vida práctica y bienestar");
+}
+const temasFinales = [...temasUnicos.entries()].map(([titulo, categoria]) => [titulo, categoria]);
+for (const formato of formatos) {
+  for (const [titulo, categoria] of [...temasFinales]) {
+    if (temasFinales.length >= 10000) break;
+    const nombre = `${formato} ${titulo}`;
+    if (!temasUnicos.has(nombre)) { temasUnicos.set(nombre, categoria); temasFinales.push([nombre, categoria]); }
+  }
+  if (temasFinales.length >= 10000) break;
+}
+let serie = 2;
+while (temasFinales.length < 10000) {
+  for (const [titulo, categoria] of [...temasUnicos.entries()]) {
+    const nombre = `Especial ${serie}: ${titulo}`;
+    if (!temasUnicos.has(nombre)) { temasUnicos.set(nombre, categoria); temasFinales.push([nombre, categoria]); }
+    if (temasFinales.length >= 10000) break;
+  }
+  serie++;
+}
+
+
+const conversacionesBase = [
+
+  [
+
+    ["Alex", "Hi! How are you doing today?", "¡Hola! ¿Cómo estás hoy?"],
+
+    ["Sam", "I'm doing well, thanks. How about you?", "Estoy bien, gracias. ¿Y tú?"],
+
+    ["Alex", "Pretty good. It's nice to see you.", "Bastante bien. Me alegra verte."],
+
+    ["Sam", "You too! How has your week been?", "¡Igualmente! ¿Cómo ha estado tu semana?"],
+
+    ["Alex", "Busy, but I can't complain.", "Ocupada, pero no me puedo quejar."],
+
+    ["Sam", "I know what you mean. Have a great day!", "Sé a qué te refieres. ¡Que tengas un buen día!"]
+
+  ],
+
+  [
+
+    ["Customer", "Excuse me, could you help me, please?", "Disculpe, ¿podría ayudarme, por favor?"],
+
+    ["Worker", "Of course. What do you need?", "Por supuesto. ¿Qué necesita?"],
+
+    ["Customer", "I'm looking for something, but I can't find it.", "Estoy buscando algo, pero no lo encuentro."],
+
+    ["Worker", "No problem. Let me show you.", "No hay problema. Déjeme mostrarle."],
+
+    ["Customer", "Thank you. I really appreciate your help.", "Gracias. Aprecio mucho su ayuda."],
+
+    ["Worker", "You're welcome. Let me know if you need anything else.", "De nada. Avíseme si necesita algo más."]
+
+  ],
+
+  [
+
+    ["Jamie", "Do you have a minute to talk?", "¿Tienes un minuto para hablar?"],
+
+    ["Taylor", "Sure. What's going on?", "Claro. ¿Qué pasa?"],
+
+    ["Jamie", "I wanted to ask you about something.", "Quería preguntarte algo."],
+
+    ["Taylor", "Go ahead. I'm listening.", "Adelante. Te escucho."],
+
+    ["Jamie", "Thanks for taking the time.", "Gracias por tomarte el tiempo."],
+
+    ["Taylor", "Of course. I'm happy to help.", "Por supuesto. Con gusto te ayudo."]
+
+  ],
+
+  [
+
+    ["Guest", "Hello, I have a reservation under my name.", "Hola, tengo una reserva a mi nombre."],
+
+    ["Host", "Welcome! Could I have your name, please?", "¡Bienvenido! ¿Me dice su nombre, por favor?"],
+
+    ["Guest", "Yes, it's Taylor Morgan.", "Sí, Taylor Morgan."],
+
+    ["Host", "Thank you. I'll check that for you.", "Gracias. Voy a comprobarlo."],
+
+    ["Guest", "Great. Please let me know if you need anything else.", "Perfecto. Dígame si necesita algo más."],
+
+    ["Host", "Everything is ready. Right this way, please.", "Todo está listo. Por aquí, por favor."]
+
+  ],
+
+  [
+
+    ["Morgan", "I think we need to make a plan.", "Creo que necesitamos hacer un plan."],
+
+    ["Riley", "I agree. What should we do first?", "Estoy de acuerdo. ¿Qué deberíamos hacer primero?"],
+
+    ["Morgan", "Let's list the most important things.", "Hagamos una lista de las cosas más importantes."],
+
+    ["Riley", "Good idea. I'll write everything down.", "Buena idea. Voy a anotarlo todo."],
+
+    ["Morgan", "Then we can decide who does each task.", "Después podemos decidir quién hace cada tarea."],
+
+    ["Riley", "Perfect. That sounds much easier.", "Perfecto. Eso parece mucho más fácil."]
+
+  ],
+
+  [
+
+    ["Chris", "I'm sorry, but I think there's been a mistake.", "Lo siento, pero creo que ha habido un error."],
+
+    ["Jordan", "I'm sorry to hear that. Can you explain what happened?", "Lamento escucharlo. ¿Puedes explicar qué pasó?"],
+
+    ["Chris", "This isn't what I expected.", "Esto no es lo que esperaba."],
+
+    ["Jordan", "I understand. Let's see how we can fix it.", "Entiendo. Veamos cómo podemos solucionarlo."],
+
+    ["Chris", "Thank you for listening to me.", "Gracias por escucharme."],
+
+    ["Jordan", "Of course. We'll do our best to help.", "Por supuesto. Haremos todo lo posible por ayudar."]
+
+  ],
+
+  [
+
+    ["Avery", "What do you think about this idea?", "¿Qué piensas de esta idea?"],
+
+    ["Casey", "I like it, but I have one question.", "Me gusta, pero tengo una pregunta."],
+
+    ["Avery", "Sure, go ahead.", "Claro, adelante."],
+
+    ["Casey", "Have you thought about the cost?", "¿Has pensado en el costo?"],
+
+    ["Avery", "That's a good point. We should compare our options.", "Es un buen punto. Deberíamos comparar nuestras opciones."],
+
+    ["Casey", "Great. Then we can make a better decision.", "Genial. Así podremos tomar una mejor decisión."]
+
+  ],
+
+  [
+
+    ["Employee", "Could we talk about my schedule?", "¿Podríamos hablar de mi horario?"],
+
+    ["Manager", "Certainly. What would you like to discuss?", "Por supuesto. ¿Qué te gustaría conversar?"],
+
+    ["Employee", "I'd like to ask if a change is possible.", "Quisiera preguntar si es posible hacer un cambio."],
+
+    ["Manager", "Let me check the schedule first.", "Déjame revisar primero el horario."],
+
+    ["Employee", "I appreciate your time.", "Aprecio tu tiempo."],
+
+    ["Manager", "I'll get back to you as soon as I can.", "Te responderé tan pronto como pueda."]
+
+  ],
+
+  [
+
+    ["Pat", "Have you ever tried this before?", "¿Alguna vez has probado esto?"],
+
+    ["Lee", "No, not yet. What is it like?", "No, todavía no. ¿Cómo es?"],
+
+    ["Pat", "It's easier than it looks.", "Es más fácil de lo que parece."],
+
+    ["Lee", "Really? Maybe you can show me.", "¿En serio? Tal vez puedas enseñarme."],
+
+    ["Pat", "Absolutely. Let's try it together.", "Por supuesto. Intentémoslo juntos."],
+
+    ["Lee", "Thanks! I'm excited to learn.", "¡Gracias! Estoy emocionado por aprender."]
+
+  ],
+
+  [
+
+    ["Drew", "I have some good news!", "¡Tengo buenas noticias!"],
+
+    ["Sky", "Really? What happened?", "¿En serio? ¿Qué pasó?"],
+
+    ["Drew", "Something I've been working on finally worked out.", "Algo en lo que he estado trabajando finalmente salió bien."],
+
+    ["Sky", "That's wonderful! You must be happy.", "¡Qué maravilloso! Debes estar feliz."],
+
+    ["Drew", "I am. Thanks for always encouraging me.", "Lo estoy. Gracias por animarme siempre."],
+
+    ["Sky", "You deserve it. Let's celebrate soon!", "Te lo mereces. ¡Celebremos pronto!"]
+
+  ]
+
+];
+
+
+
+const crearCapitulo = (tema, index) => {
+  const [title, category] = tema;
+  const level = index < 3334 ? "Principiante" : index < 6667 ? "Intermedio" : "Avanzado";
+  const prompts = [
+    ["Host", `Today we're exploring ${title.toLowerCase()}. What should we know first?`, `Hoy exploraremos ${title.toLowerCase()}. ¿Qué deberíamos saber primero?`],
+    ["Guest", "Let's begin with the main idea and explain it in simple terms.", "Empecemos con la idea principal y expliquémosla de forma sencilla."],
+    ["Host", "Can you give us a concrete example?", "¿Puedes darnos un ejemplo concreto?"],
+    ["Guest", "Of course. Imagine a real-life situation where this idea is useful.", "Claro. Imagina una situación real en la que esta idea sea útil."],
+    ["Host", "What is a common mistake or surprising detail people should remember?", "¿Cuál es un error común o un detalle sorprendente que deberíamos recordar?"],
+    ["Guest", "The key is to stay curious, check reliable information, and keep asking questions.", "La clave es mantener la curiosidad, comprobar información confiable y seguir haciendo preguntas."]
+  ];
+  const funPrompts = [
+    ["Narrator", `Welcome to this episode: ${title}.`, `Bienvenidos a este episodio: ${title}.`],
+    ["Alex", "I have a feeling this is going to be more surprising than we expect.", "Tengo la sensación de que esto será más sorprendente de lo que esperamos."],
+    ["Sam", "Look carefully at the clues. One small detail may change everything.", "Mira las pistas con atención. Un pequeño detalle puede cambiarlo todo."],
+    ["Alex", "That makes sense now. I hadn't noticed that before.", "Ahora tiene sentido. No me había fijado en eso antes."],
+    ["Sam", "Let's compare our ideas and see what we can discover.", "Comparemos nuestras ideas y veamos qué podemos descubrir."],
+    ["Narrator", "Every answer opens the door to another question.", "Cada respuesta abre la puerta a otra pregunta."]
+  ];
+  const learningCategories = ["Ciencia y naturaleza", "Historia y civilizaciones", "Filosofía y pensamiento", "Matemáticas y lógica", "Tecnología e innovación", "Arte y literatura", "Sociedad y cultura", "Negocios y finanzas", "Geografía y viajes", "Mente y aprendizaje"];
+  const base = learningCategories.includes(category) ? prompts : funPrompts;
+  const dialogue = base.map(([speaker, en, es]) => ({ speaker, en, es }));
+  return { id: index + 1, title, category, level, dialogue };
+};
+
+
+const capitulos = temasFinales.slice(0, 10000).map(crearCapitulo);
+
+const limpiarTexto = (texto) =>
+
+  String(texto ?? "").replace(/\s*\/\s*/g, ", ").replace(/\s+/g, " ").trim();
+
+
+
+export default function Historias({ volver = () => {} }) {
+
+  const [busqueda, setBusqueda] = useState("");
+
+  const [categoria, setCategoria] = useState("Todas");
+
+  const [nivel, setNivel] = useState("Todos");
+
+  const [capituloId, setCapituloId] = useState(1);
+
+  const [linea, setLinea] = useState(0);
+
+  const [idioma, setIdioma] = useState("en");
+
+  const [velocidad, setVelocidad] = useState(0.85);
+
+  const [reproduciendo, setReproduciendo] = useState(false);
+
+  const [modo, setModo] = useState("dialogo");
+
+  const [cantidadVisible, setCantidadVisible] = useState(100);
+
+  const stopRef = useRef(false);
+
+
+
+  const capitulo = capitulos.find((c) => c.id === capituloId) || capitulos[0];
+
+  const categorias = useMemo(
+
+    () => ["Todas", ...new Set(capitulos.map((c) => c.category))],
+
+    []
+
+  );
+
+
+
+  const filtrados = useMemo(() => capitulos.filter((c) => {
+
+    const termino = busqueda.trim().toLowerCase();
+    const coincideBusqueda = !termino || c.title.toLowerCase().includes(termino) || c.category.toLowerCase().includes(termino) || c.level.toLowerCase().includes(termino);
+
+    const coincideCategoria = categoria === "Todas" || c.category === categoria;
+
+    const coincideNivel = nivel === "Todos" || c.level === nivel;
+
+    return coincideBusqueda && coincideCategoria && coincideNivel;
+
+  }), [busqueda, categoria, nivel]);
+
+
+
+  useEffect(() => {
+
+    return () => window.speechSynthesis?.cancel();
+
+  }, []);
+
+
+
+  const hablar = (texto, lang = "en-US", rate = velocidad) =>
+    new Promise((resolve) => {
+      if (!("speechSynthesis" in window)) {
+        alert("Tu navegador no permite reproducir voz.");
+        resolve();
+        return;
+      }
+
+      const synth = window.speechSynthesis;
+      synth.cancel();
+
+      const utterance = new SpeechSynthesisUtterance(limpiarTexto(texto));
+      utterance.lang = lang;
+      utterance.rate = rate;
+      utterance.pitch = 1;
+
+      // Espera a que el navegador cargue las voces y selecciona una del idioma pedido.
+      const seleccionarVoz = () => {
+        const voces = synth.getVoices();
+        const idiomaBase = lang.toLowerCase().startsWith("es") ? "es" : "en";
+        const coincidentes = voces.filter((voz) =>
+          (voz.lang || "").toLowerCase().startsWith(idiomaBase)
+        );
+        const preferida = coincidentes.find((voz) =>
+          /natural|neural|premium|enhanced|samantha|monica|paulina|jorge|diego/i.test(voz.name)
+        );
+        const voz = preferida || coincidentes[0];
+        if (voz) utterance.voice = voz;
+        // Conserva explícitamente el idioma solicitado aunque no haya voz coincidente.
+        utterance.lang = lang;
+      };
+
+      seleccionarVoz();
+      if (synth.getVoices().length === 0) {
+        synth.addEventListener("voiceschanged", seleccionarVoz, { once: true });
+      }
+
+      let terminado = false;
+      const finalizar = () => {
+        if (terminado) return;
+        terminado = true;
+        synth.removeEventListener("voiceschanged", seleccionarVoz);
+        resolve();
+      };
+      utterance.onend = finalizar;
+      utterance.onerror = finalizar;
+      synth.speak(utterance);
+    });
+
+
+  const detener = () => {
+
+    stopRef.current = true;
+
+    window.speechSynthesis?.cancel();
+
+    setReproduciendo(false);
+
+  };
+
+
+
+  const reproducirLinea = async (i, idiomaElegido = idioma) => {
+
+    detener();
+
+    setLinea(i);
+
+    const d = capitulo.dialogue[i];
+
+    await hablar(
+
+      idiomaElegido === "en" ? d.en : d.es,
+
+      idiomaElegido === "en" ? "en-US" : "es-ES"
+
+    );
+
+  };
+
+
+
+  const reproducirTodo = async () => {
+
+    stopRef.current = false;
+
+    setReproduciendo(true);
+
+    for (let i = linea; i < capitulo.dialogue.length; i++) {
+
+      if (stopRef.current) break;
+
+      setLinea(i);
+
+      const d = capitulo.dialogue[i];
+
+
+
+      if (modo === "espanol") {
+
+        await hablar(d.es, "es-ES", 0.92);
+
+        if (stopRef.current) break;
+
+        await hablar(d.en, "en-US", velocidad);
+
+      } else if (modo === "pensar") {
+
+        await hablar(d.en, "en-US", 0.65);
+
+        if (stopRef.current) break;
+
+        await new Promise((resolve) => setTimeout(resolve, 1800));
+
+      } else {
+
+        await hablar(d.en, "en-US", velocidad);
+
+        if (stopRef.current) break;
+
+        await new Promise((resolve) => setTimeout(resolve, 350));
+
+        await hablar(d.es, "es-ES", 0.92);
+
+      }
+
+      if (stopRef.current) break;
+
+      await new Promise((resolve) => setTimeout(resolve, 450));
+
+    }
+
+    setReproduciendo(false);
+
+  };
+
+
+
+  const seleccionarCapitulo = (id) => {
+
+    detener();
+
+    setCapituloId(id);
+
+    setLinea(0);
+
+  };
+
+
+
+  return (
+
+    <main className="historias-page">
+
+      <header className="historias-header">
+
+        <button className="hist-btn secondary" onClick={() => { detener(); volver(); }}>
+
+          ← Volver
+
+        </button>
+
+        <div>
+
+          <p className="historias-kicker">INGLÉS PRO · LEARNING STUDIO</p>
+
+          <h1>Historias y conversaciones</h1>
+
+          <p>Aprende, descubre, piensa y disfruta: explora miles de episodios en inglés y español.</p>
+
+        </div>
+
+        <span className="historias-count">10.000 capítulos</span>
+
+      </header>
+
+
+
+      <section className="historias-layout">
+
+        <aside className="historias-library">
+
+          <h2>Biblioteca</h2>
+
+          <input
+
+            className="hist-input"
+
+            placeholder="Buscar conversación..."
+
+            value={busqueda}
+
+            onChange={(e) => { setBusqueda(e.target.value); setCantidadVisible(100); }}
+
+          />
+
+          <select className="hist-input" value={categoria} onChange={(e) => { setCategoria(e.target.value); setCantidadVisible(100); }}>
+
+            {categorias.map((c) => <option key={c}>{c}</option>)}
+
+          </select>
+
+          <select className="hist-input" value={nivel} onChange={(e) => { setNivel(e.target.value); setCantidadVisible(100); }}>
+
+            {["Todos", "Principiante", "Intermedio", "Avanzado"].map((n) => <option key={n}>{n}</option>)}
+
+          </select>
+
+          <div className="historias-list">
+
+            {filtrados.slice(0, cantidadVisible).map((c) => (
+
+              <button
+
+                key={c.id}
+
+                className={`hist-chapter ${c.id === capituloId ? "active" : ""}`}
+
+                onClick={() => seleccionarCapitulo(c.id)}
+
+              >
+
+                <span className="hist-chapter-number">{String(c.id).padStart(3, "0")}</span>
+
+                <span className="hist-chapter-text">
+
+                  <strong>{c.title}</strong>
+
+                  <small>{c.category} · {c.level}</small>
+
+                </span>
+
+              </button>
+
+            ))}
+
+            {filtrados.length === 0 && <p>No se encontraron capítulos.</p>}
+            {filtrados.length > cantidadVisible && (
+              <button className="hist-btn secondary" onClick={() => setCantidadVisible((v) => v + 100)}>Mostrar más ({Math.min(100, filtrados.length - cantidadVisible)} de {filtrados.length})</button>
+            )}
+
+          </div>
+
+        </aside>
+
+
+
+        <section className="historias-player">
+
+          <div className="hist-player-top">
+
+            <span className="hist-pill">{capitulo.level}</span>
+
+            <span className="hist-pill muted">{capitulo.category}</span>
+
+          </div>
+
+          <h2>{String(capitulo.id).padStart(3, "0")} · {capitulo.title}</h2>
+
+          <p className="hist-subtitle">Conversación práctica de la vida real</p>
+
+
+
+          <div className="hist-mode-row">
+
+            <button className={modo === "dialogo" ? "selected" : ""} onClick={() => setModo("dialogo")}>🇺🇸 Inglés + español</button>
+
+            <button className={modo === "espanol" ? "selected" : ""} onClick={() => setModo("espanol")}>🇪🇸 Español primero</button>
+
+            <button className={modo === "pensar" ? "selected" : ""} onClick={() => setModo("pensar")}>🧠 Pensar en inglés</button>
+
+          </div>
+
+
+
+          <div className="hist-speed">
+
+            <label htmlFor="hist-speed">Velocidad del inglés: {velocidad.toFixed(2)}×</label>
+
+            <input
+
+              id="hist-speed"
+
+              type="range"
+
+              min="0.5"
+
+              max="1.1"
+
+              step="0.05"
+
+              value={velocidad}
+
+              onChange={(e) => setVelocidad(Number(e.target.value))}
+
+            />
+
+          </div>
+
+
+
+          <div className="hist-controls">
+
+            <button className="hist-btn primary" onClick={reproducirTodo}>▶ Escuchar conversación</button>
+
+            <button className="hist-btn secondary" onClick={detener}>■ Detener</button>
+
+          </div>
+
+
+
+          <div className="hist-dialogue">
+
+            {capitulo.dialogue.map((d, i) => (
+
+              <article key={`${capitulo.id}-${i}`} className={`hist-line ${linea === i ? "current" : ""}`}>
+
+                <div className="hist-speaker">{d.speaker}</div>
+
+                <p className="hist-english">{d.en}</p>
+
+                <p className="hist-spanish">{d.es}</p>
+
+                <button className="hist-small-play" onClick={() => reproducirLinea(i, "en")}>
+
+                  🔊 Inglés
+
+                </button>
+
+                <button className="hist-small-play" onClick={() => reproducirLinea(i, "es")}>
+
+                  🔊 Español
+
+                </button>
+
+              </article>
+
+            ))}
+
+          </div>
+
+
+
+          <footer className="hist-navigation">
+
+            <button className="hist-btn secondary" disabled={capitulo.id === 1} onClick={() => seleccionarCapitulo(capitulo.id - 1)}>← Anterior</button>
+
+            <span>Capítulo {capitulo.id} de 10000</span>
+
+            <button className="hist-btn primary" disabled={capitulo.id === 10000} onClick={() => seleccionarCapitulo(capitulo.id + 1)}>Siguiente →</button>
+
+          </footer>
+
+        </section>
+
+      </section>
+
+    </main>
+
+  );
+
+}
