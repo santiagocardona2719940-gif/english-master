@@ -863,9 +863,17 @@ export default function Historias({ volver = () => {} }) {
         const coincidentes = voces.filter((voz) =>
           (voz.lang || "").toLowerCase().startsWith(idiomaBase)
         );
-        const preferida = coincidentes.find((voz) =>
-          /natural|neural|premium|enhanced|samantha|monica|paulina|jorge|diego/i.test(voz.name)
-        );
+        // Inglés: prioriza voces masculinas de Estados Unidos.
+        // Español: conserva la selección anterior para no cambiar la voz española.
+        const preferida = idiomaBase === "en"
+          ? coincidentes.find((voz) =>
+              /alex|fred|daniel|david|guy|mark|tom|aaron|jorge|diego|male/i.test(voz.name)
+            ) || coincidentes.find((voz) =>
+              /natural|neural|premium|enhanced|google us english/i.test(voz.name)
+            )
+          : coincidentes.find((voz) =>
+              /natural|neural|premium|enhanced|samantha|monica|paulina|jorge|diego/i.test(voz.name)
+            );
         const voz = preferida || coincidentes[0];
         if (voz) utterance.voice = voz;
         // Conserva explícitamente el idioma solicitado aunque no haya voz coincidente.
