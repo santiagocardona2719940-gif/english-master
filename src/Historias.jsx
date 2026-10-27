@@ -549,6 +549,182 @@ const colecciones = [
   ["Geografía y viajes", ["Maravillas naturales", "Capitales del mundo", "Montañas famosas", "Desiertos y oasis", "Islas sorprendentes", "Viajar con poco presupuesto", "Cómo leer un mapa", "Parques nacionales", "Climas del planeta", "Rutas históricas", "Ciudades subterráneas", "Pueblos y tradiciones"]],
   ["Mente y aprendizaje", ["Cómo funciona la memoria", "Técnicas de estudio", "Aprender con repetición", "Cómo concentrarse", "Creatividad y resolución", "Cómo evaluar una fuente", "Detectar información falsa", "Tomar apuntes útiles", "Aprendizaje durante toda la vida", "Cómo explicar ideas difíciles"]]
 ];
+// ============================================================================
+// ZONA FÁCIL DE EDITAR: AGREGA AQUÍ TUS HISTORIAS EN ESPAÑOL
+// ---------------------------------------------------------------------------
+// Para agregar una lectura, pega un objeto dentro de "historias" de la
+// categoría correspondiente. Puedes copiar el ejemplo comentado más abajo.
+// Cada línea lleva: personaje, texto en inglés (en) y traducción al español (es).
+// IMPORTANTE: escribe las categorías exactamente como aparecen aquí.
+// ============================================================================
+const bibliotecaEditable = [
+  { categoria: "Inglés y comunicación", historias: [
+    {
+      titulo: "Saludos y presentaciones: conoce a alguien nuevo",
+      nivel: "Principiante",
+      dialogo: [
+        { personaje: "Daniel", ingles: 'Good morning! How are you today?', espanol: '¡Buenos días! ¿Cómo estás hoy?' },
+        { personaje: "Sofia", ingles: "I'm doing well, thank you. And you?", espanol: 'Estoy bien, gracias. ¿Y tú?' },
+        { personaje: "Daniel", ingles: "I'm great. It's nice to see you again.", espanol: 'Estoy muy bien. Qué gusto verte de nuevo.' },
+        { personaje: "Sofia", ingles: "It's nice to see you, too. How have you been?", espanol: 'También me alegra verte. ¿Cómo has estado?' },
+        { personaje: "Daniel", ingles: "I've been busy, but everything is going well.", espanol: 'He estado ocupado, pero todo va bien.' },
+        { personaje: "Sofia", ingles: "That's good to hear. My name is Daniel.", espanol: 'Me alegra escuchar eso. Me llamo Daniel.' },
+        { personaje: "Daniel", ingles: "Hi, Daniel. I'm Sofia. It's a pleasure to meet you.", espanol: 'Hola, Daniel. Soy Sofía. Mucho gusto en conocerte.' },
+        { personaje: "Sofia", ingles: 'The pleasure is mine, Sofia. Are you new here?', espanol: 'El gusto es mío, Sofía. ¿Eres nueva aquí?' },
+        { personaje: "Daniel", ingles: 'Yes, I started working here on Monday.', espanol: 'Sí, empecé a trabajar aquí el lunes.' },
+        { personaje: "Sofia", ingles: 'Welcome to the team! How are you finding the place?', espanol: '¡Bienvenida al equipo! ¿Qué te parece el lugar?' },
+        { personaje: "Daniel", ingles: 'Everyone has been very friendly so far.', espanol: 'Hasta ahora, todos han sido muy amables.' },
+        { personaje: "Sofia", ingles: "I'm glad. Let me introduce you to my coworker.", espanol: 'Me alegra. Déjame presentarte a mi compañero de trabajo.' },
+        { personaje: "Daniel", ingles: 'This is Michael. He works in customer service.', espanol: 'Él es Michael. Trabaja en atención al cliente.' },
+        { personaje: "Sofia", ingles: "Hello, Michael. I'm Sofia, the new assistant.", espanol: 'Hola, Michael. Soy Sofía, la nueva asistente.' },
+        { personaje: "Daniel", ingles: 'Welcome, Sofia. Please let me know if you need anything.', espanol: 'Bienvenida, Sofía. Avísame si necesitas algo.' },
+        { personaje: "Sofia", ingles: 'Thank you. I appreciate your help.', espanol: 'Gracias. Aprecio tu ayuda.' },
+        { personaje: "Daniel", ingles: 'Where are you from, Sofia?', espanol: '¿De dónde eres, Sofía?' },
+        { personaje: "Sofia", ingles: "I'm from Colombia, but I live nearby now.", espanol: 'Soy de Colombia, pero ahora vivo cerca de aquí.' },
+        { personaje: "Daniel", ingles: 'Really? Which city are you from?', espanol: '¿En serio? ¿De qué ciudad eres?' },
+        { personaje: "Sofia", ingles: "I'm from Medellín. Have you ever visited Colombia?", espanol: 'Soy de Medellín. ¿Alguna vez has visitado Colombia?' },
+        { personaje: "Daniel", ingles: "Not yet, but I'd love to go someday.", espanol: 'Todavía no, pero me encantaría ir algún día.' },
+        { personaje: "Sofia", ingles: 'You should visit. The people are warm and welcoming.', espanol: 'Deberías visitarla. La gente es cálida y acogedora.' },
+        { personaje: "Daniel", ingles: 'What languages do you speak?', espanol: '¿Qué idiomas hablas?' },
+        { personaje: "Sofia", ingles: "I speak Spanish, and I'm learning English.", espanol: 'Hablo español y estoy aprendiendo inglés.' },
+        { personaje: "Daniel", ingles: 'Your English is clear. Keep practicing every day.', espanol: 'Tu inglés es claro. Sigue practicando todos los días.' },
+        { personaje: "Sofia", ingles: 'Thank you. Sometimes I feel nervous when I speak.', espanol: 'Gracias. A veces me pongo nerviosa cuando hablo.' },
+        { personaje: "Daniel", ingles: "That's normal. You don't need to be perfect.", espanol: 'Es normal. No necesitas ser perfecta.' },
+        { personaje: "Sofia", ingles: 'I just want people to understand me.', espanol: 'Solo quiero que la gente me entienda.' },
+        { personaje: "Daniel", ingles: "They will. Speak slowly and don't be afraid to ask questions.", espanol: 'Lo harán. Habla despacio y no tengas miedo de hacer preguntas.' },
+        { personaje: "Sofia", ingles: 'By the way, how do you spell your last name?', espanol: 'Por cierto, ¿cómo se escribe tu apellido?' },
+        { personaje: "Daniel", ingles: "It's Ramirez: R-A-M-I-R-E-Z.", espanol: 'Es Ramírez: R-A-M-I-R-E-Z.' },
+        { personaje: "Sofia", ingles: 'Thanks. I want to make sure I write it correctly.', espanol: 'Gracias. Quiero asegurarme de escribirlo correctamente.' },
+        { personaje: "Daniel", ingles: 'No problem. People often ask me to spell it.', espanol: 'No hay problema. La gente suele pedirme que lo deletree.' },
+        { personaje: "Sofia", ingles: 'Do you prefer Sofia or Sofi?', espanol: '¿Prefieres Sofía o Sofi?' },
+        { personaje: "Daniel", ingles: 'Sofia is fine, but my friends call me Sofi.', espanol: 'Sofía está bien, pero mis amigos me llaman Sofi.' },
+        { personaje: "Sofia", ingles: "I'll call you Sofia until I know you better.", espanol: 'Te llamaré Sofía hasta que te conozca mejor.' },
+        { personaje: "Daniel", ingles: 'That sounds good. What should I call you?', espanol: 'Me parece bien. ¿Cómo debería llamarte?' },
+        { personaje: "Sofia", ingles: 'Daniel is perfect. My family calls me Dan.', espanol: 'Daniel está perfecto. Mi familia me llama Dan.' },
+        { personaje: "Daniel", ingles: 'Nice to know. Is this your first job in this city?', espanol: 'Qué bueno saberlo. ¿Este es tu primer trabajo en esta ciudad?' },
+        { personaje: "Sofia", ingles: "Yes, and I'm excited to meet new people.", espanol: 'Sí, y me entusiasma conocer gente nueva.' },
+        { personaje: "Daniel", ingles: "You'll meet plenty of people here.", espanol: 'Aquí conocerás a muchísima gente.' },
+        { personaje: "Sofia", ingles: 'I hope so. I would like to make some friends.', espanol: 'Eso espero. Me gustaría hacer algunos amigos.' },
+        { personaje: "Daniel", ingles: 'We sometimes have lunch together. You can join us.', espanol: 'A veces almorzamos juntos. Puedes acompañarnos.' },
+        { personaje: "Sofia", ingles: "I'd love to. What time do you usually go?", espanol: 'Me encantaría. ¿A qué hora suelen ir?' },
+        { personaje: "Daniel", ingles: "Around twelve thirty, depending on the day's schedule.", espanol: 'Alrededor de las doce y media, según el horario del día.' },
+        { personaje: "Sofia", ingles: "Great. I'll ask you about it later.", espanol: 'Perfecto. Te preguntaré más tarde.' },
+        { personaje: "Daniel", ingles: 'Are you from a big family?', espanol: '¿Vienes de una familia grande?' },
+        { personaje: "Sofia", ingles: 'Yes, I have two brothers and one sister.', espanol: 'Sí, tengo dos hermanos y una hermana.' },
+        { personaje: "Daniel", ingles: 'That sounds lively. Are they living nearby?', espanol: 'Parece una familia animada. ¿Viven cerca?' },
+        { personaje: "Sofia", ingles: 'My sister lives here, but my brothers live abroad.', espanol: 'Mi hermana vive aquí, pero mis hermanos viven en el extranjero.' },
+        { personaje: "Daniel", ingles: 'Do you get to see them often?', espanol: '¿Puedes verlos con frecuencia?' },
+        { personaje: "Sofia", ingles: 'We call every weekend and visit when we can.', espanol: 'Hablamos por teléfono cada fin de semana y nos visitamos cuando podemos.' },
+        { personaje: "Daniel", ingles: "That's a lovely way to stay connected.", espanol: 'Es una manera muy bonita de mantenerse en contacto.' },
+        { personaje: "Sofia", ingles: 'What do you like to do in your free time?', espanol: '¿Qué te gusta hacer en tu tiempo libre?' },
+        { personaje: "Daniel", ingles: 'I enjoy cooking, walking, and watching movies.', espanol: 'Disfruto cocinar, caminar y ver películas.' },
+        { personaje: "Sofia", ingles: 'What kind of movies do you like?', espanol: '¿Qué tipo de películas te gustan?' },
+        { personaje: "Daniel", ingles: 'I like comedies because they help me relax.', espanol: 'Me gustan las comedias porque me ayudan a relajarme.' },
+        { personaje: "Sofia", ingles: 'I prefer documentaries, especially about history.', espanol: 'Prefiero los documentales, especialmente los de historia.' },
+        { personaje: "Daniel", ingles: 'Maybe you can recommend one to me.', espanol: 'Quizás puedas recomendarme uno.' },
+        { personaje: "Sofia", ingles: "Of course. I'll send you a title this afternoon.", espanol: 'Claro. Te enviaré un título esta tarde.' },
+        { personaje: "Daniel", ingles: 'Thanks! Do you live far from the office?', espanol: '¡Gracias! ¿Vives lejos de la oficina?' },
+        { personaje: "Sofia", ingles: 'No, I take the bus and it takes twenty minutes.', espanol: 'No, tomo el autobús y tardo veinte minutos.' },
+        { personaje: "Daniel", ingles: "That's convenient. I usually drive to work.", espanol: 'Qué conveniente. Yo normalmente voy al trabajo en carro.' },
+        { personaje: "Sofia", ingles: 'Is traffic bad in the morning?', espanol: '¿Hay mucho tráfico por la mañana?' },
+        { personaje: "Daniel", ingles: 'Sometimes, so I leave home a little early.', espanol: 'A veces, así que salgo de casa un poco temprano.' },
+        { personaje: "Sofia", ingles: "That's smart. Arriving on time makes the day easier.", espanol: 'Es una buena idea. Llegar a tiempo facilita el día.' },
+        { personaje: "Daniel", ingles: 'Do you know everyone in the department yet?', espanol: '¿Ya conoces a todos en el departamento?' },
+        { personaje: "Sofia", ingles: "Not yet. I'm still learning everyone's names.", espanol: 'Todavía no. Aún estoy aprendiendo los nombres de todos.' },
+        { personaje: "Daniel", ingles: "Don't worry. It took me a few weeks, too.", espanol: 'No te preocupes. A mí también me tomó unas semanas.' },
+        { personaje: "Sofia", ingles: 'I may ask you to remind me of some names.', espanol: 'Quizás te pida que me recuerdes algunos nombres.' },
+        { personaje: "Daniel", ingles: "Anytime. It's easier when you connect a name with a face.", espanol: 'Cuando quieras. Es más fácil asociar un nombre con un rostro.' },
+        { personaje: "Sofia", ingles: "That's a helpful tip. I'll try to remember it.", espanol: 'Es un consejo útil. Intentaré recordarlo.' },
+        { personaje: "Daniel", ingles: 'Would you like some coffee before the meeting?', espanol: '¿Te gustaría tomar café antes de la reunión?' },
+        { personaje: "Sofia", ingles: 'Yes, please. I usually drink coffee in the morning.', espanol: 'Sí, por favor. Normalmente tomo café por la mañana.' },
+        { personaje: "Daniel", ingles: 'How do you take it, with milk or black?', espanol: '¿Cómo lo tomas, con leche o negro?' },
+        { personaje: "Sofia", ingles: 'With a little milk and no sugar, please.', espanol: 'Con un poco de leche y sin azúcar, por favor.' },
+        { personaje: "Daniel", ingles: "Got it. I'll bring you a cup.", espanol: 'Entendido. Te traeré una taza.' },
+        { personaje: "Sofia", ingles: 'Thank you for making me feel welcome.', espanol: 'Gracias por hacerme sentir bienvenida.' },
+        { personaje: "Daniel", ingles: "You're welcome. Starting somewhere new can feel strange.", espanol: 'De nada. Empezar en un lugar nuevo puede sentirse extraño.' },
+        { personaje: "Sofia", ingles: 'It does, but everyone has made it easier.', espanol: 'Sí, pero todos lo han hecho más fácil.' },
+        { personaje: "Daniel", ingles: "I'm happy to hear that. You'll settle in soon.", espanol: 'Me alegra escucharlo. Pronto te adaptarás.' },
+        { personaje: "Sofia", ingles: 'I already feel more comfortable talking with you.', espanol: 'Ya me siento más cómoda hablando contigo.' },
+        { personaje: "Daniel", ingles: "That's great. Good communication starts with a simple hello.", espanol: 'Qué bien. La buena comunicación comienza con un simple saludo.' },
+        { personaje: "Sofia", ingles: "You're right. A friendly greeting can change the whole day.", espanol: 'Tienes razón. Un saludo amable puede cambiar todo el día.' },
+        { personaje: "Daniel", ingles: 'Before we go, would you like my phone number?', espanol: 'Antes de irnos, ¿quieres mi número de teléfono?' },
+        { personaje: "Sofia", ingles: 'Yes, please. We can coordinate lunch sometime.', espanol: 'Sí, por favor. Podemos coordinar un almuerzo algún día.' },
+        { personaje: "Daniel", ingles: "Sure. I'll send you a message so you have my number.", espanol: 'Claro. Te enviaré un mensaje para que tengas mi número.' },
+        { personaje: "Sofia", ingles: "Perfect. I'll save your contact right away.", espanol: 'Perfecto. Guardaré tu contacto de inmediato.' },
+        { personaje: "Daniel", ingles: 'If you need help, just send me a text.', espanol: 'Si necesitas ayuda, simplemente envíame un mensaje.' },
+        { personaje: "Sofia", ingles: 'I will. And please tell me if I speak too quickly.', espanol: 'Lo haré. Y dime, por favor, si hablo demasiado rápido.' },
+        { personaje: "Daniel", ingles: 'Of course. We can practice English together during breaks.', espanol: 'Por supuesto. Podemos practicar inglés juntos durante los descansos.' },
+        { personaje: "Sofia", ingles: 'That would be wonderful. Practice helps me gain confidence.', espanol: 'Sería maravilloso. Practicar me ayuda a ganar confianza.' },
+        { personaje: "Daniel", ingles: "Then let's make it a habit, even for ten minutes a day.", espanol: 'Entonces hagamos de eso un hábito, aunque sean diez minutos al día.' },
+        { personaje: "Sofia", ingles: "Deal. I'll bring a few questions tomorrow.", espanol: 'Trato hecho. Mañana traeré algunas preguntas.' },
+        { personaje: "Daniel", ingles: "I'm looking forward to it. Have a wonderful afternoon!", espanol: 'Me alegra. ¡Que tengas una tarde maravillosa!' },
+        { personaje: "Sofia", ingles: 'You too, Daniel. Thanks again for everything.', espanol: 'Igualmente, Daniel. Gracias de nuevo por todo.' },
+        { personaje: "Daniel", ingles: "You're very welcome, Sofia. See you tomorrow morning.", espanol: 'Con mucho gusto, Sofía. Nos vemos mañana por la mañana.' },
+        { personaje: "Sofia", ingles: 'See you tomorrow! It was lovely meeting you all.', espanol: '¡Hasta mañana! Fue un gusto conocerlos a todos.' },
+        { personaje: "Daniel", ingles: 'And remember, every new friendship begins with an introduction.', espanol: 'Y recuerda: toda nueva amistad comienza con una presentación.' },
+        { personaje: "Sofia", ingles: 'A smile, a name, and a question can open a conversation.', espanol: 'Una sonrisa, un nombre y una pregunta pueden iniciar una conversación.' },
+        { personaje: "Daniel", ingles: 'So take a breath, say hello, and be yourself.', espanol: 'Así que respira, saluda y sé tú misma.' },
+        { personaje: "Sofia", ingles: "You don't need perfect English to make a real connection.", espanol: 'No necesitas un inglés perfecto para crear una conexión real.' },
+        { personaje: "Daniel", ingles: 'You only need patience, curiosity, and a willingness to practice.', espanol: 'Solo necesitas paciencia, curiosidad y disposición para practicar.' },
+        { personaje: "Sofia", ingles: 'Every conversation is a chance to learn something new.', espanol: 'Cada conversación es una oportunidad para aprender algo nuevo.' },
+        { personaje: "Daniel", ingles: "Tomorrow, we'll greet someone new and introduce ourselves again.", espanol: 'Mañana saludaremos a alguien nuevo y volveremos a presentarnos.' },
+        { personaje: "Sofia", ingles: 'Little by little, these words will begin to feel natural.', espanol: 'Poco a poco, estas palabras empezarán a sentirse naturales.' },
+        { personaje: "Daniel", ingles: 'And soon, saying hello will be the easiest part of your day.', espanol: 'Y pronto, decir hola será la parte más fácil de tu día.' }
+      ]
+    }
+    // EJEMPLO PARA COPIAR:
+    // {
+    //   titulo: "Una conversación en una cafetería",
+    //   nivel: "Principiante", // "Principiante", "Intermedio" o "Avanzado"
+    //   dialogo: [
+    //     { personaje: "Ana", ingles: "Good morning. Can I have a coffee, please?", espanol: "Buenos días. ¿Me puede dar un café, por favor?" },
+    //     { personaje: "Barista", ingles: "Of course. Would you like milk or sugar?", espanol: "Por supuesto. ¿Quiere leche o azúcar?" },
+    //     { personaje: "Ana", ingles: "Just a little milk, please.", espanol: "Solo un poco de leche, por favor." }
+    //   ]
+    // }
+  ]},
+  { categoria: "Ciencia y naturaleza", historias: [] },
+  { categoria: "Historia y civilizaciones", historias: [] },
+  { categoria: "Filosofía y pensamiento", historias: [] },
+  { categoria: "Matemáticas y lógica", historias: [] },
+  { categoria: "Tecnología e innovación", historias: [] },
+  { categoria: "Arte y literatura", historias: [] },
+  { categoria: "Entretenimiento y cultura pop", historias: [] },
+  { categoria: "Sociedad y cultura", historias: [] },
+  { categoria: "Vida práctica y bienestar", historias: [] },
+  { categoria: "Negocios y finanzas", historias: [] },
+  { categoria: "Geografía y viajes", historias: [] },
+  { categoria: "Mente y aprendizaje", historias: [] },
+  { categoria: "Vida diaria", historias: [] },
+  { categoria: "Familia", historias: [] },
+  { categoria: "Comida", historias: [] },
+  { categoria: "Restaurantes", historias: [] },
+  { categoria: "Compras", historias: [] },
+  { categoria: "Transporte", historias: [] },
+  { categoria: "Viajes", historias: [] },
+  { categoria: "Trabajo", historias: [] },
+  { categoria: "Salud", historias: [] },
+  { categoria: "Emergencias", historias: [] },
+  { categoria: "Estudios", historias: [] },
+  { categoria: "Amistad", historias: [] },
+  { categoria: "Relaciones", historias: [] },
+  { categoria: "Eventos", historias: [] }
+];
+
+// Convierte los datos fáciles de editar al formato que utiliza el reproductor.
+const capitulosPersonalizados = bibliotecaEditable.flatMap((grupo) =>
+  grupo.historias.map((historia) => ({
+    title: historia.titulo,
+    category: grupo.categoria,
+    level: historia.nivel || "Intermedio",
+    dialogue: (historia.dialogo || []).map((linea) => ({
+      speaker: linea.personaje || "Narrador",
+      en: linea.ingles || "",
+      es: linea.espanol || ""
+    }))
+  }))
+);
+
 const formatos = ["Introducción a", "Curiosidades sobre", "Una historia sobre", "Preguntas y respuestas sobre", "Mitos y realidades de", "Aprende paso a paso:", "Un reto intelectual sobre", "Una conversación sobre", "Un caso para analizar:", "Ideas esenciales de", "Explorando", "Lo que conviene saber de", "Un episodio para descubrir", "Ejemplos prácticos de", "Debate y reflexión sobre", "Un misterio relacionado con", "Guía para principiantes:", "Nivel intermedio:", "Nivel avanzado:", "Datos sorprendentes de"];
 const temasUnicos = new Map();
 for (const [categoria, asuntos] of colecciones) {
@@ -771,7 +947,14 @@ const crearCapitulo = (tema, index) => {
 };
 
 
-const capitulos = temasFinales.slice(0, 10000).map(crearCapitulo);
+// Las historias que agregues en "bibliotecaEditable" aparecen primero.
+// Después se muestran los capítulos generados que ya tenía la biblioteca.
+const capitulosGenerados = temasFinales
+  .filter(([titulo]) => !capitulosPersonalizados.some((c) => c.title === titulo))
+  .slice(0, 10000)
+  .map((tema, index) => crearCapitulo(tema, index + capitulosPersonalizados.length));
+const capitulos = [...capitulosPersonalizados, ...capitulosGenerados]
+  .map((capitulo, index) => ({ ...capitulo, id: index + 1 }));
 
 const limpiarTexto = (texto) =>
 
@@ -794,6 +977,7 @@ export default function Historias({ volver = () => {} }) {
   const [idioma, setIdioma] = useState("en");
 
   const [velocidad, setVelocidad] = useState(0.85);
+  const [superLento, setSuperLento] = useState(false);
 
   const [reproduciendo, setReproduciendo] = useState(false);
 
@@ -863,14 +1047,14 @@ export default function Historias({ volver = () => {} }) {
         const coincidentes = voces.filter((voz) =>
           (voz.lang || "").toLowerCase().startsWith(idiomaBase)
         );
-        // Inglés: prioriza voces masculinas de Estados Unidos.
-        // Español: conserva la selección anterior para no cambiar la voz española.
+        // Inglés: prioriza voces estadounidenses y después nombres habitualmente masculinos.
+        // Español: conserva la lógica de selección en español, sin forzar una voz inglesa.
+        const vocesUS = voces.filter((voz) => (voz.lang || "").toLowerCase() === "en-us");
         const preferida = idiomaBase === "en"
-          ? coincidentes.find((voz) =>
-              /alex|fred|daniel|david|guy|mark|tom|aaron|jorge|diego|male/i.test(voz.name)
-            ) || coincidentes.find((voz) =>
-              /natural|neural|premium|enhanced|google us english/i.test(voz.name)
-            )
+          ? (vocesUS.find((voz) => /guy|david|daniel|alex|fred|mark|tom|aaron|male/i.test(voz.name))
+            || vocesUS.find((voz) => /natural|neural|premium|enhanced|google us english/i.test(voz.name))
+            || coincidentes.find((voz) => /guy|david|daniel|alex|fred|mark|tom|aaron|male/i.test(voz.name))
+            || coincidentes.find((voz) => /natural|neural|premium|enhanced|google us english/i.test(voz.name)))
           : coincidentes.find((voz) =>
               /natural|neural|premium|enhanced|samantha|monica|paulina|jorge|diego/i.test(voz.name)
             );
@@ -930,6 +1114,15 @@ export default function Historias({ volver = () => {} }) {
 
 
 
+  // En modo súper lento, cada bloque llega hasta la siguiente coma.
+  // Si no hay comas, se reproduce la oración completa como un solo bloque.
+  const dividirPorComas = (texto) => {
+    return limpiarTexto(texto)
+      .split(/,(?![^()]*\))/)
+      .map((parte) => parte.trim())
+      .filter(Boolean);
+  };
+
   const reproducirTodo = async () => {
 
     stopRef.current = false;
@@ -961,6 +1154,26 @@ export default function Historias({ volver = () => {} }) {
         if (stopRef.current) break;
 
         await new Promise((resolve) => setTimeout(resolve, 1800));
+
+      } else if (superLento) {
+
+        const bloquesEn = dividirPorComas(d.en);
+        const bloquesEs = dividirPorComas(d.es);
+        for (let b = 0; b < bloquesEn.length; b++) {
+          if (stopRef.current) break;
+          // Lee el fragmento en inglés hasta la coma y luego su traducción.
+          await hablar(bloquesEn[b], "en-US", Math.min(0.58, velocidad));
+          if (stopRef.current) break;
+          await new Promise((resolve) => setTimeout(resolve, 550));
+          // Empareja los fragmentos por posición; si las comas no coinciden,
+          // usa la traducción completa para no omitir contenido en español.
+          const traduccion = bloquesEs.length === bloquesEn.length
+            ? bloquesEs[b]
+            : (b === bloquesEn.length - 1 ? d.es : bloquesEs[Math.min(b, bloquesEs.length - 1)]);
+          await hablar(traduccion || d.es, "es-ES", 0.78);
+          if (stopRef.current) break;
+          await new Promise((resolve) => setTimeout(resolve, 750));
+        }
 
       } else {
 
@@ -1036,7 +1249,7 @@ export default function Historias({ volver = () => {} }) {
 
             className="hist-input"
 
-            placeholder="Buscar conversación..."
+            placeholder="Buscar por título o categoría..."
 
             value={busqueda}
 
@@ -1148,6 +1361,11 @@ export default function Historias({ volver = () => {} }) {
           </div>
 
 
+
+                    <label style={{ display: "flex", alignItems: "center", gap: "10px", margin: "12px 0", fontWeight: 600 }}>
+            <input type="checkbox" checked={superLento} onChange={(e) => setSuperLento(e.target.checked)} />
+            Modo súper lento: lee hasta cada coma en inglés, traduce al español y continúa
+          </label>
 
           <div className="hist-controls">
 
