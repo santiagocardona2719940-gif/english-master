@@ -1042,9 +1042,10 @@ const hablar = async (texto, lang = "en-US", rate = velocidad) => {
   }
 
   const esIngles = lang.toLowerCase().startsWith("en");
+  // Inglés lento y español aún más lento para que termine cada frase.
   const velocidadFinal = esIngles
     ? Math.max(0.60, Math.min(0.78, rate))
-    : 0.78;
+    : 0.50;
 
   try {
     const respuesta = await fetch("/api/tts", {
@@ -1067,7 +1068,7 @@ const hablar = async (texto, lang = "en-US", rate = velocidad) => {
     const audioUrl = URL.createObjectURL(audioBlob);
     const audio = new Audio(audioUrl);
     audio.preservesPitch = true;
-    audio.playbackRate = 0.80;
+    audio.playbackRate = esIngles ? 0.80 : 0.62;
     audioIARef.current = audio;
 
     await new Promise((resolve, reject) => {
