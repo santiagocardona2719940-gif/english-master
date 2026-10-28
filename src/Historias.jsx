@@ -1034,8 +1034,8 @@ const hablar = async (texto, lang = "en-US", rate = velocidad) => {
 
   const esIngles = lang.toLowerCase().startsWith("en");
 
-  // No usar el servicio remoto para español: la voz del navegador permite
-  // esperar explícitamente a que termine antes de lanzar la siguiente frase.
+  // Intenta ElevenLabs también para español, para obtener una voz más natural.
+  // Si no está configurada o falla, usa la voz del navegador como respaldo.
   const hablarConNavegador = () => new Promise((resolve) => {
     const synth = window.speechSynthesis;
     let terminado = false;
@@ -1055,7 +1055,7 @@ const hablar = async (texto, lang = "en-US", rate = velocidad) => {
     mensaje.lang = lang;
     mensaje.rate = esIngles
       ? Math.max(0.7, Math.min(1.2, rate))
-      : 0.78;
+      : 0.9;
     mensaje.pitch = 1;
     mensaje.volume = 1;
     if (voz) mensaje.voice = voz;
@@ -1064,15 +1064,7 @@ const hablar = async (texto, lang = "en-US", rate = velocidad) => {
     synth.speak(mensaje);
   });
 
-  // Español: espera el evento onend real antes de continuar con el inglés.
-  if (!esIngles) {
-    if (!("speechSynthesis" in window)) return;
-    window.speechSynthesis.cancel();
-    await hablarConNavegador();
-    return;
-  }
-
-  // Inglés: conserva el audio actual de ElevenLabs y su velocidad configurada.
+  // Conserva la sincronización: espera a que termine cada audio remoto.
   window.speechSynthesis?.cancel();
   if (audioIARef.current) {
     audioIARef.current.pause();
@@ -1094,7 +1086,7 @@ const hablar = async (texto, lang = "en-US", rate = velocidad) => {
 
     const audioUrl = URL.createObjectURL(audioBlob);
     const audio = new Audio(audioUrl);
-    audio.playbackRate = Math.max(0.7, Math.min(1.2, rate));
+    audio.playbackRate = Math.max(0.7, Math.min(1.2, esIngles ? rate : 0.92));
     audio.preservesPitch = true;
     audioIARef.current = audio;
 
@@ -1112,7 +1104,7 @@ const hablar = async (texto, lang = "en-US", rate = velocidad) => {
     });
     return;
   } catch (error) {
-    console.warn("ElevenLabs no disponible; se usará la voz del navegador para inglés:", error);
+    console.warn(`ElevenLabs no disponible para ${esIngles ? "inglés" : "español"}; se usará la voz del navegador:`, error);
   }
 
   if (!("speechSynthesis" in window)) return;
