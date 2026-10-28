@@ -1027,98 +1027,91 @@ export default function Historias({ volver = () => {} }) {
 
   // Primero intenta usar una voz neuronal real desde el servidor seguro de TTS.
   // Si el servicio no está configurado, utiliza la voz disponible del navegador.
-  const hablar = async (texto, lang = "en-US", rate = velocidad) => {
-    const textoLimpio = limpiarTexto(texto);
-    if (!textoLimpio) return;
+ 
+const hablar = async (texto, lang = "en-US", rate = velocidad) => {
+  const textoLimpio = limpiarTexto(texto);
+  if (!textoLimpio) return;
 
-    // Detener el audio anterior, tanto el generado por IA como el del navegador.
-    window.speechSynthesis?.cancel();
-    if (audioIARef.current) {
-      audioIARef.current.pause();
-      audioIARef.current.src = "";
-      audioIARef.current = null;
+  window.speechSynthesis?.cancel();
+
+  if (audioIARef.current) {
+    audioIARef.current.pause();
+    audioIARef.current.src = "";
+    audioIARef.current = null;
+  }
+
+  // Primero intentamos ElevenLabs.
+  try {
+    const respuesta = await fetch("/api/tts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        texto: textoLimpio,
+        idioma: lang,
+        velocidad: rate,
+      }),
+    });
+
+    if (!respuesta.ok) {
+      throw new Error("ElevenLabs no disponible");
     }
 
-    try {
-      const respuesta = await fetch("/api/tts", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ texto: textoLimpio, idioma: lang, velocidad: rate }),
-      });
-      if (!respuesta.ok) {
-  const detalle = await respuesta.json().catch(() => ({}));
+    const audioBlob = await respuesta.blob();
+    if (!audioBlob.size) throw new Error("Audio vacío");
 
-  throw new Error(
-    `Error de voz: ${detalle.providerStatus || respuesta.status}. ` +
-    `${detalle.detail || detalle.error || "No se pudo generar el audio."}`
-  );
-}
-      const audioBlob = await respuesta.blob();
-      if (!audioBlob.size) throw new Error("El servicio no devolvió audio");
-
-      const audioUrl = URL.createObjectURL(audioBlob);
-      const audio = new Audio(audioUrl);
-      audio.playbackRate = Math.max(0.7, Math.min(1.2, rate));
-      audioIARef.current = audio;
-      await new Promise((resolve) => {
-        const terminar = () => {
-          URL.revokeObjectURL(audioUrl);
-          if (audioIARef.current === audio) audioIARef.current = null;
-          resolve();
-        };
-        audio.onended = terminar;
-        audio.onerror = terminar;
-        audio.play().catch(() => terminar());
-      });
-      return;
-    } catch (error) {
-      // No cambiar silenciosamente a la voz robótica del navegador: informar del problema.
-      console.error("No se pudo generar la voz IA:", error);
-      if (!window.__avisoVozIAMostrado) {
-        window.__avisoVozIAMostrado = true;
-        alert("La voz natural de IA no está disponible. Comprueba que hayas configurado ELEVENLABS_API_KEY y los IDs de voz en las variables de entorno de Vercel, y vuelve a intentarlo.");
-      }
-      return;
-    }
-
-    /* La reproducción usa exclusivamente el audio neuronal del endpoint /api/tts. */
-    return;
-
-    if (!("speechSynthesis" in window)) {
-      alert("No se pudo iniciar la voz. Comprueba la configuración del servicio de voz IA.");
-      return;
-    }
+    const audioUrl = URL.createObjectURL(audioBlob);
+    const audio = new Audio(audioUrl);
+    audio.playbackRate = Math.max(0.7, Math.min(1.2, rate));
+    audioIARef.current = audio;
 
     await new Promise((resolve) => {
-      const synth = window.speechSynthesis;
-      const utterance = new SpeechSynthesisUtterance(textoLimpio);
-      utterance.lang = lang;
-      utterance.rate = rate;
-      utterance.pitch = 1;
-      const seleccionarVoz = () => {
-        const voces = synth.getVoices();
-        const idiomaBase = lang.toLowerCase().startsWith("es") ? "es" : "en";
-        const coincidentes = voces.filter((voz) => (voz.lang || "").toLowerCase().startsWith(idiomaBase));
-        const vocesUS = voces.filter((voz) => (voz.lang || "").toLowerCase() === "en-us");
-        const preferida = idiomaBase === "en"
-          ? (vocesUS.find((voz) => /guy|david|daniel|alex|fred|mark|tom|aaron|male/i.test(voz.name))
-            || vocesUS.find((voz) => /natural|neural|premium|enhanced|google us english/i.test(voz.name))
-            || coincidentes.find((voz) => /natural|neural|premium|enhanced/i.test(voz.name)))
-          : coincidentes.find((voz) => /natural|neural|premium|enhanced|samantha|monica|paulina|jorge|diego|google español/i.test(voz.name));
-        if (preferida || coincidentes[0]) utterance.voice = preferida || coincidentes[0];
-      };
-      seleccionarVoz();
-      let terminado = false;
-      const finalizar = () => {
-        if (terminado) return;
-        terminado = true;
+      const terminar = () => {
+        URL.revokeObjectURL(audioUrl);
+        if (audioIARef.current === audio) audioIARef.current = null;
         resolve();
       };
-      utterance.onend = finalizar;
-      utterance.onerror = finalizar;
-      synth.speak(utterance);
+
+      audio.onended = terminar;
+      audio.onerror = terminar;
+      audio.play().catch(terminar);
     });
+
+    return;
+  } catch (error) {
+    console.warn("Usando voz del navegador:", error);
+  }
+
+  // Alternativa gratuita: voz instalada en el navegador.
+  if (!("speechSynthesis" in window)) {
+    alert("Este navegador no tiene disponible la función de voz.");
+    return;
+  }
+
+  const decir = () => {
+    const voces = window.speechSynthesis.getVoices();
+    const idiomaBase = lang.toLowerCase().startsWith("es") ? "es" : "en";
+
+    const voz =
+      voces.find((v) => v.lang.toLowerCase() === lang.toLowerCase()) ||
+      voces.find((v) => v.lang.toLowerCase().startsWith(idiomaBase));
+
+    const mensaje = new SpeechSynthesisUtterance(textoLimpio);
+    mensaje.lang = lang;
+    mensaje.rate = Math.max(0.6, Math.min(1.2, rate));
+
+    if (voz) mensaje.voice = voz;
+
+    window.speechSynthesis.speak(mensaje);
   };
+
+  if (window.speechSynthesis.getVoices().length) {
+    decir();
+  } else {
+    window.speechSynthesis.onvoiceschanged = decir;
+    window.speechSynthesis.getVoices();
+  }
+};
+
 
   const detener = () => {
 
