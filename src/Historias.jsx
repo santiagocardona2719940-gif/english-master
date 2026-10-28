@@ -1064,21 +1064,33 @@ const hablar = async (texto, lang = "en-US", rate = velocidad) => {
     audio.playbackRate = Math.max(0.7, Math.min(1.2, rate));
     audioIARef.current = audio;
 
-    await new Promise((resolve) => {
-      const terminar = () => {
+    await new Promise((resolve, reject) => {
+      let finalizado = false;
+      const limpiarAudio = () => {
+        if (finalizado) return;
+        finalizado = true;
         URL.revokeObjectURL(audioUrl);
         if (audioIARef.current === audio) audioIARef.current = null;
-        resolve();
       };
 
-      audio.onended = terminar;
-      audio.onerror = terminar;
-      audio.play().catch(terminar);
+      audio.onended = () => {
+        limpiarAudio();
+        resolve();
+      };
+      audio.onerror = () => {
+        limpiarAudio();
+        reject(new Error("No se pudo reproducir el audio de ElevenLabs"));
+      };
+      audio.play().catch((error) => {
+        limpiarAudio();
+        reject(error);
+      });
     });
 
     return;
   } catch (error) {
-    console.warn("Usando voz del navegador:", error);
+    // Si ElevenLabs falla, seguimos con la voz gratuita del navegador.
+    console.warn("ElevenLabs no disponible; se usará la voz del navegador:", error);
   }
 
   // Alternativa gratuita: voz instalada en el navegador.
@@ -1107,7 +1119,7 @@ const hablar = async (texto, lang = "en-US", rate = velocidad) => {
   if (window.speechSynthesis.getVoices().length) {
     decir();
   } else {
-    window.speechSynthesis.onvoiceschanged = decir;
+    window.speechSynthesis.addEventListener("voiceschanged", decir, { once: true });
     window.speechSynthesis.getVoices();
   }
 };
