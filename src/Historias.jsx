@@ -986,6 +986,7 @@ export default function Historias({ volver = () => {} }) {
   const [cantidadVisible, setCantidadVisible] = useState(100);
 
   const stopRef = useRef(false);
+  const audioIARef = useRef(null);
 
 
 
@@ -1024,69 +1025,104 @@ export default function Historias({ volver = () => {} }) {
 
 
 
-  const hablar = (texto, lang = "en-US", rate = velocidad) =>
-    new Promise((resolve) => {
-      if (!("speechSynthesis" in window)) {
-        alert("Tu navegador no permite reproducir voz.");
-        resolve();
-        return;
+  // Primero intenta usar una voz neuronal real desde el servidor seguro de TTS.
+  // Si el servicio no está configurado, utiliza la voz disponible del navegador.
+  const hablar = async (texto, lang = "en-US", rate = velocidad) => {
+    const textoLimpio = limpiarTexto(texto);
+    if (!textoLimpio) return;
+
+    // Detener el audio anterior, tanto el generado por IA como el del navegador.
+    window.speechSynthesis?.cancel();
+    if (audioIARef.current) {
+      audioIARef.current.pause();
+      audioIARef.current.src = "";
+      audioIARef.current = null;
+    }
+
+    try {
+      const respuesta = await fetch("/api/tts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ texto: textoLimpio, idioma: lang, velocidad: rate }),
+      });
+      if (!respuesta.ok) throw new Error("El servicio de voz IA no está disponible");
+      const audioBlob = await respuesta.blob();
+      if (!audioBlob.size) throw new Error("El servicio no devolvió audio");
+
+      const audioUrl = URL.createObjectURL(audioBlob);
+      const audio = new Audio(audioUrl);
+      audio.playbackRate = Math.max(0.7, Math.min(1.2, rate));
+      audioIARef.current = audio;
+      await new Promise((resolve) => {
+        const terminar = () => {
+          URL.revokeObjectURL(audioUrl);
+          if (audioIARef.current === audio) audioIARef.current = null;
+          resolve();
+        };
+        audio.onended = terminar;
+        audio.onerror = terminar;
+        audio.play().catch(() => terminar());
+      });
+      return;
+    } catch (error) {
+      // No cambiar silenciosamente a la voz robótica del navegador: informar del problema.
+      console.error("No se pudo generar la voz IA:", error);
+      if (!window.__avisoVozIAMostrado) {
+        window.__avisoVozIAMostrado = true;
+        alert("La voz natural de IA no está disponible. Comprueba que hayas configurado ELEVENLABS_API_KEY y los IDs de voz en las variables de entorno de Vercel, y vuelve a intentarlo.");
       }
+      return;
+    }
 
+    /* La reproducción usa exclusivamente el audio neuronal del endpoint /api/tts. */
+    return;
+
+    if (!("speechSynthesis" in window)) {
+      alert("No se pudo iniciar la voz. Comprueba la configuración del servicio de voz IA.");
+      return;
+    }
+
+    await new Promise((resolve) => {
       const synth = window.speechSynthesis;
-      synth.cancel();
-
-      const utterance = new SpeechSynthesisUtterance(limpiarTexto(texto));
+      const utterance = new SpeechSynthesisUtterance(textoLimpio);
       utterance.lang = lang;
       utterance.rate = rate;
       utterance.pitch = 1;
-
-      // Espera a que el navegador cargue las voces y selecciona una del idioma pedido.
       const seleccionarVoz = () => {
         const voces = synth.getVoices();
         const idiomaBase = lang.toLowerCase().startsWith("es") ? "es" : "en";
-        const coincidentes = voces.filter((voz) =>
-          (voz.lang || "").toLowerCase().startsWith(idiomaBase)
-        );
-        // Inglés: prioriza voces estadounidenses y después nombres habitualmente masculinos.
-        // Español: conserva la lógica de selección en español, sin forzar una voz inglesa.
+        const coincidentes = voces.filter((voz) => (voz.lang || "").toLowerCase().startsWith(idiomaBase));
         const vocesUS = voces.filter((voz) => (voz.lang || "").toLowerCase() === "en-us");
         const preferida = idiomaBase === "en"
           ? (vocesUS.find((voz) => /guy|david|daniel|alex|fred|mark|tom|aaron|male/i.test(voz.name))
             || vocesUS.find((voz) => /natural|neural|premium|enhanced|google us english/i.test(voz.name))
-            || coincidentes.find((voz) => /guy|david|daniel|alex|fred|mark|tom|aaron|male/i.test(voz.name))
-            || coincidentes.find((voz) => /natural|neural|premium|enhanced|google us english/i.test(voz.name)))
-          : coincidentes.find((voz) =>
-              /natural|neural|premium|enhanced|samantha|monica|paulina|jorge|diego/i.test(voz.name)
-            );
-        const voz = preferida || coincidentes[0];
-        if (voz) utterance.voice = voz;
-        // Conserva explícitamente el idioma solicitado aunque no haya voz coincidente.
-        utterance.lang = lang;
+            || coincidentes.find((voz) => /natural|neural|premium|enhanced/i.test(voz.name)))
+          : coincidentes.find((voz) => /natural|neural|premium|enhanced|samantha|monica|paulina|jorge|diego|google español/i.test(voz.name));
+        if (preferida || coincidentes[0]) utterance.voice = preferida || coincidentes[0];
       };
-
       seleccionarVoz();
-      if (synth.getVoices().length === 0) {
-        synth.addEventListener("voiceschanged", seleccionarVoz, { once: true });
-      }
-
       let terminado = false;
       const finalizar = () => {
         if (terminado) return;
         terminado = true;
-        synth.removeEventListener("voiceschanged", seleccionarVoz);
         resolve();
       };
       utterance.onend = finalizar;
       utterance.onerror = finalizar;
       synth.speak(utterance);
     });
-
+  };
 
   const detener = () => {
 
     stopRef.current = true;
 
     window.speechSynthesis?.cancel();
+    if (audioIARef.current) {
+      audioIARef.current.pause();
+      audioIARef.current.currentTime = 0;
+      audioIARef.current = null;
+    }
 
     setReproduciendo(false);
 
@@ -1123,6 +1159,67 @@ export default function Historias({ volver = () => {} }) {
       .filter(Boolean);
   };
 
+  // Explicaciones breves para expresiones frecuentes. En frases no incluidas,
+  // el modo profesor explica la oración completa sin inventar traducciones palabra por palabra.
+  const explicacionesFrase = {
+    "good morning": [["Good morning", "Buenos días"]],
+    "good afternoon": [["Good afternoon", "Buenas tardes"]],
+    "good evening": [["Good evening", "Buenas noches (al saludar por la tarde/noche)"]],
+    "good night": [["Good night", "Buenas noches (al despedirse o ir a dormir)"]],
+    "how are you": [["How are you", "Cómo estás / cómo está usted"]],
+    "how are you today": [["How are you today", "Cómo estás hoy"]],
+    "what is your name": [["What is your name", "Cómo te llamas"]],
+    "my name is": [["My name is", "Me llamo / mi nombre es"]],
+    "nice to meet you": [["Nice to meet you", "Mucho gusto en conocerte"]],
+    "where are you from": [["Where are you from", "De dónde eres"]],
+    "i am from": [["I am from", "Soy de / vengo de"]],
+    "thank you": [["Thank you", "Gracias"]],
+    "and you": [["And you", "Y tú / y usted"]],
+    "see you later": [["See you later", "Nos vemos más tarde"]],
+    "how have you been": [["How have you been", "Cómo has estado"]],
+    "the pleasure is mine": [["The pleasure is mine", "El gusto es mío"]],
+    "by the way": [["By the way", "Por cierto"]],
+    "i would love to": [["I would love to", "Me encantaría"]],
+    "no problem": [["No problem", "No hay problema"]]
+  };
+
+  const obtenerExplicaciones = (ingles, espanol) => {
+    const limpio = limpiarTexto(ingles);
+    const clave = limpio.toLowerCase().replace(/[.!?]+$/g, "");
+    if (explicacionesFrase[clave]) return explicacionesFrase[clave];
+    const trozosEn = limpio.split(/,(?![^()]*\))/).map((x) => x.trim()).filter(Boolean);
+    const trozosEs = limpiarTexto(espanol).split(/,(?![^()]*\))/).map((x) => x.trim()).filter(Boolean);
+    if (trozosEn.length > 1 && trozosEn.length === trozosEs.length) {
+      return trozosEn.map((en, i) => [en, trozosEs[i]]);
+    }
+    return [[limpio, limpiarTexto(espanol)]];
+  };
+
+  const reproducirModoProfesor = async (d) => {
+    // Primero presenta la idea completa para que el alumno conozca el objetivo.
+    await hablar(d.en, "en-US", Math.min(0.88, velocidad));
+    if (stopRef.current) return;
+    await new Promise((resolve) => setTimeout(resolve, 650));
+    await hablar("Ahora vamos a entender esta frase por partes.", "es-ES", 0.9);
+    const partes = obtenerExplicaciones(d.en, d.es);
+    for (const [parteEn, parteEs] of partes) {
+      if (stopRef.current) return;
+      await hablar(parteEn, "en-US", 0.78);
+      if (stopRef.current) return;
+      await hablar("Esto significa: " + parteEs, "es-ES", 0.88);
+      await new Promise((resolve) => setTimeout(resolve, 450));
+    }
+    if (stopRef.current) return;
+    await hablar("Ahora escucha la frase completa otra vez.", "es-ES", 0.9);
+    await hablar(d.en, "en-US", Math.min(0.88, velocidad));
+    if (stopRef.current) return;
+    await hablar("Ahora dilo en tu mente. Tienes unos segundos.", "es-ES", 0.9);
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+    if (stopRef.current) return;
+    await hablar("Si lo dijiste así, ¡lo hiciste muy bien! Vamos con la siguiente frase.", "es-ES", 0.9);
+    await new Promise((resolve) => setTimeout(resolve, 650));
+  };
+
   const reproducirTodo = async () => {
 
     stopRef.current = false;
@@ -1139,7 +1236,11 @@ export default function Historias({ volver = () => {} }) {
 
 
 
-      if (modo === "espanol") {
+      if (modo === "profesor") {
+
+        await reproducirModoProfesor(d);
+
+      } else if (modo === "espanol") {
 
         await hablar(d.es, "es-ES", 0.92);
 
@@ -1320,7 +1421,7 @@ export default function Historias({ volver = () => {} }) {
 
           <h2>{String(capitulo.id).padStart(3, "0")} · {capitulo.title}</h2>
 
-          <p className="hist-subtitle">Conversación práctica de la vida real</p>
+          <p className="hist-subtitle">Conversación práctica de la vida real. En Modo profesor escucharás la frase, su explicación, una pausa para practicar y una felicitación antes de continuar.</p>
 
 
 
@@ -1331,6 +1432,7 @@ export default function Historias({ volver = () => {} }) {
             <button className={modo === "espanol" ? "selected" : ""} onClick={() => setModo("espanol")}>🇪🇸 Español primero</button>
 
             <button className={modo === "pensar" ? "selected" : ""} onClick={() => setModo("pensar")}>🧠 Pensar en inglés</button>
+            <button className={modo === "profesor" ? "selected" : ""} onClick={() => setModo("profesor")}>🎓 Modo profesor</button>
 
           </div>
 
@@ -1364,7 +1466,7 @@ export default function Historias({ volver = () => {} }) {
 
                     <label style={{ display: "flex", alignItems: "center", gap: "10px", margin: "12px 0", fontWeight: 600 }}>
             <input type="checkbox" checked={superLento} onChange={(e) => setSuperLento(e.target.checked)} />
-            Modo súper lento: lee hasta cada coma en inglés, traduce al español y continúa
+            Modo súper lento: lee hasta cada coma en inglés, traduce al español y continúa (el Modo profesor guía frase por frase)
           </label>
 
           <div className="hist-controls">
