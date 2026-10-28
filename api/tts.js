@@ -2,61 +2,42 @@
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
 
-  const required = [
-    "ELEVENLABS_API_KEY",
-    "ELEVENLABS_ENGLISH_VOICE_ID",
-    "ELEVENLABS_SPANISH_VOICE_ID",
-  ];
-
-  const missing = required.filter(
-    (name) => !process.env[name]?.trim()
-  );
-
-  if (req.method !== "GET" && req.method !== "POST") {
+  if (req.method !== "POST" && req.method !== "GET") {
     res.setHeader("Allow", "GET, POST");
-    return res.status(405).json({
-      error: "Método no permitido.",
+    return res.status(405).json({ error: "Método no permitido." });
+  }
+
+  const apiKey = process.env.ELEVENLABS_API_KEY?.trim();
+  const englishVoiceId = process.env.ELEVENLABS_ENGLISH_VOICE_ID?.trim();
+  const spanishVoiceId = process.env.ELEVENLABS_SPANISH_VOICE_ID?.trim();
+
+  if (req.method === "GET") {
+    const missing = [];
+    if (!apiKey) missing.push("ELEVENLABS_API_KEY");
+    if (!englishVoiceId) missing.push("ELEVENLABS_ENGLISH_VOICE_ID");
+
+    return res.status(missing.length ? 503 : 200).json({
+      ok: missing.length === 0,
+      provider: "elevenlabs",
+      missing,
+      message: missing.length
+        ? "Faltan variables necesarias para la voz inglesa."
+        : "La voz inglesa está configurada.",
     });
   }
 
-  if (missing.length) {
+  if (!apiKey || !englishVoiceId) {
+    const missing = [];
+    if (!apiKey) missing.push("ELEVENLABS_API_KEY");
+    if (!englishVoiceId) missing.push("ELEVENLABS_ENGLISH_VOICE_ID");
+
     return res.status(503).json({
-      ok: false,
-      error: "Faltan variables de configuración.",
+      error: "Faltan variables necesarias para generar audio.",
       missing,
     });
   }
 
-  const test = String(req.query?.test || "").toLowerCase();
-
-  // GET normal: comprobar únicamente la configuración.
-  if (req.method === "GET" && !test) {
-    return res.status(200).json({
-      ok: true,
-      provider: "elevenlabs",
-      configured: true,
-      message:
-        "Variables presentes. Para probar el audio abre ?test=en o ?test=es.",
-    });
-  }
-
-  if (req.method === "GET" && !["en", "es"].includes(test)) {
-    return res.status(400).json({
-      error: "Prueba inválida. Usa ?test=en o ?test=es.",
-    });
-  }
-
-  const texto =
-    req.method === "GET"
-      ? test === "es"
-        ? "Hola. Esta es una prueba de voz en español."
-        : "Hello. This is an English voice test."
-      : req.body?.texto;
-
-  const idioma =
-    req.method === "GET"
-      ? test === "es" ? "es" : "en"
-      : req.body?.idioma || "en-US";
+  const { texto, idioma = "en-US" } = req.body || {};
 
   if (typeof texto !== "string" || !texto.trim()) {
     return res.status(400).json({
@@ -66,17 +47,20 @@ export default async function handler(req, res) {
 
   if (texto.length > 5000) {
     return res.status(400).json({
-      error: "El texto supera los 5000 caracteres.",
+      error: "El texto supera el límite de 5000 caracteres.",
     });
   }
 
   const esEspanol = String(idioma).toLowerCase().startsWith("es");
 
-  const voiceId = (
-    esEspanol
-      ? process.env.ELEVENLABS_SPANISH_VOICE_ID
-      : process.env.ELEVENLABS_ENGLISH_VOICE_ID
-  ).trim();
+  if (esEspanol && !spanishVoiceId) {
+    return res.status(503).json({
+      error: "La voz española aún no está configurada.",
+      missing: ["ELEVENLABS_SPANISH_VOICE_ID"],
+    });
+  }
+
+  const voiceId = esEspanol ? spanishVoiceId : englishVoiceId;
 
   try {
     const response = await fetch(
@@ -84,7 +68,7 @@ export default async function handler(req, res) {
       {
         method: "POST",
         headers: {
-          "xi-api-key": process.env.ELEVENLABS_API_KEY.trim(),
+          "xi-api-key": apiKey,
           "Content-Type": "application/json",
           Accept: "audio/mpeg",
         },
@@ -102,57 +86,32 @@ export default async function handler(req, res) {
     );
 
     if (!response.ok) {
-      const raw = await response.text();
-      console.error("ElevenLabs rechazó la solicitud:", response.status, raw);
+      const detail = await response.text();
+      console.error("ElevenLabs error:", response.status, detail);
 
-      let detail = raw;
+      let mensaje = detail;
+
       try {
-        const parsed = JSON.parse(raw);
-        detail =
+        const parsed = JSON.parse(detail);
+        mensaje =
           parsed?.detail?.message ||
-          parsed?.detail?.status ||
           parsed?.detail ||
           parsed?.message ||
-          raw;
+          detail;
 
-        if (typeof detail !== "string") {
-          detail = JSON.stringify(detail);
+        if (typeof mensaje !== "string") {
+          mensaje = JSON.stringify(mensaje);
         }
       } catch {}
-
-      // La prueba devuelve diagnóstico en JSON.
-      if (req.method === "GET") {
-        return res.status(502).json({
-          ok: false,
-          provider: "elevenlabs",
-          providerStatus: response.status,
-          detail: String(detail).slice(0, 700),
-          language: esEspanol ? "es" : "en",
-        });
-      }
 
       return res.status(502).json({
         error: "ElevenLabs rechazó la solicitud de audio.",
         providerStatus: response.status,
-        detail: String(detail).slice(0, 700),
+        detail: String(mensaje).slice(0, 700),
       });
     }
 
     const audio = Buffer.from(await response.arrayBuffer());
-
-    if (!audio.length) {
-      return res.status(502).json({
-        ok: false,
-        error: "ElevenLabs devolvió un audio vacío.",
-      });
-    }
-
-    // La prueba GET confirma que se generó audio, sin mostrarlo como JSON.
-    if (req.method === "GET") {
-      res.setHeader("Content-Type", "audio/mpeg");
-      res.setHeader("Content-Disposition", 'inline; filename="voice-test.mp3"');
-      return res.status(200).send(audio);
-    }
 
     res.setHeader("Content-Type", "audio/mpeg");
     return res.status(200).send(audio);
@@ -160,10 +119,11 @@ export default async function handler(req, res) {
     console.error("Error conectando con ElevenLabs:", error);
 
     return res.status(500).json({
-      ok: false,
       error: "No se pudo conectar con el servicio de voz.",
       detail:
-        error instanceof Error ? error.message : "Error desconocido",
+        error instanceof Error
+          ? error.message
+          : "Error desconocido",
     });
   }
 }
