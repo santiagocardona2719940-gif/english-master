@@ -8,32 +8,38 @@ export default async function handler(req, res) {
   }
 
   const apiKey = process.env.ELEVENLABS_API_KEY?.trim();
-  const englishVoiceId = process.env.ELEVENLABS_ENGLISH_VOICE_ID?.trim();
-  const spanishVoiceId = process.env.ELEVENLABS_SPANISH_VOICE_ID?.trim();
+  const englishVoiceId =
+    process.env.ELEVENLABS_ENGLISH_VOICE_ID?.trim();
+  const spanishVoiceId =
+    process.env.ELEVENLABS_SPANISH_VOICE_ID?.trim();
 
   if (req.method === "GET") {
+    const idioma = String(req.query?.test || "en").toLowerCase();
+    const esEspanol = idioma.startsWith("es");
+    const voiceId = esEspanol ? spanishVoiceId : englishVoiceId;
     const missing = [];
+
     if (!apiKey) missing.push("ELEVENLABS_API_KEY");
-    if (!englishVoiceId) missing.push("ELEVENLABS_ENGLISH_VOICE_ID");
+
+    if (esEspanol && !spanishVoiceId) {
+      missing.push("ELEVENLABS_SPANISH_VOICE_ID");
+    }
+
+    if (!esEspanol && !englishVoiceId) {
+      missing.push("ELEVENLABS_ENGLISH_VOICE_ID");
+    }
 
     return res.status(missing.length ? 503 : 200).json({
       ok: missing.length === 0,
       provider: "elevenlabs",
+      idioma: esEspanol ? "español" : "inglés",
+      voiceConfigured: Boolean(voiceId),
       missing,
       message: missing.length
-        ? "Faltan variables necesarias para la voz inglesa."
-        : "La voz inglesa está configurada.",
-    });
-  }
-
-  if (!apiKey || !englishVoiceId) {
-    const missing = [];
-    if (!apiKey) missing.push("ELEVENLABS_API_KEY");
-    if (!englishVoiceId) missing.push("ELEVENLABS_ENGLISH_VOICE_ID");
-
-    return res.status(503).json({
-      error: "Faltan variables necesarias para generar audio.",
-      missing,
+        ? `Falta configuración para la voz en ${
+            esEspanol ? "español" : "inglés"
+          }.`
+        : `La voz en ${esEspanol ? "español" : "inglés"} está configurada.`,
     });
   }
 
@@ -52,15 +58,25 @@ export default async function handler(req, res) {
   }
 
   const esEspanol = String(idioma).toLowerCase().startsWith("es");
+  const voiceId = esEspanol ? spanishVoiceId : englishVoiceId;
 
-  if (esEspanol && !spanishVoiceId) {
+  if (!apiKey || !voiceId) {
+    const missing = [];
+    if (!apiKey) missing.push("ELEVENLABS_API_KEY");
+
+    if (!voiceId) {
+      missing.push(
+        esEspanol
+          ? "ELEVENLABS_SPANISH_VOICE_ID"
+          : "ELEVENLABS_ENGLISH_VOICE_ID"
+      );
+    }
+
     return res.status(503).json({
-      error: "La voz española aún no está configurada.",
-      missing: ["ELEVENLABS_SPANISH_VOICE_ID"],
+      error: "Faltan variables necesarias para generar audio.",
+      missing,
     });
   }
-
-  const voiceId = esEspanol ? spanishVoiceId : englishVoiceId;
 
   try {
     const response = await fetch(
@@ -112,7 +128,6 @@ export default async function handler(req, res) {
     }
 
     const audio = Buffer.from(await response.arrayBuffer());
-
     res.setHeader("Content-Type", "audio/mpeg");
     return res.status(200).send(audio);
   } catch (error) {
