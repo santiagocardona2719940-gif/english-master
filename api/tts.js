@@ -6,7 +6,9 @@ export default async function handler(req, res) {
     "ELEVENLABS_SPANISH_VOICE_ID",
   ];
 
-  const missing = required.filter((name) => !process.env[name]);
+  const missing = required.filter(
+    (name) => !process.env[name]?.trim()
+  );
 
   res.setHeader("Cache-Control", "no-store");
 
@@ -16,19 +18,21 @@ export default async function handler(req, res) {
       provider: "elevenlabs",
       missing,
       message: missing.length
-        ? "Faltan variables de entorno."
-        : "Las variables existen; falta comprobar la autenticación y el audio.",
+        ? "Faltan variables de configuración."
+        : "Las variables existen; falta comprobar que ElevenLabs genere el audio.",
     });
   }
 
   if (req.method !== "POST") {
     res.setHeader("Allow", "GET, POST");
-    return res.status(405).json({ error: "Método no permitido." });
+    return res.status(405).json({
+      error: "Método no permitido.",
+    });
   }
 
   if (missing.length) {
     return res.status(503).json({
-      error: "Faltan variables de entorno.",
+      error: "Faltan variables de configuración.",
       missing,
     });
   }
@@ -36,17 +40,24 @@ export default async function handler(req, res) {
   const { texto, idioma = "en-US" } = req.body || {};
 
   if (typeof texto !== "string" || !texto.trim()) {
-    return res.status(400).json({ error: "No se recibió texto para pronunciar." });
+    return res.status(400).json({
+      error: "Falta el texto que se va a pronunciar.",
+    });
   }
 
   if (texto.length > 5000) {
-    return res.status(400).json({ error: "El texto supera los 5000 caracteres." });
+    return res.status(400).json({
+      error: "El texto supera los 5000 caracteres.",
+    });
   }
 
-  const esEspanol = String(idioma).toLowerCase().startsWith("es");
+  const esEspanol = String(idioma)
+    .toLowerCase()
+    .startsWith("es");
+
   const voiceId = esEspanol
-    ? process.env.ELEVENLABS_SPANISH_VOICE_ID
-    : process.env.ELEVENLABS_ENGLISH_VOICE_ID;
+    ? process.env.ELEVENLABS_SPANISH_VOICE_ID.trim()
+    : process.env.ELEVENLABS_ENGLISH_VOICE_ID.trim();
 
   try {
     const response = await fetch(
@@ -54,7 +65,7 @@ export default async function handler(req, res) {
       {
         method: "POST",
         headers: {
-          "xi-api-key": process.env.ELEVENLABS_API_KEY,
+          "xi-api-key": process.env.ELEVENLABS_API_KEY.trim(),
           "Content-Type": "application/json",
           Accept: "audio/mpeg",
         },
@@ -72,13 +83,32 @@ export default async function handler(req, res) {
     );
 
     if (!response.ok) {
-      const detail = (await response.text()).slice(0, 1500);
-      console.error("ElevenLabs respondió con error:", response.status, detail);
+      const detail = await response.text();
+      console.error(
+        "ElevenLabs error:",
+        response.status,
+        detail
+      );
+
+      let mensaje = detail;
+
+      try {
+        const parsed = JSON.parse(detail);
+        mensaje =
+          parsed?.detail?.message ||
+          parsed?.detail ||
+          parsed?.message ||
+          detail;
+
+        if (typeof mensaje !== "string") {
+          mensaje = JSON.stringify(mensaje);
+        }
+      } catch {}
 
       return res.status(502).json({
-        error: "ElevenLabs no pudo generar el audio.",
+        error: "ElevenLabs rechazó la solicitud de audio.",
         providerStatus: response.status,
-        detail,
+        detail: String(mensaje).slice(0, 700),
       });
     }
 
@@ -93,10 +123,14 @@ export default async function handler(req, res) {
     res.setHeader("Content-Type", "audio/mpeg");
     return res.status(200).send(audio);
   } catch (error) {
-    console.error("Error de conexión con ElevenLabs:", error);
+    console.error("Error conectando con ElevenLabs:", error);
 
     return res.status(500).json({
-      error: "No se pudo conectar con ElevenLabs.",
+      error: "No se pudo conectar con el servicio de voz.",
+      detail:
+        error instanceof Error
+          ? error.message
+          : "Error desconocido",
     });
   }
 }
