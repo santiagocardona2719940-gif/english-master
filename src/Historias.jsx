@@ -976,7 +976,7 @@ export default function Historias({ volver = () => {} }) {
 
   const [idioma, setIdioma] = useState("en");
 
-  const [velocidad, setVelocidad] = useState(0.85);
+  const [velocidad, setVelocidad] = useState(0.70);
   const [superLento, setSuperLento] = useState(false);
 
   const [reproduciendo, setReproduciendo] = useState(false);
@@ -1036,11 +1036,16 @@ const hablar = async (texto, lang = "en-US", rate = velocidad) => {
 
   if (audioIARef.current) {
     audioIARef.current.pause();
+    audioIARef.current.currentTime = 0;
     audioIARef.current.src = "";
     audioIARef.current = null;
   }
 
-  // Primero intentamos ElevenLabs.
+  const esIngles = lang.toLowerCase().startsWith("en");
+  const velocidadFinal = esIngles
+    ? Math.max(0.60, Math.min(0.78, rate))
+    : 0.78;
+
   try {
     const respuesta = await fetch("/api/tts", {
       method: "POST",
@@ -1048,12 +1053,12 @@ const hablar = async (texto, lang = "en-US", rate = velocidad) => {
       body: JSON.stringify({
         texto: textoLimpio,
         idioma: lang,
-        velocidad: rate,
+        velocidad: velocidadFinal,
       }),
     });
 
     if (!respuesta.ok) {
-      throw new Error("ElevenLabs no disponible");
+      throw new Error(`ElevenLabs no disponible (${respuesta.status})`);
     }
 
     const audioBlob = await respuesta.blob();
@@ -1061,7 +1066,8 @@ const hablar = async (texto, lang = "en-US", rate = velocidad) => {
 
     const audioUrl = URL.createObjectURL(audioBlob);
     const audio = new Audio(audioUrl);
-    audio.playbackRate = Math.max(0.7, Math.min(1.2, rate));
+    audio.preservesPitch = true;
+    audio.playbackRate = 0.80;
     audioIARef.current = audio;
 
     await new Promise((resolve, reject) => {
@@ -1089,11 +1095,9 @@ const hablar = async (texto, lang = "en-US", rate = velocidad) => {
 
     return;
   } catch (error) {
-    // Si ElevenLabs falla, seguimos con la voz gratuita del navegador.
     console.warn("ElevenLabs no disponible; se usará la voz del navegador:", error);
   }
 
-  // Alternativa gratuita: voz instalada en el navegador.
   if (!("speechSynthesis" in window)) {
     alert("Este navegador no tiene disponible la función de voz.");
     return;
@@ -1101,18 +1105,17 @@ const hablar = async (texto, lang = "en-US", rate = velocidad) => {
 
   const decir = () => {
     const voces = window.speechSynthesis.getVoices();
-    const idiomaBase = lang.toLowerCase().startsWith("es") ? "es" : "en";
-
+    const idiomaBase = esIngles ? "en" : "es";
     const voz =
       voces.find((v) => v.lang.toLowerCase() === lang.toLowerCase()) ||
       voces.find((v) => v.lang.toLowerCase().startsWith(idiomaBase));
 
     const mensaje = new SpeechSynthesisUtterance(textoLimpio);
     mensaje.lang = lang;
-    mensaje.rate = Math.max(0.6, Math.min(1.2, rate));
-
+    mensaje.rate = velocidadFinal;
+    mensaje.pitch = 1;
+    mensaje.volume = 1;
     if (voz) mensaje.voice = voz;
-
     window.speechSynthesis.speak(mensaje);
   };
 
@@ -1123,7 +1126,6 @@ const hablar = async (texto, lang = "en-US", rate = velocidad) => {
     window.speechSynthesis.getVoices();
   }
 };
-
 
   const detener = () => {
 
