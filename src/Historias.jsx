@@ -1045,7 +1045,14 @@ export default function Historias({ volver = () => {} }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ texto: textoLimpio, idioma: lang, velocidad: rate }),
       });
-      if (!respuesta.ok) throw new Error("El servicio de voz IA no está disponible");
+      if (!respuesta.ok) {
+  const detalle = await respuesta.json().catch(() => ({}));
+
+  throw new Error(
+    `Error de voz: ${detalle.providerStatus || respuesta.status}. ` +
+    `${detalle.detail || detalle.error || "No se pudo generar el audio."}`
+  );
+}
       const audioBlob = await respuesta.blob();
       if (!audioBlob.size) throw new Error("El servicio no devolvió audio");
 
