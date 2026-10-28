@@ -1104,28 +1104,53 @@ const hablar = async (texto, lang = "en-US", rate = velocidad) => {
     return;
   }
 
-  const decir = () => {
-    const voces = window.speechSynthesis.getVoices();
-    const idiomaBase = esIngles ? "en" : "es";
-    const voz =
-      voces.find((v) => v.lang.toLowerCase() === lang.toLowerCase()) ||
-      voces.find((v) => v.lang.toLowerCase().startsWith(idiomaBase));
+  // Espera a que la voz del navegador termine realmente antes de continuar.
+  // Esto evita que el inglés siguiente corte la traducción en español.
+  await new Promise((resolve) => {
+    let finalizado = false;
+    let listenerVoces;
 
-    const mensaje = new SpeechSynthesisUtterance(textoLimpio);
-    mensaje.lang = lang;
-    mensaje.rate = velocidadFinal;
-    mensaje.pitch = 1;
-    mensaje.volume = 1;
-    if (voz) mensaje.voice = voz;
-    window.speechSynthesis.speak(mensaje);
-  };
+    const terminar = () => {
+      if (finalizado) return;
+      finalizado = true;
+      if (listenerVoces) {
+        window.speechSynthesis.removeEventListener("voiceschanged", listenerVoces);
+      }
+      resolve();
+    };
 
-  if (window.speechSynthesis.getVoices().length) {
-    decir();
-  } else {
-    window.speechSynthesis.addEventListener("voiceschanged", decir, { once: true });
-    window.speechSynthesis.getVoices();
-  }
+    const decir = () => {
+      if (finalizado || stopRef.current) {
+        terminar();
+        return;
+      }
+
+      const voces = window.speechSynthesis.getVoices();
+      const idiomaBase = esIngles ? "en" : "es";
+      const voz =
+        voces.find((v) => v.lang.toLowerCase() === lang.toLowerCase()) ||
+        voces.find((v) => v.lang.toLowerCase().startsWith(idiomaBase));
+
+      const mensaje = new SpeechSynthesisUtterance(textoLimpio);
+      mensaje.lang = lang;
+      // No cambiar el ritmo del inglés; el español usa un ritmo más pausado.
+      mensaje.rate = esIngles ? velocidadFinal : 0.78;
+      mensaje.pitch = 1;
+      mensaje.volume = 1;
+      if (voz) mensaje.voice = voz;
+      mensaje.onend = terminar;
+      mensaje.onerror = terminar;
+      window.speechSynthesis.speak(mensaje);
+    };
+
+    if (window.speechSynthesis.getVoices().length) {
+      decir();
+    } else {
+      listenerVoces = decir;
+      window.speechSynthesis.addEventListener("voiceschanged", listenerVoces, { once: true });
+      window.speechSynthesis.getVoices();
+    }
+  });
 };
 
   const detener = () => {
