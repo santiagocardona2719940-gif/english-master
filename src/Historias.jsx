@@ -1032,8 +1032,48 @@ const hablar = async (texto, lang = "en-US", rate = velocidad) => {
   const textoLimpio = limpiarTexto(texto);
   if (!textoLimpio) return;
 
-  window.speechSynthesis?.cancel();
+  const esIngles = lang.toLowerCase().startsWith("en");
 
+  // No usar el servicio remoto para español: la voz del navegador permite
+  // esperar explícitamente a que termine antes de lanzar la siguiente frase.
+  const hablarConNavegador = () => new Promise((resolve) => {
+    const synth = window.speechSynthesis;
+    let terminado = false;
+    const finalizar = () => {
+      if (terminado) return;
+      terminado = true;
+      resolve();
+    };
+
+    const voces = synth.getVoices();
+    const idiomaBase = esIngles ? "en" : "es";
+    const voz =
+      voces.find((v) => v.lang.toLowerCase() === lang.toLowerCase()) ||
+      voces.find((v) => v.lang.toLowerCase().startsWith(idiomaBase));
+
+    const mensaje = new SpeechSynthesisUtterance(textoLimpio);
+    mensaje.lang = lang;
+    mensaje.rate = esIngles
+      ? Math.max(0.7, Math.min(1.2, rate))
+      : 0.78;
+    mensaje.pitch = 1;
+    mensaje.volume = 1;
+    if (voz) mensaje.voice = voz;
+    mensaje.onend = finalizar;
+    mensaje.onerror = finalizar;
+    synth.speak(mensaje);
+  });
+
+  // Español: espera el evento onend real antes de continuar con el inglés.
+  if (!esIngles) {
+    if (!("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
+    await hablarConNavegador();
+    return;
+  }
+
+  // Inglés: conserva el audio actual de ElevenLabs y su velocidad configurada.
+  window.speechSynthesis?.cancel();
   if (audioIARef.current) {
     audioIARef.current.pause();
     audioIARef.current.currentTime = 0;
@@ -1041,34 +1081,21 @@ const hablar = async (texto, lang = "en-US", rate = velocidad) => {
     audioIARef.current = null;
   }
 
-  const esIngles = lang.toLowerCase().startsWith("en");
-  // Inglés lento y español aún más lento para que termine cada frase.
-  const velocidadFinal = esIngles
-    ? Math.max(0.60, Math.min(0.78, rate))
-    : 0.50;
-
   try {
     const respuesta = await fetch("/api/tts", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        texto: textoLimpio,
-        idioma: lang,
-        velocidad: velocidadFinal,
-      }),
+      body: JSON.stringify({ texto: textoLimpio, idioma: lang, velocidad: rate }),
     });
-
-    if (!respuesta.ok) {
-      throw new Error(`ElevenLabs no disponible (${respuesta.status})`);
-    }
+    if (!respuesta.ok) throw new Error(`ElevenLabs no disponible (${respuesta.status})`);
 
     const audioBlob = await respuesta.blob();
     if (!audioBlob.size) throw new Error("Audio vacío");
 
     const audioUrl = URL.createObjectURL(audioBlob);
     const audio = new Audio(audioUrl);
+    audio.playbackRate = Math.max(0.7, Math.min(1.2, rate));
     audio.preservesPitch = true;
-    audio.playbackRate = esIngles ? 0.80 : 0.62;
     audioIARef.current = audio;
 
     await new Promise((resolve, reject) => {
@@ -1079,78 +1106,17 @@ const hablar = async (texto, lang = "en-US", rate = velocidad) => {
         URL.revokeObjectURL(audioUrl);
         if (audioIARef.current === audio) audioIARef.current = null;
       };
-
-      audio.onended = () => {
-        limpiarAudio();
-        resolve();
-      };
-      audio.onerror = () => {
-        limpiarAudio();
-        reject(new Error("No se pudo reproducir el audio de ElevenLabs"));
-      };
-      audio.play().catch((error) => {
-        limpiarAudio();
-        reject(error);
-      });
+      audio.onended = () => { limpiarAudio(); resolve(); };
+      audio.onerror = () => { limpiarAudio(); reject(new Error("No se pudo reproducir el audio de inglés")); };
+      audio.play().catch((error) => { limpiarAudio(); reject(error); });
     });
-
     return;
   } catch (error) {
-    console.warn("ElevenLabs no disponible; se usará la voz del navegador:", error);
+    console.warn("ElevenLabs no disponible; se usará la voz del navegador para inglés:", error);
   }
 
-  if (!("speechSynthesis" in window)) {
-    alert("Este navegador no tiene disponible la función de voz.");
-    return;
-  }
-
-  // Espera a que la voz del navegador termine realmente antes de continuar.
-  // Esto evita que el inglés siguiente corte la traducción en español.
-  await new Promise((resolve) => {
-    let finalizado = false;
-    let listenerVoces;
-
-    const terminar = () => {
-      if (finalizado) return;
-      finalizado = true;
-      if (listenerVoces) {
-        window.speechSynthesis.removeEventListener("voiceschanged", listenerVoces);
-      }
-      resolve();
-    };
-
-    const decir = () => {
-      if (finalizado || stopRef.current) {
-        terminar();
-        return;
-      }
-
-      const voces = window.speechSynthesis.getVoices();
-      const idiomaBase = esIngles ? "en" : "es";
-      const voz =
-        voces.find((v) => v.lang.toLowerCase() === lang.toLowerCase()) ||
-        voces.find((v) => v.lang.toLowerCase().startsWith(idiomaBase));
-
-      const mensaje = new SpeechSynthesisUtterance(textoLimpio);
-      mensaje.lang = lang;
-      // No cambiar el ritmo del inglés; el español usa un ritmo más pausado.
-      mensaje.rate = esIngles ? velocidadFinal : 0.78;
-      mensaje.pitch = 1;
-      mensaje.volume = 1;
-      if (voz) mensaje.voice = voz;
-      mensaje.onend = terminar;
-      mensaje.onerror = terminar;
-      window.speechSynthesis.speak(mensaje);
-    };
-
-    if (window.speechSynthesis.getVoices().length) {
-      decir();
-    } else {
-      listenerVoces = decir;
-      window.speechSynthesis.addEventListener("voiceschanged", listenerVoces, { once: true });
-      window.speechSynthesis.getVoices();
-    }
-  });
+  if (!("speechSynthesis" in window)) return;
+  await hablarConNavegador();
 };
 
   const detener = () => {
