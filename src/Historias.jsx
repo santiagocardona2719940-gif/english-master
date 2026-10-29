@@ -976,7 +976,7 @@ export default function Historias({ volver = () => {} }) {
 
   const [idioma, setIdioma] = useState("en");
 
-  const [velocidad, setVelocidad] = useState(0.85);
+  const [velocidad, setVelocidad] = useState(0.70);
   const [superLento, setSuperLento] = useState(false);
 
   const [reproduciendo, setReproduciendo] = useState(false);
@@ -986,6 +986,7 @@ export default function Historias({ volver = () => {} }) {
   const [cantidadVisible, setCantidadVisible] = useState(100);
 
   const stopRef = useRef(false);
+  const audioIARef = useRef(null);
 
 
 
@@ -1024,69 +1025,149 @@ export default function Historias({ volver = () => {} }) {
 
 
 
-  const hablar = (texto, lang = "en-US", rate = velocidad) =>
-    new Promise((resolve) => {
-      if (!("speechSynthesis" in window)) {
-        alert("Tu navegador no permite reproducir voz.");
-        resolve();
-        return;
+  // Primero intenta usar una voz neuronal real desde el servidor seguro de TTS.
+  // Si el servicio no está configurado, utiliza la voz disponible del navegador.
+ 
+const hablar = async (texto, lang = "en-US", rate = velocidad) => {
+  const textoLimpio = limpiarTexto(texto);
+  if (!textoLimpio) return;
+
+  const esIngles = lang.toLowerCase().startsWith("en");
+  const synth = window.speechSynthesis;
+
+  const hablarConNavegador = () => new Promise((resolve) => {
+    if (!("speechSynthesis" in window)) return resolve();
+
+    let terminado = false;
+    let temporizador;
+    const finalizar = () => {
+      if (terminado) return;
+      terminado = true;
+      if (temporizador) clearTimeout(temporizador);
+      resolve();
+    };
+
+    const elegirVoz = (voces) => {
+      const base = esIngles ? "en" : "es";
+      const disponibles = voces.filter(v => (v.lang || "").toLowerCase().startsWith(base));
+      if (esIngles) {
+        return disponibles.find(v => (v.lang || "").toLowerCase() === lang.toLowerCase())
+          || disponibles.find(v => /natural|neural|google|microsoft|samantha|ava/i.test(v.name))
+          || disponibles[0];
       }
+      // Prioriza voces femeninas conocidas en español. El navegador no expone
+      // un campo fiable de género, así que se usan nombres habituales de voces.
+      const preferidas = /monica|mónica|paulina|lucia|lucía|sofia|sofía|helena|sabina|elena|isabela|isabella|laura|female|femenina/i;
+      const evitar = /male|masculina|jorge|pablo|diego|raul|raúl|alvaro|álvaro|juan|miguel|antonio/i;
+      const vozFemenina = disponibles.find(v =>
+        preferidas.test(v.name || "") && !evitar.test(v.name || "")
+      );
+      if (vozFemenina) return vozFemenina;
 
-      const synth = window.speechSynthesis;
-      synth.cancel();
+      // Si no se identifica una voz femenina por nombre, prefiere una voz
+      // española de mejor calidad y después cualquier voz española disponible.
+      return disponibles.find(v =>
+        /natural|neural|premium|enhanced/i.test(v.name || "") &&
+        !evitar.test(v.name || "")
+      )
+        || disponibles.find(v => /es[-_]?(mx|us|co)/i.test(v.lang || "") && !evitar.test(v.name || ""))
+        || disponibles.find(v => !evitar.test(v.name || ""))
+        || disponibles[0];
+    };
 
-      const utterance = new SpeechSynthesisUtterance(limpiarTexto(texto));
-      utterance.lang = lang;
-      utterance.rate = rate;
-      utterance.pitch = 1;
+    const reproducir = () => {
+      if (terminado) return;
+      const voz = elegirVoz(synth.getVoices());
+      const mensaje = new SpeechSynthesisUtterance(textoLimpio);
+      mensaje.lang = esIngles ? lang : (voz?.lang || "es-ES");
+      mensaje.rate = esIngles ? Math.max(0.7, Math.min(1.2, rate)) : 0.92;
+      mensaje.pitch = esIngles ? 1 : 1.08;
+      mensaje.volume = 1;
+      if (voz) mensaje.voice = voz;
+      mensaje.onend = finalizar;
+      mensaje.onerror = finalizar;
+      synth.speak(mensaje);
+    };
 
-      // Espera a que el navegador cargue las voces y selecciona una del idioma pedido.
-      const seleccionarVoz = () => {
-        const voces = synth.getVoices();
-        const idiomaBase = lang.toLowerCase().startsWith("es") ? "es" : "en";
-        const coincidentes = voces.filter((voz) =>
-          (voz.lang || "").toLowerCase().startsWith(idiomaBase)
-        );
-        // Inglés: prioriza voces estadounidenses y después nombres habitualmente masculinos.
-        // Español: conserva la lógica de selección en español, sin forzar una voz inglesa.
-        const vocesUS = voces.filter((voz) => (voz.lang || "").toLowerCase() === "en-us");
-        const preferida = idiomaBase === "en"
-          ? (vocesUS.find((voz) => /guy|david|daniel|alex|fred|mark|tom|aaron|male/i.test(voz.name))
-            || vocesUS.find((voz) => /natural|neural|premium|enhanced|google us english/i.test(voz.name))
-            || coincidentes.find((voz) => /guy|david|daniel|alex|fred|mark|tom|aaron|male/i.test(voz.name))
-            || coincidentes.find((voz) => /natural|neural|premium|enhanced|google us english/i.test(voz.name)))
-          : coincidentes.find((voz) =>
-              /natural|neural|premium|enhanced|samantha|monica|paulina|jorge|diego/i.test(voz.name)
-            );
-        const voz = preferida || coincidentes[0];
-        if (voz) utterance.voice = voz;
-        // Conserva explícitamente el idioma solicitado aunque no haya voz coincidente.
-        utterance.lang = lang;
+    if (synth.getVoices().length) {
+      reproducir();
+    } else {
+      const alCargarVoces = () => {
+        synth.removeEventListener?.("voiceschanged", alCargarVoces);
+        if (temporizador) clearTimeout(temporizador);
+        reproducir();
       };
+      synth.addEventListener?.("voiceschanged", alCargarVoces);
+      temporizador = setTimeout(() => {
+        synth.removeEventListener?.("voiceschanged", alCargarVoces);
+        reproducir();
+      }, 900);
+    }
+  });
 
-      seleccionarVoz();
-      if (synth.getVoices().length === 0) {
-        synth.addEventListener("voiceschanged", seleccionarVoz, { once: true });
-      }
+  synth?.cancel();
+  if (audioIARef.current) {
+    audioIARef.current.pause();
+    audioIARef.current.currentTime = 0;
+    audioIARef.current.src = "";
+    audioIARef.current = null;
+  }
 
-      let terminado = false;
-      const finalizar = () => {
-        if (terminado) return;
-        terminado = true;
-        synth.removeEventListener("voiceschanged", seleccionarVoz);
-        resolve();
-      };
-      utterance.onend = finalizar;
-      utterance.onerror = finalizar;
-      synth.speak(utterance);
+  // La voz española configurada en ElevenLabs exige un plan superior.
+  // Para español elegimos una voz femenina/natural disponible en el navegador.
+  // El audio de inglés sigue usando ElevenLabs como antes.
+  if (!esIngles) {
+    await hablarConNavegador();
+    return;
+  }
+
+  try {
+    const respuesta = await fetch("/api/tts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ texto: textoLimpio, idioma: lang, velocidad: rate }),
     });
+    if (!respuesta.ok) throw new Error(`ElevenLabs no disponible (${respuesta.status})`);
+    const audioBlob = await respuesta.blob();
+    if (!audioBlob.size) throw new Error("Audio vacío");
 
+    const audioUrl = URL.createObjectURL(audioBlob);
+    const audio = new Audio(audioUrl);
+    audio.playbackRate = Math.max(0.7, Math.min(1.2, rate));
+    audio.preservesPitch = true;
+    audioIARef.current = audio;
+
+    await new Promise((resolve, reject) => {
+      let finalizado = false;
+      const limpiarAudio = () => {
+        if (finalizado) return;
+        finalizado = true;
+        URL.revokeObjectURL(audioUrl);
+        if (audioIARef.current === audio) audioIARef.current = null;
+      };
+      audio.onended = () => { limpiarAudio(); resolve(); };
+      audio.onerror = () => { limpiarAudio(); reject(new Error("No se pudo reproducir el audio de inglés")); };
+      audio.play().catch(error => { limpiarAudio(); reject(error); });
+    });
+    return;
+  } catch (error) {
+    // Inglés: no usar la voz de respaldo del navegador.
+    // Si ElevenLabs falla, detener la reproducción para no cambiar de voz silenciosamente.
+    console.error("No se pudo generar o reproducir la voz inglesa de ElevenLabs:", error);
+    return;
+  }
+};
 
   const detener = () => {
 
     stopRef.current = true;
 
     window.speechSynthesis?.cancel();
+    if (audioIARef.current) {
+      audioIARef.current.pause();
+      audioIARef.current.currentTime = 0;
+      audioIARef.current = null;
+    }
 
     setReproduciendo(false);
 
