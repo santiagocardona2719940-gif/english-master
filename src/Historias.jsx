@@ -1210,77 +1210,98 @@ export default function Historias({ volver = () => {} }) {
       .filter(Boolean);
   };
 
-  // Explicaciones breves para expresiones frecuentes. En frases no incluidas,
-  // el modo profesor explica la oración completa sin inventar traducciones palabra por palabra.
-  const explicacionesFrase = {
-    "good morning": [["Good morning", "Buenos días"]],
-    "good afternoon": [["Good afternoon", "Buenas tardes"]],
-    "good evening": [["Good evening", "Buenas noches (al saludar por la tarde/noche)"]],
-    "good night": [["Good night", "Buenas noches (al despedirse o ir a dormir)"]],
-    "how are you": [["How are you", "Cómo estás / cómo está usted"]],
-    "how are you today": [["How are you today", "Cómo estás hoy"]],
-    "what is your name": [["What is your name", "Cómo te llamas"]],
-    "my name is": [["My name is", "Me llamo / mi nombre es"]],
-    "nice to meet you": [["Nice to meet you", "Mucho gusto en conocerte"]],
-    "where are you from": [["Where are you from", "De dónde eres"]],
-    "i am from": [["I am from", "Soy de / vengo de"]],
-    "thank you": [["Thank you", "Gracias"]],
-    "and you": [["And you", "Y tú / y usted"]],
-    "see you later": [["See you later", "Nos vemos más tarde"]],
-    "how have you been": [["How have you been", "Cómo has estado"]],
-    "the pleasure is mine": [["The pleasure is mine", "El gusto es mío"]],
-    "by the way": [["By the way", "Por cierto"]],
-    "i would love to": [["I would love to", "Me encantaría"]],
-    "no problem": [["No problem", "No hay problema"]]
-  };
-
+  // Modo Profesor: enseñanza por situaciones reales, con tiempo para pensar,
+  // tres opciones naturales, una explicación detallada y avance por el diálogo.
   const traduccionesPalabra = {
-    i: 'yo', am: 'soy / estoy', im: 'soy / estoy (contracción de I am)', my: 'mi', name: 'nombre', is: 'es / está', are: 'eres / estás / son / están', you: 'tú / usted / ustedes', your: 'tu / su', what: 'qué / cuál', how: 'cómo', where: 'dónde', from: 'de / desde', the: 'el / la / los / las', a: 'un / una', an: 'un / una (antes de sonido vocálico)', to: 'a / para; también acompaña a ciertos verbos', meet: 'conocer / encontrarse con', nice: 'agradable / bonito; en esta expresión, parte de “mucho gusto”', pleasure: 'placer / gusto', mine: 'mío / mía', good: 'bueno / buen', morning: 'mañana', afternoon: 'tarde', evening: 'tarde-noche', night: 'noche', hello: 'hola', hi: 'hola (informal)', hey: 'hola (muy informal)', thank: 'agradecer', thanks: 'gracias', 'you’re': 'tú eres / tú estás (contracción de you are)', fine: 'bien', well: 'bien', today: 'hoy', and: 'y', yes: 'sí', no: 'no', please: 'por favor', sorry: 'lo siento / disculpa', excuse: 'disculpar', me: 'me / a mí', do: 'hacer; auxiliar para preguntas', does: 'hace; auxiliar para preguntas con he/she/it', live: 'vivir', work: 'trabajar / trabajo', 'what’s': 'qué es / cuál es (contracción de what is)', 'it’s': 'es / está (contracción de it is)', this: 'esto / este / esta', that: 'eso / ese / esa', have: 'tener / haber', been: 'estado / sido', see: 'ver', later: 'más tarde', again: 'otra vez', can: 'poder', help: 'ayudar / ayuda', would: 'auxiliar que expresa posibilidad o cortesía', love: 'amar; en esta expresión, encantar', like: 'gustar', problem: 'problema', no: 'no', not: 'no', much: 'mucho', very: 'muy', because: 'porque', but: 'pero', with: 'con', in: 'en / dentro de', at: 'en (lugar u hora)', for: 'para / por', on: 'sobre / en', we: 'nosotros / nosotras', they: 'ellos / ellas', he: 'él', she: 'ella', it: 'eso / ello', was: 'era / estaba / fue', were: 'eras / estabas / eran / estaban', live: 'vivir', here: 'aquí', there: 'allí / ahí', please: 'por favor', welcome: 'bienvenido; en “you’re welcome”, de nada'
+    i: 'yo', im: 'yo soy / yo estoy (contracción de I am)', am: 'soy / estoy', my: 'mi',
+    name: 'nombre', is: 'es / está', are: 'eres / estás / son / están', you: 'tú / usted / ustedes',
+    your: 'tu / su', what: 'qué / cuál', whats: 'qué es / cuál es (contracción de what is)',
+    how: 'cómo', where: 'dónde', from: 'de / desde', the: 'el / la / los / las',
+    a: 'un / una', an: 'un / una (antes de sonido vocálico)', to: 'a / para; también acompaña a ciertos verbos',
+    meet: 'conocer / encontrarse con', nice: 'agradable; en “nice to meet you”, forma parte de “mucho gusto”',
+    pleasure: 'placer / gusto', mine: 'mío / mía', good: 'bueno / buen', morning: 'mañana',
+    afternoon: 'tarde', evening: 'tarde-noche', night: 'noche', hello: 'hola', hi: 'hola (informal)',
+    hey: 'hola (muy informal)', thank: 'agradecer', thanks: 'gracias', fine: 'bien', well: 'bien',
+    today: 'hoy', and: 'y', yes: 'sí', no: 'no', please: 'por favor', sorry: 'lo siento / disculpa',
+    excuse: 'disculpar; “excuse me” significa “disculpe”', me: 'me / a mí', do: 'hacer; también se usa como auxiliar en preguntas',
+    does: 'auxiliar para preguntas con he, she o it', live: 'vivir', work: 'trabajar / trabajo',
+    it: 'eso / ello', its: 'es / está (contracción de it is)', this: 'esto / este / esta', that: 'eso / ese / esa',
+    have: 'tener / haber', been: 'estado / sido', see: 'ver', later: 'más tarde', again: 'otra vez',
+    can: 'poder', could: 'podría; se usa para pedir algo con cortesía', help: 'ayudar / ayuda',
+    would: 'auxiliar que expresa posibilidad o cortesía', love: 'amar; en “would love”, encantaría',
+    like: 'gustar', problem: 'problema', not: 'no', much: 'mucho', very: 'muy', because: 'porque',
+    but: 'pero', with: 'con', in: 'en / dentro de', at: 'en (lugar u hora)', for: 'para / por',
+    on: 'sobre / en', we: 'nosotros / nosotras', they: 'ellos / ellas', he: 'él', she: 'ella',
+    was: 'era / estaba / fue', were: 'eras / estabas / eran / estaban', here: 'aquí', there: 'allí / ahí',
+    welcome: 'bienvenido; “you’re welcome” significa “de nada”', menu: 'menú / carta', could: 'podría',
+    order: 'ordenar / pedir comida', drink: 'beber / bebida', water: 'agua', check: 'cuenta (en un restaurante)',
+    bill: 'cuenta', card: 'tarjeta', table: 'mesa', want: 'querer', ready: 'listo / preparado',
+    everything: 'todo', great: 'excelente / genial', please: 'por favor', restaurant: 'restaurante'
   };
 
   const obtenerExplicaciones = (ingles, espanol) => {
     const limpio = limpiarTexto(ingles).replace(/[.!?]+$/g, '').trim();
-    const palabras = limpio.match(/[A-Za-z]+(?:['’][A-Za-z]+)?|[^\sA-Za-z]+/g) || [];
-    return palabras.filter(p => /[A-Za-z]/.test(p)).map(p => {
+    const palabras = limpio.match(/[A-Za-z]+(?:['’][A-Za-z]+)?/g) || [];
+    return palabras.map((p) => {
       const clave = p.toLowerCase().replace(/[’]/g, "'");
-      const base = ({"you're":"you’re", "what's":"what’s", "it's":"it’s", "i'm":"im", "that's":"that", "don't":"do", "can't":"can"})[clave] || clave;
-      const significado = traduccionesPalabra[base] || traduccionesPalabra[clave] || `esta palabra depende del contexto; en la frase completa significa parte de: ${limpiarTexto(espanol)}`;
+      const base = ({ "you're": 'youre', "what's": 'whats', "it's": 'its', "i'm": 'im', "that's": 'that', "don't": 'do', "can't": 'can', "i'd": 'id', "i'll": 'ill' })[clave] || clave;
+      const especiales = {
+        youre: 'tú eres / tú estás (contracción de you are)',
+        id: 'yo quisiera / yo haría, según el contexto (contracción de I would)',
+        ill: 'yo haré / voy a, según el contexto (contracción de I will)',
+        dont: 'no; contracción de do not',
+        cant: 'no poder; contracción de cannot'
+      };
+      const significado = especiales[base] || traduccionesPalabra[base] || traduccionesPalabra[clave] || `no tiene una traducción única palabra por palabra; en esta frase se entiende por el contexto: ${limpiarTexto(espanol)}`;
       return [p, significado];
     });
   };
 
-  const obtenerSituacionesProfesor = (d) => {
-    const en = limpiarTexto(d.en).toLowerCase();
-    if (/good morning|good afternoon|good evening|hello|hi\b|hey\b|how are you|how have you been/.test(en)) return [
-      ['Entras al trabajo por la mañana.', 'Good morning! How are you?', '¡Buenos días! ¿Cómo estás?'],
-      ['Te encuentras con un vecino en la calle.', 'Hi! It’s nice to see you.', '¡Hola! Qué gusto verte.'],
-      ['Un compañero te saluda y te pregunta cómo estás.', 'I’m fine, thank you. And you?', 'Estoy bien, gracias. ¿Y tú?']
-    ];
-    if (/what is your name|what’s your name|my name is|i am .*name|nice to meet|pleasure is mine/.test(en)) return [
-      ['Te presentan a alguien en una reunión.', 'Hi, my name is Daniel. What’s your name?', 'Hola, me llamo Daniel. ¿Cómo te llamas?'],
-      ['Conoces a un compañero nuevo en el trabajo.', 'Nice to meet you. I’m Laura.', 'Mucho gusto. Soy Laura.'],
-      ['La otra persona también se presenta.', 'The pleasure is mine.', 'El gusto es mío.']
-    ];
-    if (/where are you from|i am from|i’m from|live|city|country/.test(en)) return [
-      ['Alguien te pregunta de dónde eres.', 'I’m from Colombia.', 'Soy de Colombia.'],
-      ['Conoces a alguien en una clase de inglés.', 'Where are you from?', '¿De dónde eres?'],
-      ['Hablas con un compañero sobre dónde vive.', 'I live in New York now.', 'Ahora vivo en Nueva York.']
-    ];
-    if (/thank|thanks|welcome|no problem|sorry|excuse me|help/.test(en)) return [
-      ['Alguien te ayuda con una tarea.', 'Thank you for your help.', 'Gracias por tu ayuda.'],
-      ['Una persona te agradece y respondes con amabilidad.', 'You’re welcome. No problem.', 'De nada. No hay problema.'],
-      ['Necesitas llamar la atención de alguien educadamente.', 'Excuse me, can you help me, please?', 'Disculpe, ¿puede ayudarme, por favor?']
-    ];
-    if (/see you|good night|later|goodbye|bye/.test(en)) return [
-      ['Te despides de un compañero al terminar el trabajo.', 'See you later!', '¡Nos vemos más tarde!'],
-      ['Termina una conversación con un amigo.', 'Goodbye. Have a nice day!', 'Adiós. ¡Que tengas un buen día!'],
-      ['Te vas a dormir y te despides en casa.', 'Good night!', '¡Buenas noches!']
-    ];
-    return [
-      ['En una conversación cotidiana con un amigo.', d.en, d.es],
-      ['En el trabajo, cuando hablas con un compañero.', d.en, d.es],
-      ['En una clase de inglés para practicar la expresión.', d.en, d.es]
-    ];
+  const obtenerContextoProfesor = (d) => {
+    const titulo = String(capitulo?.title || capitulo?.titulo || '').toLowerCase();
+    const texto = `${d.en} ${d.es} ${titulo}`.toLowerCase();
+    if (/restaurante|menú|menu|cuenta|order|drink|food|restaurant|camarero|mesero|café|coffee/.test(texto)) {
+      return {
+        lugar: 'Llegas a un restaurante en Estados Unidos. El empleado te saluda y quieres comenzar la conversación.',
+        pregunta: '¿Cómo saludarías y pedirías lo que necesitas en inglés?',
+        opciones: [
+          ['Hi! How are you today?', '¡Hola! ¿Cómo está hoy?'],
+          ['Could I see the menu, please?', '¿Podría ver el menú, por favor?'],
+          ['Can I have some water, please?', '¿Me puede traer agua, por favor?']
+        ],
+        siguientes: [
+          ['El camarero te pregunta qué deseas beber.', 'What would you like to drink?', '¿Qué te gustaría beber?', ['I’d like some water, please.', 'Can I have a coffee, please?', 'Just water, thank you.']],
+          ['El camarero pregunta si estás listo para ordenar.', 'Are you ready to order?', '¿Estás listo para ordenar?', ['Yes, I’d like the chicken, please.', 'I’ll have a burger, please.', 'Could I get the fish, please?']],
+          ['Terminaste de comer y quieres pagar.', 'Could we have the check, please?', '¿Nos trae la cuenta, por favor?', ['Could we have the check, please?', 'Can I pay by card?', 'Thank you. Have a nice day!']]
+        ]
+      };
+    }
+    if (/saludo|convers|amig|present|neighbor|greeting|hello|hi\b|how are you/.test(texto)) {
+      return {
+        lugar: 'Te encuentras con una persona que acabas de conocer. Quieres saludar, presentarte y mantener una conversación breve.',
+        pregunta: '¿Cómo saludarías en inglés?',
+        opciones: [
+          ['Hello! How are you?', '¡Hola! ¿Cómo estás?'],
+          ['Hi! How’s it going?', '¡Hola! ¿Cómo te va?'],
+          ['Hey! Nice to meet you.', '¡Hola! Mucho gusto en conocerte.']
+        ],
+        siguientes: [
+          ['La otra persona te pregunta cómo te llamas.', 'What’s your name?', '¿Cómo te llamas?', ['My name is Julián.', 'I’m Julián. What’s your name?', 'You can call me Julián.']],
+          ['Quieres preguntar de dónde es la otra persona.', 'Where are you from?', '¿De dónde eres?', ['I’m from Colombia.', 'I’m originally from Colombia.', 'I’m from Colombia, but I live here now.']],
+          ['La conversación termina y quieres despedirte.', 'It was nice talking to you.', 'Fue agradable hablar contigo.', ['It was nice talking to you.', 'See you later!', 'Have a great day!']]
+        ]
+      };
+    }
+    return {
+      lugar: `Imagina esta situación de la vida real: ${capitulo?.title || 'una conversación cotidiana'}.`,
+      pregunta: '¿Cómo expresarías esta idea en inglés?',
+      opciones: [[d.en, d.es], ['Could you help me, please?', '¿Podrías ayudarme, por favor?'], ['Thank you for your help.', 'Gracias por tu ayuda.']],
+      siguientes: [
+        ['Quieres hacer una pregunta con educación.', 'Could you help me, please?', '¿Podrías ayudarme, por favor?', ['Could you help me, please?', 'Can you show me, please?', 'Would you mind helping me?']],
+        ['Quieres confirmar que entendiste.', 'I understand. Thank you.', 'Entiendo. Gracias.', ['I understand.', 'Could you repeat that, please?', 'Thank you for explaining.']],
+        ['Quieres cerrar la conversación amablemente.', 'Thank you. Have a nice day!', 'Gracias. ¡Que tengas un buen día!', ['Thank you. Have a nice day!', 'It was nice talking to you.', 'See you soon!']]
+      ]
+    };
   };
 
   const reproducirModoProfesor = async (d) => {
@@ -1289,39 +1310,63 @@ export default function Historias({ volver = () => {} }) {
       if (stopRef.current) return;
       await hablar(texto, idioma, ritmo);
     };
-    await decir('Primero escucha la frase completa en inglés.', 'es-ES');
-    await decir(d.en, 'en-US', Math.min(0.86, velocidad));
+    const contexto = obtenerContextoProfesor(d);
+
+    await decir('Vamos a practicar con una situación real.', 'es-ES');
+    await decir(contexto.lugar, 'es-ES');
+    await decir(contexto.pregunta, 'es-ES');
+    await decir('Haz una pausa e intenta responder tú primero.', 'es-ES');
+    await pausa(5000);
     if (stopRef.current) return;
-    await pausa(500);
-    await decir('Ahora vamos palabra por palabra. Escucha cada palabra y su significado en español.');
-    const partes = obtenerExplicaciones(d.en, d.es);
-    for (const [palabra, significado] of partes) {
+
+    await decir('Aquí tienes tres maneras naturales de decirlo.', 'es-ES');
+    for (let i = 0; i < contexto.opciones.length; i++) {
       if (stopRef.current) return;
-      await decir(palabra, 'en-US', 0.72);
-      await decir(`${palabra}. Significa: ${significado}.`, 'es-ES', 0.86);
-      await pausa(300);
+      const [en, es] = contexto.opciones[i];
+      await decir(`Opción ${i + 1}.`, 'es-ES');
+      await decir(en, 'en-US', Math.min(0.86, velocidad));
+      await decir(`Significa: ${es}`, 'es-ES');
+      await pausa(650);
+    }
+    await decir('Si pensaste en una de estas respuestas, lo hiciste muy bien. También puedes usar otras frases correctas.', 'es-ES');
+
+    // Explicamos una frase central de las opciones, palabra por palabra.
+    const fraseElegida = contexto.opciones.find(([en]) => /could i see the menu|hello|hi! how are you|what would you like/i.test(en)) || contexto.opciones[0];
+    await decir('Ahora vamos a escoger una frase y aprender cómo funciona.', 'es-ES');
+    await decir(fraseElegida[0], 'en-US', Math.min(0.84, velocidad));
+    for (const [palabra, significado] of obtenerExplicaciones(fraseElegida[0], fraseElegida[1])) {
+      if (stopRef.current) return;
+      await decir(palabra, 'en-US', 0.74);
+      await decir(`${palabra} significa ${significado}.`, 'es-ES', 0.86);
+      await pausa(250);
+    }
+    await decir(`Ahora, todo junto quiere decir: ${fraseElegida[1]}.`, 'es-ES');
+    await decir('Escucha la frase completa una vez más.', 'es-ES');
+    await decir(fraseElegida[0], 'en-US', Math.min(0.82, velocidad));
+    await decir('Repite la frase en voz alta. Tienes un momento para practicar.', 'es-ES');
+    await pausa(3000);
+
+    // Continuamos el diálogo con preguntas y respuestas distintas, no con la misma frase repetida.
+    await decir('Muy bien. Continuemos la conversación paso a paso.', 'es-ES');
+    for (let i = 0; i < contexto.siguientes.length; i++) {
+      if (stopRef.current) return;
+      const [escena, preguntaEn, preguntaEs, respuestas] = contexto.siguientes[i];
+      await decir(`Siguiente situación. ${escena}`, 'es-ES');
+      await decir(preguntaEn, 'en-US', Math.min(0.84, velocidad));
+      await decir(`En español: ${preguntaEs}`, 'es-ES');
+      await decir('¿Qué responderías? Piensa unos segundos.', 'es-ES');
+      await pausa(3500);
+      for (let j = 0; j < respuestas.length; j++) {
+        if (stopRef.current) return;
+        await decir(`Respuesta ${j + 1}.`, 'es-ES');
+        await decir(respuestas[j], 'en-US', Math.min(0.83, velocidad));
+        await pausa(250);
+      }
+      await decir('Muy bien. Elige la respuesta que encaje con lo que quieres comunicar.', 'es-ES');
+      await pausa(500);
     }
     if (stopRef.current) return;
-    await decir('Ahora, todo junto quiere decir: ' + limpiarTexto(d.es) + '.');
-    await decir('Escucha la frase completa otra vez.');
-    await decir(d.en, 'en-US', Math.min(0.86, velocidad));
-    if (stopRef.current) return;
-    await decir('Ahora veremos tres situaciones donde puedes utilizar esta expresión.');
-    const situaciones = obtenerSituacionesProfesor(d);
-    for (let i = 0; i < situaciones.length; i++) {
-      if (stopRef.current) return;
-      const [contexto, ejemploEn, ejemploEs] = situaciones[i];
-      await decir(`Situación ${i + 1}. ${contexto}`);
-      await decir(ejemploEn, 'en-US', 0.82);
-      await decir('En español significa: ' + ejemploEs);
-      await pausa(450);
-    }
-    if (stopRef.current) return;
-    await decir('Ahora practica. Intenta decir la frase en inglés antes de que la repita.');
-    await pausa(2500);
-    await decir(d.en, 'en-US', Math.min(0.82, velocidad));
-    if (stopRef.current) return;
-    await decir('Muy bien. Continuemos con la siguiente frase.');
+    await decir('Terminamos esta práctica. Cuando estés listo, pasaremos a la siguiente frase del diálogo.', 'es-ES');
     await pausa(450);
   };
 
