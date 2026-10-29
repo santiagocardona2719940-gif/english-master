@@ -1210,65 +1210,499 @@ export default function Historias({ volver = () => {} }) {
       .filter(Boolean);
   };
 
-  // Explicaciones breves para expresiones frecuentes. En frases no incluidas,
-  // el modo profesor explica la oración completa sin inventar traducciones palabra por palabra.
-  const explicacionesFrase = {
-    "good morning": [["Good morning", "Buenos días"]],
-    "good afternoon": [["Good afternoon", "Buenas tardes"]],
-    "good evening": [["Good evening", "Buenas noches (al saludar por la tarde/noche)"]],
-    "good night": [["Good night", "Buenas noches (al despedirse o ir a dormir)"]],
-    "how are you": [["How are you", "Cómo estás / cómo está usted"]],
-    "how are you today": [["How are you today", "Cómo estás hoy"]],
-    "what is your name": [["What is your name", "Cómo te llamas"]],
-    "my name is": [["My name is", "Me llamo / mi nombre es"]],
-    "nice to meet you": [["Nice to meet you", "Mucho gusto en conocerte"]],
-    "where are you from": [["Where are you from", "De dónde eres"]],
-    "i am from": [["I am from", "Soy de / vengo de"]],
-    "thank you": [["Thank you", "Gracias"]],
-    "and you": [["And you", "Y tú / y usted"]],
-    "see you later": [["See you later", "Nos vemos más tarde"]],
-    "how have you been": [["How have you been", "Cómo has estado"]],
-    "the pleasure is mine": [["The pleasure is mine", "El gusto es mío"]],
-    "by the way": [["By the way", "Por cierto"]],
-    "i would love to": [["I would love to", "Me encantaría"]],
-    "no problem": [["No problem", "No hay problema"]]
+  // Modo profesor: explica la frase, cada palabra, el sentido completo y
+  // tres situaciones reales antes de avanzar a la siguiente línea.
+  const traduccionesPalabra = {
+    "good":"bueno/a; en saludos forma parte de «buenos/buenas»",
+    "morning":"mañana",
+    "afternoon":"tarde",
+    "evening":"tarde/noche",
+    "night":"noche",
+    "hello":"hola",
+    "hi":"hola",
+    "hey":"hola / oye, informal",
+    "how":"cómo",
+    "are":"eres / estás; forma del verbo «to be»",
+    "am":"soy / estoy; forma del verbo «to be»",
+    "is":"es / está",
+    "i":"yo",
+    "you":"tú / usted / ustedes",
+    "your":"tu / tus / su / sus",
+    "my":"mi / mis",
+    "name":"nombre",
+    "what":"qué / cuál",
+    "where":"dónde",
+    "from":"de / desde",
+    "today":"hoy",
+    "doing":"haciendo; en «How are you doing?» expresa cómo te encuentras",
+    "well":"bien",
+    "fine":"bien",
+    "great":"muy bien / genial",
+    "goodbye":"adiós",
+    "bye":"chao / adiós",
+    "see":"ver",
+    "later":"más tarde",
+    "again":"otra vez / de nuevo",
+    "nice":"agradable; en esta expresión, «qué gusto»",
+    "meet":"conocer a alguien",
+    "to":"a / para; aquí completa la expresión",
+    "too":"también",
+    "pleasure":"placer / gusto",
+    "mine":"mío / mía",
+    "thank":"agradecer; con «you», «gracias»",
+    "thanks":"gracias",
+    "and":"y",
+    "please":"por favor",
+    "sorry":"lo siento / disculpa",
+    "excuse":"disculpar; «Excuse me» significa «disculpe»",
+    "me":"me / mí",
+    "yes":"sí",
+    "no":"no",
+    "not":"no",
+    "yet":"todavía / aún",
+    "new":"nuevo/a",
+    "here":"aquí",
+    "there":"allí / ahí",
+    "welcome":"bienvenido/a; también «de nada» según el contexto",
+    "team":"equipo",
+    "everyone":"todos / todo el mundo",
+    "very":"muy",
+    "friendly":"amable / simpático",
+    "thank":"agradecer",
+    "appreciate":"apreciar / agradecer",
+    "help":"ayuda / ayudar",
+    "let":"dejar; «Let me...» = «déjame...»",
+    "introduce":"presentar",
+    "this":"esto / este / esta",
+    "he":"él",
+    "she":"ella",
+    "works":"trabaja / funciona",
+    "in":"en / dentro de",
+    "customer":"cliente",
+    "service":"servicio",
+    "really":"en serio / realmente",
+    "which":"qué / cuál",
+    "city":"ciudad",
+    "ever":"alguna vez",
+    "visited":"visitado/a",
+    "visit":"visitar",
+    "speak":"hablar",
+    "languages":"idiomas",
+    "language":"idioma",
+    "spanish":"español",
+    "english":"inglés",
+    "learning":"aprendiendo",
+    "keep":"seguir / mantener",
+    "practicing":"practicando",
+    "every":"cada",
+    "day":"día",
+    "sometimes":"a veces",
+    "feel":"sentir(se)",
+    "nervous":"nervioso/a",
+    "when":"cuando",
+    "speak":"hablar",
+    "slowly":"despacio",
+    "don't":"no; contracción de «do not»",
+    "do":"hacer; también auxiliar en preguntas",
+    "need":"necesitar",
+    "perfect":"perfecto/a",
+    "people":"personas / gente",
+    "understand":"entender",
+    "will":"auxiliar de futuro",
+    "afraid":"tener miedo",
+    "ask":"preguntar / pedir",
+    "questions":"preguntas",
+    "question":"pregunta",
+    "by":"por",
+    "the":"el / la / los / las",
+    "way":"manera; «By the way» = «por cierto»",
+    "spell":"deletrear",
+    "last":"último/a; en «last name», apellido",
+    "surname":"apellido",
+    "it's":"es / está; contracción de «it is»",
+    "it":"eso / ello",
+    "ramirez":"Ramírez (apellido)",
+    "problem":"problema",
+    "often":"a menudo",
+    "call":"llamar",
+    "prefer":"preferir",
+    "or":"o",
+    "isn't":"no es / no está",
+    "until":"hasta",
+    "know":"saber / conocer",
+    "better":"mejor",
+    "sounds":"suena / parece",
+    "should":"debería",
+    "call":"llamar",
+    "family":"familia",
+    "friends":"amigos/as",
+    "friend":"amigo/a",
+    "excited":"emocionado/a / ilusionado/a",
+    "make":"hacer / crear",
+    "some":"algunos/as",
+    "plenty":"muchos/as",
+    "join":"unirse / acompañar",
+    "us":"nosotros / nos",
+    "love":"amar; «I'd love to» = «me encantaría»",
+    "around":"alrededor de; para la hora, «aproximadamente»",
+    "twelve":"doce",
+    "thirty":"treinta",
+    "depending":"dependiendo",
+    "on":"en / sobre",
+    "schedule":"horario / agenda",
+    "have":"tener / haber",
+    "two":"dos",
+    "brothers":"hermanos",
+    "brother":"hermano",
+    "sister":"hermana",
+    "living":"viviendo",
+    "nearby":"cerca",
+    "lives":"vive",
+    "abroad":"en el extranjero",
+    "get":"conseguir / llegar; «get to see» = poder ver",
+    "see":"ver",
+    "them":"ellos / ellas / los / las",
+    "frequently":"frecuentemente",
+    "often":"a menudo",
+    "call":"llamar",
+    "weekend":"fin de semana",
+    "like":"gustar",
+    "free":"libre",
+    "time":"tiempo / hora",
+    "enjoy":"disfrutar",
+    "cooking":"cocinar",
+    "walking":"caminar",
+    "watching":"ver / mirar",
+    "movies":"películas",
+    "kind":"tipo / clase",
+    "comedy":"comedia",
+    "comedies":"comedias",
+    "because":"porque",
+    "they":"ellos / ellas",
+    "relax":"relajarse",
+    "prefer":"preferir",
+    "documentaries":"documentales",
+    "especially":"especialmente",
+    "about":"sobre / acerca de",
+    "maybe":"quizás / tal vez",
+    "recommend":"recomendar",
+    "one":"uno / una",
+    "of":"de",
+    "course":"curso; «of course» = «por supuesto»",
+    "send":"enviar",
+    "title":"título",
+    "this":"este / esta",
+    "afternoon":"tarde",
+    "live":"vivir",
+    "far":"lejos",
+    "take":"tomar / llevar",
+    "bus":"autobús",
+    "takes":"tarda / toma",
+    "minutes":"minutos",
+    "minute":"minuto",
+    "convenient":"conveniente / práctico",
+    "usually":"normalmente",
+    "drive":"conducir / manejar",
+    "traffic":"tráfico",
+    "bad":"malo; en contexto, intenso o pesado",
+    "morning":"mañana",
+    "leave":"salir / dejar",
+    "home":"casa",
+    "early":"temprano",
+    "department":"departamento / área",
+    "yet":"todavía",
+    "still":"todavía / aún",
+    "remind":"recordar a alguien",
+    "names":"nombres",
+    "worry":"preocuparse",
+    "took":"tomó / llevó",
+    "few":"unos pocos",
+    "weeks":"semanas",
+    "anytime":"cuando quieras",
+    "easier":"más fácil",
+    "connect":"relacionar / conectar",
+    "face":"rostro / cara",
+    "helpful":"útil",
+    "tip":"consejo",
+    "try":"intentar / probar",
+    "would":"auxiliar condicional; «would like» = «gustaría»",
+    "before":"antes",
+    "meeting":"reunión",
+    "coffee":"café",
+    "milk":"leche",
+    "black":"negro; para café, sin leche",
+    "with":"con",
+    "little":"poco / pequeño",
+    "sugar":"azúcar",
+    "got":"conseguí / entendido; «Got it» = «entendido»",
+    "bring":"traer",
+    "cup":"taza",
+    "making":"haciendo",
+    "welcome":"bienvenido/a",
+    "starting":"empezar / comenzando",
+    "somewhere":"en algún lugar",
+    "strange":"extraño/a",
+    "does":"hace; auxiliar en preguntas y énfasis",
+    "made":"hizo / han hecho",
+    "easier":"más fácil",
+    "happy":"feliz / contento",
+    "hear":"oír / escuchar",
+    "settle":"establecerse / adaptarse",
+    "soon":"pronto",
+    "already":"ya",
+    "comfortable":"cómodo/a",
+    "talking":"hablando",
+    "starts":"comienza",
+    "simple":"simple",
+    "smile":"sonrisa",
+    "can":"poder",
+    "open":"abrir",
+    "conversation":"conversación",
+    "right":"correcto/a; también «tienes razón»",
+    "friendly":"amable",
+    "greeting":"saludo",
+    "change":"cambiar / cambio",
+    "whole":"todo/a",
+    "before":"antes",
+    "go":"ir",
+    "phone":"teléfono",
+    "number":"número",
+    "coordinate":"coordinar",
+    "sometime":"alguna vez / en algún momento",
+    "sure":"claro / seguro",
+    "message":"mensaje",
+    "save":"guardar",
+    "contact":"contacto",
+    "right":"justo / correcto; «right away» = enseguida",
+    "away":"lejos; «right away» = enseguida",
+    "if":"si",
+    "just":"solo / simplemente",
+    "text":"mensaje de texto",
+    "too":"también / demasiado, según contexto",
+    "quickly":"rápidamente",
+    "together":"juntos",
+    "during":"durante",
+    "breaks":"descansos",
+    "wonderful":"maravilloso/a",
+    "confidence":"confianza",
+    "then":"entonces",
+    "make":"hacer",
+    "habit":"hábito",
+    "ten":"diez",
+    "deal":"trato; «Deal» = «trato hecho»",
+    "looking":"mirando; «looking forward to» = esperar con ilusión",
+    "forward":"adelante; en «look forward to», expresa ilusión por algo",
+    "have":"tener",
+    "wonderful":"maravilloso/a",
+    "afternoon":"tarde",
+    "you":"tú / usted",
+    "too":"también",
+    "tomorrow":"mañana",
+    "lovely":"encantador/a; agradable",
+    "meeting":"conocer / reunión, según contexto",
+    "all":"todos / todo",
+    "remember":"recordar",
+    "new":"nuevo/a",
+    "begins":"comienza",
+    "introduction":"presentación",
+    "only":"solo",
+    "patience":"paciencia",
+    "curiosity":"curiosidad",
+    "willingness":"disposición",
+    "chance":"oportunidad",
+    "something":"algo",
+    "little":"poco",
+    "by":"por",
+    "soon":"pronto",
+    "easiest":"lo más fácil",
+    "part":"parte"
   };
+
+  const expresionesProfesor = [
+    ["good morning", "Buenos días"],
+    ["good afternoon", "Buenas tardes"],
+    ["good evening", "Buenas noches, al saludar por la tarde o noche"],
+    ["good night", "Buenas noches, al despedirse o ir a dormir"],
+    ["how are you doing", "¿Cómo estás? / ¿Cómo te encuentras?"],
+    ["how are you", "¿Cómo estás? / ¿Cómo está usted?"],
+    ["how have you been", "¿Cómo has estado?"],
+    ["what is your name", "¿Cómo te llamas?"],
+    ["my name is", "Me llamo / mi nombre es"],
+    ["nice to meet you", "Mucho gusto en conocerte"],
+    ["nice to see you", "Qué gusto verte"],
+    ["where are you from", "¿De dónde eres?"],
+    ["i am from", "Soy de / vengo de"],
+    ["i'm from", "Soy de / vengo de"],
+    ["thank you", "Gracias"],
+    ["and you", "¿Y tú? / ¿Y usted?"],
+    ["see you later", "Nos vemos más tarde"],
+    ["the pleasure is mine", "El gusto es mío"],
+    ["by the way", "Por cierto"],
+    ["i would love to", "Me encantaría"],
+    ["i'd love to", "Me encantaría"],
+    ["no problem", "No hay problema"],
+    ["excuse me", "Disculpe / perdón"],
+    ["of course", "Por supuesto"],
+    ["got it", "Entendido"],
+    ["look forward to", "Esperar algo con ilusión"]
+  ];
 
   const obtenerExplicaciones = (ingles, espanol) => {
-    const limpio = limpiarTexto(ingles);
-    const clave = limpio.toLowerCase().replace(/[.!?]+$/g, "");
-    if (explicacionesFrase[clave]) return explicacionesFrase[clave];
-    const trozosEn = limpio.split(/,(?![^()]*\))/).map((x) => x.trim()).filter(Boolean);
-    const trozosEs = limpiarTexto(espanol).split(/,(?![^()]*\))/).map((x) => x.trim()).filter(Boolean);
-    if (trozosEn.length > 1 && trozosEn.length === trozosEs.length) {
-      return trozosEn.map((en, i) => [en, trozosEs[i]]);
+    const texto = limpiarTexto(ingles).replace(/[.!?]+$/g, "");
+    const clave = texto.toLowerCase().replace(/[’]/g, "'");
+    const expresion = expresionesProfesor.find(([en]) => en === clave);
+    if (expresion) {
+      return [{ en: expresion[0], es: expresion[1], tipo: "expresion" }];
     }
-    return [[limpio, limpiarTexto(espanol)]];
+
+    // Enseña primero expresiones de varias palabras y luego cada palabra restante.
+    const palabras = texto.match(/[A-Za-z]+(?:['’][A-Za-z]+)?|[0-9]+/g) || [];
+    const resultado = [];
+    let i = 0;
+    while (i < palabras.length) {
+      const restante = palabras.slice(i).join(" ").toLowerCase().replace(/[’]/g, "'");
+      const multi = expresionesProfesor
+        .filter(([en]) => restante.startsWith(en))
+        .sort((a, b) => b[0].length - a[0].length)[0];
+
+      if (multi) {
+        resultado.push({ en: palabras.slice(i, i + multi[0].split(" ").length).join(" "), es: multi[1], tipo: "expresion" });
+        i += multi[0].split(" ").length;
+        continue;
+      }
+
+      const original = palabras[i];
+      const normal = original.toLowerCase().replace(/[’]/g, "'");
+      let significado = traduccionesPalabra[normal];
+      if (!significado && normal.includes("'")) {
+        const contracciones = {
+          "i'm": "yo soy / yo estoy",
+          "you're": "tú eres / tú estás",
+          "he's": "él es / él está",
+          "she's": "ella es / ella está",
+          "we're": "nosotros somos / estamos",
+          "they're": "ellos son / están",
+          "i've": "yo he",
+          "you've": "tú has",
+          "we've": "nosotros hemos",
+          "they've": "ellos han",
+          "i'll": "yo haré / yo voy a",
+          "you'll": "tú harás / tú vas a",
+          "we'll": "nosotros haremos / vamos a",
+          "they'll": "ellos harán / van a",
+          "i'd": "yo quisiera / yo haría, según contexto",
+          "you'd": "tú quisieras / harías, según contexto",
+          "can't": "no poder",
+          "don't": "no; contracción de do not",
+          "doesn't": "no; contracción de does not",
+          "isn't": "no es / no está",
+          "aren't": "no eres / no estás / no son",
+          "that's": "eso es / esa es",
+          "there's": "hay / allí está",
+          "what's": "qué es / qué está",
+          "who's": "quién es",
+          "let's": "vamos a / hagamos",
+          "it's": "eso es / está",
+          "we'd": "nosotros haríamos / quisiéramos"
+        };
+        significado = contracciones[normal];
+      }
+      if (!significado) significado = `significado según el contexto: «${original}»`;
+      resultado.push({ en: original, es: significado, tipo: "palabra" });
+      i++;
+    }
+
+    return resultado.length ? resultado : [{ en: texto, es: limpiarTexto(espanol), tipo: "frase" }];
   };
 
-  const reproducirModoProfesor = async (d) => {
-    // Primero presenta la idea completa para que el alumno conozca el objetivo.
-    await hablar(d.en, "en-US", Math.min(0.88, velocidad));
-    if (stopRef.current) return;
-    await new Promise((resolve) => setTimeout(resolve, 650));
-    await hablar("Ahora vamos a entender esta frase por partes.", "es-ES", 0.9);
-    const partes = obtenerExplicaciones(d.en, d.es);
-    for (const [parteEn, parteEs] of partes) {
-      if (stopRef.current) return;
-      await hablar(parteEn, "en-US", 0.78);
-      if (stopRef.current) return;
-      await hablar("Esto significa: " + parteEs, "es-ES", 0.88);
-      await new Promise((resolve) => setTimeout(resolve, 450));
+  const obtenerSituaciones = (ingles, espanol, indice) => {
+    const texto = limpiarTexto(ingles);
+    const normal = texto.toLowerCase();
+    if (/hello|hi\b|hey\b|good morning|good afternoon|good evening|how are you|how have you been|nice to meet|nice to see|what's your name|what is your name|where are you from|welcome/.test(normal)) {
+      return [
+        { titulo: "Al encontrarte con alguien", contexto: "Te cruzas con un compañero al comenzar el día.", ejemplo: `${texto}`, uso: "Para iniciar el saludo de forma amable." },
+        { titulo: "Al conocer a una persona nueva", contexto: "Alguien te presentan en una reunión o en el trabajo.", ejemplo: `${texto}`, uso: "Para romper el hielo y empezar a conversar." },
+        { titulo: "Al continuar una conversación", contexto: "Ves a un vecino o conocido y quieres mostrar interés.", ejemplo: `${texto}`, uso: "Para preguntar cómo está o mantener el contacto." }
+      ];
     }
+    if (/thank|appreciate|grateful/.test(normal)) {
+      return [
+        { titulo: "Después de recibir ayuda", contexto: "Una persona te ayuda con una tarea.", ejemplo: texto, uso: "Para demostrar agradecimiento." },
+        { titulo: "En una tienda o restaurante", contexto: "Un empleado te atiende o resuelve una duda.", ejemplo: texto, uso: "Para cerrar la interacción con cortesía." },
+        { titulo: "Con un amigo", contexto: "Alguien hace algo amable por ti.", ejemplo: texto, uso: "Para reconocer un gesto amable." }
+      ];
+    }
+    if (/\?/.test(texto)) {
+      return [
+        { titulo: "En una conversación informal", contexto: "Estás hablando con un amigo y quieres saber más.", ejemplo: texto, uso: "Para hacer la pregunta de manera natural." },
+        { titulo: "En el trabajo o en clase", contexto: "Necesitas información para continuar una actividad.", ejemplo: texto, uso: "Para pedir una aclaración o información." },
+        { titulo: "Al conocer a alguien", contexto: "Quieres mantener la conversación y mostrar interés.", ejemplo: texto, uso: "Para invitar a la otra persona a compartir información." }
+      ];
+    }
+    if (/sorry|mistake|problem|wrong|can't|cannot|issue/.test(normal)) {
+      return [
+        { titulo: "Cuando surge un inconveniente", contexto: "Algo no sale como esperabas.", ejemplo: texto, uso: "Para explicar el problema con calma." },
+        { titulo: "En el trabajo", contexto: "Debes informar a un compañero o supervisor.", ejemplo: texto, uso: "Para comunicar la situación de forma clara." },
+        { titulo: "Al pedir ayuda", contexto: "Necesitas que alguien te ayude a resolverlo.", ejemplo: texto, uso: "Para iniciar una explicación y buscar una solución." }
+      ];
+    }
+    return [
+      { titulo: "En la vida diaria", contexto: "Estás conversando con un amigo o conocido.", ejemplo: texto, uso: `Puedes utilizarla para expresar esta idea: ${limpiarTexto(espanol)}` },
+      { titulo: "En el trabajo o en clase", contexto: "La conversación trata de una tarea o una situación práctica.", ejemplo: texto, uso: "Adapta la frase a la situación y a la persona con quien hablas." },
+      { titulo: "Al conocer a alguien", contexto: "Quieres compartir información o continuar una conversación.", ejemplo: texto, uso: "Úsala como parte de una conversación natural." }
+    ];
+  };
+
+  const reproducirModoProfesor = async (d, indice = 0) => {
+    const pausa = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    const decir = async (texto, lang = "es-ES", rate = 0.9) => {
+      if (stopRef.current) return;
+      await hablar(texto, lang, rate);
+    };
+
+    await decir("Primero escucha la frase completa en inglés.", "es-ES", 0.9);
+    await decir(d.en, "en-US", Math.min(0.88, velocidad));
     if (stopRef.current) return;
-    await hablar("Ahora escucha la frase completa otra vez.", "es-ES", 0.9);
-    await hablar(d.en, "en-US", Math.min(0.88, velocidad));
+
+    await pausa(500);
+    await decir("Ahora vamos palabra por palabra. Escucha la palabra en inglés y después su significado en español.", "es-ES", 0.88);
+
+    const partes = obtenerExplicaciones(d.en, d.es);
+    for (const parte of partes) {
+      if (stopRef.current) return;
+      await decir(parte.en, "en-US", 0.76);
+      if (stopRef.current) return;
+      await decir(parte.es, "es-ES", 0.86);
+      await pausa(280);
+    }
+
     if (stopRef.current) return;
-    await hablar("Ahora dilo en tu mente. Tienes unos segundos.", "es-ES", 0.9);
-    await new Promise((resolve) => setTimeout(resolve, 3000));
+    await decir("Ahora, todo junto quiere decir: " + d.es, "es-ES", 0.9);
+    await pausa(450);
+    await decir("Escucha la frase completa otra vez.", "es-ES", 0.9);
+    await decir(d.en, "en-US", Math.min(0.88, velocidad));
     if (stopRef.current) return;
-    await hablar("Si lo dijiste así, ¡lo hiciste muy bien! Vamos con la siguiente frase.", "es-ES", 0.9);
-    await new Promise((resolve) => setTimeout(resolve, 650));
+
+    const situaciones = obtenerSituaciones(d.en, d.es, indice);
+    await decir("Ahora veremos tres situaciones en las que puedes utilizar esta frase.", "es-ES", 0.88);
+    for (let i = 0; i < situaciones.length; i++) {
+      if (stopRef.current) return;
+      const situacion = situaciones[i];
+      await decir(`Situación ${i + 1}. ${situacion.titulo}.`, "es-ES", 0.88);
+      await decir(situacion.contexto, "es-ES", 0.88);
+      await decir("En inglés puedes decir:", "es-ES", 0.88);
+      await decir(situacion.ejemplo, "en-US", Math.min(0.86, velocidad));
+      await decir(`Esto quiere decir: ${d.es}. ${situacion.uso}`, "es-ES", 0.88);
+      await pausa(350);
+    }
+
+    if (stopRef.current) return;
+    await decir("Vamos a practicar. Intenta decir la frase en inglés tú mismo.", "es-ES", 0.88);
+    await pausa(2500);
+    if (stopRef.current) return;
+    await decir(d.en, "en-US", Math.min(0.82, velocidad));
+    await decir("Muy bien. Continuemos con la siguiente frase.", "es-ES", 0.9);
+    await pausa(450);
   };
 
   const reproducirTodo = async () => {
@@ -1289,7 +1723,7 @@ export default function Historias({ volver = () => {} }) {
 
       if (modo === "profesor") {
 
-        await reproducirModoProfesor(d);
+        await reproducirModoProfesor(d, i);
 
       } else if (modo === "espanol") {
 
