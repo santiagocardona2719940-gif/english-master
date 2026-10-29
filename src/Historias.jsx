@@ -962,6 +962,33 @@ const limpiarTexto = (texto) =>
 
 
 
+
+
+// Guion largo del Modo Profesor: conversación continua para practicar durante unos 10 minutos.
+const guionProfesorLargo = [
+  { speaker: "Daniel", en: "Hi! I don't think we've met before. I'm Daniel.", es: "¡Hola! Creo que no nos hemos conocido antes. Soy Daniel.", prompt: "Acabas de conocer a Daniel. ¿Cómo te presentarías?", answers: [["Hi, I'm Sofia. Nice to meet you.", "Hola, soy Sofía. Mucho gusto."], ["Hello! My name is Sofia.", "¡Hola! Me llamo Sofía."], ["Hey, I'm Sofia. What's your name?", "Hola, soy Sofía. ¿Cómo te llamas?"]], focus: 0 },
+  { speaker: "Sofia", en: "Nice to meet you, too. How are you today?", es: "Mucho gusto también. ¿Cómo estás hoy?", prompt: "Daniel te pregunta cómo estás. ¿Qué responderías?", answers: [["I'm good, thank you. And you?", "Estoy bien, gracias. ¿Y tú?"], ["I'm doing well.", "Estoy muy bien."], ["Pretty good, thanks.", "Bastante bien, gracias."]], focus: 0 },
+  { speaker: "Daniel", en: "I'm doing well, thanks. Is this your first time here?", es: "Estoy bien, gracias. ¿Es tu primera vez aquí?", prompt: "Quieres decir que sí, es tu primera vez. ¿Cómo lo dirías?", answers: [["Yes, it's my first time here.", "Sí, es mi primera vez aquí."], ["Yes, I'm new here.", "Sí, soy nuevo aquí."], ["It is. I'm looking around.", "Sí. Estoy conociendo el lugar."]], focus: 0 },
+  { speaker: "Sofia", en: "Welcome! Where are you from?", es: "¡Bienvenido! ¿De dónde eres?", prompt: "Te pregunta de dónde eres. ¿Cómo contestarías?", answers: [["I'm from Colombia.", "Soy de Colombia."], ["I'm originally from Medellín.", "Soy originalmente de Medellín."], ["I'm from Colombia, but I live here now.", "Soy de Colombia, pero ahora vivo aquí."]], focus: 0 },
+  { speaker: "Daniel", en: "Oh, nice! Which city are you from?", es: "¡Qué bien! ¿De qué ciudad eres?", prompt: "Quieres decir que eres de Medellín. ¿Qué frase usarías?", answers: [["I'm from Medellín.", "Soy de Medellín."], ["I grew up in Medellín.", "Crecí en Medellín."], ["Medellín is my hometown.", "Medellín es mi ciudad natal."]], focus: 0 },
+  { speaker: "Sofia", en: "I've heard about Medellín. What do you do for work?", es: "He oído hablar de Medellín. ¿En qué trabajas?", prompt: "Te pregunta a qué te dedicas. Elige una respuesta sencilla.", answers: [["I run a small business.", "Tengo un pequeño negocio."], ["I work in cleaning services.", "Trabajo en servicios de limpieza."], ["I'm working on a new project.", "Estoy trabajando en un proyecto nuevo."]], focus: 0 },
+  { speaker: "Daniel", en: "That's interesting. Do you like your job?", es: "Qué interesante. ¿Te gusta tu trabajo?", prompt: "Quieres decir que sí, que te gusta mucho. ¿Cómo lo dirías?", answers: [["Yes, I like it a lot.", "Sí, me gusta mucho."], ["Yes, it's interesting.", "Sí, es interesante."], ["I do. Every day is different.", "Sí. Cada día es diferente."]], focus: 0 },
+  { speaker: "Sofia", en: "Are you learning anything new these days?", es: "¿Estás aprendiendo algo nuevo estos días?", prompt: "Estás aprendiendo inglés. ¿Qué responderías?", answers: [["I'm learning English.", "Estoy aprendiendo inglés."], ["I'm trying to improve my English.", "Estoy intentando mejorar mi inglés."], ["I practice a little every day.", "Practico un poco todos los días."]], focus: 0 },
+  { speaker: "Daniel", en: "That's great! How long have you been learning English?", es: "¡Qué bien! ¿Cuánto tiempo llevas aprendiendo inglés?", prompt: "Quieres decir que llevas unos meses. Usa una frase fácil.", answers: [["I've been learning for a few months.", "Llevo unos meses aprendiendo."], ["For about six months.", "Desde hace unos seis meses."], ["I'm still a beginner.", "Todavía soy principiante."]], focus: 2 },
+  { speaker: "Sofia", en: "Don't worry. You're doing well. What do you like to do in your free time?", es: "No te preocupes. Lo estás haciendo bien. ¿Qué te gusta hacer en tu tiempo libre?", prompt: "Quieres hablar de tus pasatiempos. ¿Qué dirías?", answers: [["I like listening to music.", "Me gusta escuchar música."], ["I enjoy watching movies.", "Disfruto ver películas."], ["I like going for walks.", "Me gusta salir a caminar."]], focus: 0 },
+  { speaker: "Daniel", en: "What kind of music do you like?", es: "¿Qué tipo de música te gusta?", prompt: "Te gusta la música tranquila. ¿Cómo responderías?", answers: [["I like relaxing music.", "Me gusta la música relajante."], ["I listen to many kinds of music.", "Escucho muchos tipos de música."], ["I love Latin music.", "Me encanta la música latina."]], focus: 0 },
+  { speaker: "Sofia", en: "Do you have a big family?", es: "¿Tienes una familia grande?", prompt: "Quieres decir que tienes dos hermanos. ¿Qué frase es fácil de recordar?", answers: [["I have two brothers.", "Tengo dos hermanos."], ["My family is pretty big.", "Mi familia es bastante grande."], ["I have a small family.", "Tengo una familia pequeña."]], focus: 0 },
+  { speaker: "Daniel", en: "Do you get to see your family often?", es: "¿Puedes ver a tu familia a menudo?", prompt: "Quieres decir que hablas con tu familia cada semana.", answers: [["We talk every week.", "Hablamos cada semana."], ["I call them on weekends.", "Los llamo los fines de semana."], ["I visit when I can.", "Los visito cuando puedo."]], focus: 0 },
+  { speaker: "Sofia", en: "What food do you like?", es: "¿Qué comida te gusta?", prompt: "Quieres decir que te gusta la comida colombiana.", answers: [["I like Colombian food.", "Me gusta la comida colombiana."], ["I love arepas.", "Me encantan las arepas."], ["I enjoy trying new food.", "Disfruto probar comida nueva."]], focus: 0 },
+  { speaker: "Daniel", en: "Would you like to get a coffee sometime?", es: "¿Te gustaría tomar un café algún día?", prompt: "Aceptas la invitación de forma amable.", answers: [["Sure, I'd love to.", "Claro, me encantaría."], ["That sounds great.", "Eso suena genial."], ["Yes, that would be nice.", "Sí, estaría bien."]], focus: 0 },
+  { speaker: "Sofia", en: "Great! Are you free this Saturday?", es: "¡Genial! ¿Estás libre este sábado?", prompt: "Quieres decir que sí, estás libre el sábado.", answers: [["Yes, I'm free on Saturday.", "Sí, estoy libre el sábado."], ["Saturday works for me.", "El sábado me queda bien."], ["I think so. What time?", "Creo que sí. ¿A qué hora?"]], focus: 0 },
+  { speaker: "Daniel", en: "How about three in the afternoon?", es: "¿Qué tal a las tres de la tarde?", prompt: "La hora te parece perfecta. ¿Cómo contestarías?", answers: [["Three is perfect.", "Las tres está perfecto."], ["That works for me.", "Me queda bien."], ["Sounds good. See you then.", "Me parece bien. Nos vemos entonces."]], focus: 1 },
+  { speaker: "Sofia", en: "Would you like to exchange phone numbers?", es: "¿Te gustaría intercambiar números de teléfono?", prompt: "Aceptas intercambiar números.", answers: [["Sure, here's my number.", "Claro, aquí tienes mi número."], ["Of course. Let me get my phone.", "Claro. Déjame sacar mi teléfono."], ["Yes, that would be great.", "Sí, estaría muy bien."]], focus: 0 },
+  { speaker: "Daniel", en: "Thanks. I'll send you a message later.", es: "Gracias. Te enviaré un mensaje más tarde.", prompt: "Quieres decir que está bien y que hablarán luego.", answers: [["Okay, talk to you later.", "Está bien, hablamos luego."], ["Great. Have a good day!", "Genial. ¡Que tengas un buen día!"], ["Thanks. See you on Saturday.", "Gracias. Nos vemos el sábado."]], focus: 0 },
+  { speaker: "Sofia", en: "It was really nice meeting you, Daniel.", es: "Fue un gusto conocerte, Daniel.", prompt: "Quieres despedirte de manera amable.", answers: [["It was nice meeting you, too.", "También fue un gusto conocerte."], ["Have a great day!", "¡Que tengas un excelente día!"], ["See you soon!", "¡Hasta pronto! "]], focus: 0 },
+  { speaker: "Daniel", en: "You too, Sofia. See you Saturday!", es: "Igualmente, Sofía. ¡Nos vemos el sábado!", prompt: "Responde para cerrar la conversación.", answers: [["See you Saturday!", "¡Nos vemos el sábado!"], ["Take care!", "¡Cuídate!"], ["Bye! Have a good one.", "¡Chao! Que te vaya bien."]], focus: 0 }
+];
+
 export default function Historias({ volver = () => {} }) {
 
   const [busqueda, setBusqueda] = useState("");
@@ -1210,164 +1237,66 @@ export default function Historias({ volver = () => {} }) {
       .filter(Boolean);
   };
 
-  // Modo Profesor: enseñanza por situaciones reales, con tiempo para pensar,
-  // tres opciones naturales, una explicación detallada y avance por el diálogo.
-  const traduccionesPalabra = {
-    i: 'yo', im: 'yo soy / yo estoy (contracción de I am)', am: 'soy / estoy', my: 'mi',
-    name: 'nombre', is: 'es / está', are: 'eres / estás / son / están', you: 'tú / usted / ustedes',
-    your: 'tu / su', what: 'qué / cuál', whats: 'qué es / cuál es (contracción de what is)',
-    how: 'cómo', where: 'dónde', from: 'de / desde', the: 'el / la / los / las',
-    a: 'un / una', an: 'un / una (antes de sonido vocálico)', to: 'a / para; también acompaña a ciertos verbos',
-    meet: 'conocer / encontrarse con', nice: 'agradable; en “nice to meet you”, forma parte de “mucho gusto”',
-    pleasure: 'placer / gusto', mine: 'mío / mía', good: 'bueno / buen', morning: 'mañana',
-    afternoon: 'tarde', evening: 'tarde-noche', night: 'noche', hello: 'hola', hi: 'hola (informal)',
-    hey: 'hola (muy informal)', thank: 'agradecer', thanks: 'gracias', fine: 'bien', well: 'bien',
-    today: 'hoy', and: 'y', yes: 'sí', no: 'no', please: 'por favor', sorry: 'lo siento / disculpa',
-    excuse: 'disculpar; “excuse me” significa “disculpe”', me: 'me / a mí', do: 'hacer; también se usa como auxiliar en preguntas',
-    does: 'auxiliar para preguntas con he, she o it', live: 'vivir', work: 'trabajar / trabajo',
-    it: 'eso / ello', its: 'es / está (contracción de it is)', this: 'esto / este / esta', that: 'eso / ese / esa',
-    have: 'tener / haber', been: 'estado / sido', see: 'ver', later: 'más tarde', again: 'otra vez',
-    can: 'poder', could: 'podría; se usa para pedir algo con cortesía', help: 'ayudar / ayuda',
-    would: 'auxiliar que expresa posibilidad o cortesía', love: 'amar; en “would love”, encantaría',
-    like: 'gustar', problem: 'problema', not: 'no', much: 'mucho', very: 'muy', because: 'porque',
-    but: 'pero', with: 'con', in: 'en / dentro de', at: 'en (lugar u hora)', for: 'para / por',
-    on: 'sobre / en', we: 'nosotros / nosotras', they: 'ellos / ellas', he: 'él', she: 'ella',
-    was: 'era / estaba / fue', were: 'eras / estabas / eran / estaban', here: 'aquí', there: 'allí / ahí',
-    welcome: 'bienvenido; “you’re welcome” significa “de nada”', menu: 'menú / carta', could: 'podría',
-    order: 'ordenar / pedir comida', drink: 'beber / bebida', water: 'agua', check: 'cuenta (en un restaurante)',
-    bill: 'cuenta', card: 'tarjeta', table: 'mesa', want: 'querer', ready: 'listo / preparado',
-    everything: 'todo', great: 'excelente / genial', please: 'por favor', restaurant: 'restaurante'
-  };
-
+  // Modo Profesor: historia continua, pausas para pensar y respuestas fáciles de recordar.
   const obtenerExplicaciones = (ingles, espanol) => {
-    const limpio = limpiarTexto(ingles).replace(/[.!?]+$/g, '').trim();
-    const palabras = limpio.match(/[A-Za-z]+(?:['’][A-Za-z]+)?/g) || [];
-    return palabras.map((p) => {
-      const clave = p.toLowerCase().replace(/[’]/g, "'");
-      const base = ({ "you're": 'youre', "what's": 'whats', "it's": 'its', "i'm": 'im', "that's": 'that', "don't": 'do', "can't": 'can', "i'd": 'id', "i'll": 'ill' })[clave] || clave;
-      const especiales = {
-        youre: 'tú eres / tú estás (contracción de you are)',
-        id: 'yo quisiera / yo haría, según el contexto (contracción de I would)',
-        ill: 'yo haré / voy a, según el contexto (contracción de I will)',
-        dont: 'no; contracción de do not',
-        cant: 'no poder; contracción de cannot'
-      };
-      const significado = especiales[base] || traduccionesPalabra[base] || traduccionesPalabra[clave] || `no tiene una traducción única palabra por palabra; en esta frase se entiende por el contexto: ${limpiarTexto(espanol)}`;
-      return [p, significado];
+    const dic = {
+      i: "yo", im: "yo soy / yo estoy", am: "soy / estoy", my: "mi", name: "nombre", is: "es / está",
+      are: "eres / estás / son / están", you: "tú / usted", your: "tu / su", what: "qué", how: "cómo",
+      where: "dónde", from: "de", the: "el / la", a: "un / una", to: "a / para", meet: "conocer",
+      nice: "agradable; en esta expresión significa ‘mucho gusto’", hello: "hola", hi: "hola", hey: "hola (informal)",
+      thank: "agradecer", thanks: "gracias", and: "y", yes: "sí", no: "no", please: "por favor", do: "hacer / auxiliar de pregunta",
+      like: "gustar", live: "vivir", work: "trabajar", for: "para / por", few: "unos pocos", months: "meses",
+      learning: "aprendiendo", learn: "aprender", english: "inglés", good: "bien / bueno", well: "bien", doing: "haciendo; en ‘doing well’, encontrarse bien",
+      it: "eso", here: "aquí", this: "esto / este", time: "tiempo / vez", first: "primero / primera", from: "de", colombia: "Colombia",
+      sure: "claro / seguro", love: "encantar / amar", would: "auxiliar de cortesía; con ‘love’ significa ‘me encantaría’", free: "libre", on: "en", saturday: "sábado", see: "ver", later: "más tarde", talk: "hablar", to: "a", you: "tú", soon: "pronto"
+    };
+    return (limpiarTexto(ingles).match(/[A-Za-z]+(?:['’][A-Za-z]+)?/g) || []).map((p) => {
+      const key = p.toLowerCase().replace(/[’']/g, "");
+      const special = { im: "yo soy / yo estoy (I am)", ive: "yo he / llevo (I have)", dont: "no (do not)", thats: "eso es / esa es", youre: "tú eres / estás", id: "yo haría / me gustaría", ill: "yo haré", itd: "eso sería" };
+      return [p, special[key] || dic[key] || `en esta frase aporta significado a la idea: “${espanol}”`];
     });
   };
 
-  const obtenerContextoProfesor = (d) => {
-    const titulo = String(capitulo?.title || capitulo?.titulo || '').toLowerCase();
-    const texto = `${d.en} ${d.es} ${titulo}`.toLowerCase();
-    if (/restaurante|menú|menu|cuenta|order|drink|food|restaurant|camarero|mesero|café|coffee/.test(texto)) {
-      return {
-        lugar: 'Llegas a un restaurante en Estados Unidos. El empleado te saluda y quieres comenzar la conversación.',
-        pregunta: '¿Cómo saludarías y pedirías lo que necesitas en inglés?',
-        opciones: [
-          ['Hi! How are you today?', '¡Hola! ¿Cómo está hoy?'],
-          ['Could I see the menu, please?', '¿Podría ver el menú, por favor?'],
-          ['Can I have some water, please?', '¿Me puede traer agua, por favor?']
-        ],
-        siguientes: [
-          ['El camarero te pregunta qué deseas beber.', 'What would you like to drink?', '¿Qué te gustaría beber?', ['I’d like some water, please.', 'Can I have a coffee, please?', 'Just water, thank you.']],
-          ['El camarero pregunta si estás listo para ordenar.', 'Are you ready to order?', '¿Estás listo para ordenar?', ['Yes, I’d like the chicken, please.', 'I’ll have a burger, please.', 'Could I get the fish, please?']],
-          ['Terminaste de comer y quieres pagar.', 'Could we have the check, please?', '¿Nos trae la cuenta, por favor?', ['Could we have the check, please?', 'Can I pay by card?', 'Thank you. Have a nice day!']]
-        ]
-      };
-    }
-    if (/saludo|convers|amig|present|neighbor|greeting|hello|hi\b|how are you/.test(texto)) {
-      return {
-        lugar: 'Te encuentras con una persona que acabas de conocer. Quieres saludar, presentarte y mantener una conversación breve.',
-        pregunta: '¿Cómo saludarías en inglés?',
-        opciones: [
-          ['Hello! How are you?', '¡Hola! ¿Cómo estás?'],
-          ['Hi! How’s it going?', '¡Hola! ¿Cómo te va?'],
-          ['Hey! Nice to meet you.', '¡Hola! Mucho gusto en conocerte.']
-        ],
-        siguientes: [
-          ['La otra persona te pregunta cómo te llamas.', 'What’s your name?', '¿Cómo te llamas?', ['My name is Julián.', 'I’m Julián. What’s your name?', 'You can call me Julián.']],
-          ['Quieres preguntar de dónde es la otra persona.', 'Where are you from?', '¿De dónde eres?', ['I’m from Colombia.', 'I’m originally from Colombia.', 'I’m from Colombia, but I live here now.']],
-          ['La conversación termina y quieres despedirte.', 'It was nice talking to you.', 'Fue agradable hablar contigo.', ['It was nice talking to you.', 'See you later!', 'Have a great day!']]
-        ]
-      };
-    }
-    return {
-      lugar: `Imagina esta situación de la vida real: ${capitulo?.title || 'una conversación cotidiana'}.`,
-      pregunta: '¿Cómo expresarías esta idea en inglés?',
-      opciones: [[d.en, d.es], ['Could you help me, please?', '¿Podrías ayudarme, por favor?'], ['Thank you for your help.', 'Gracias por tu ayuda.']],
-      siguientes: [
-        ['Quieres hacer una pregunta con educación.', 'Could you help me, please?', '¿Podrías ayudarme, por favor?', ['Could you help me, please?', 'Can you show me, please?', 'Would you mind helping me?']],
-        ['Quieres confirmar que entendiste.', 'I understand. Thank you.', 'Entiendo. Gracias.', ['I understand.', 'Could you repeat that, please?', 'Thank you for explaining.']],
-        ['Quieres cerrar la conversación amablemente.', 'Thank you. Have a nice day!', 'Gracias. ¡Que tengas un buen día!', ['Thank you. Have a nice day!', 'It was nice talking to you.', 'See you soon!']]
-      ]
-    };
-  };
-
-  const reproducirModoProfesor = async (d) => {
+  const reproducirGuionProfesorLargo = async () => {
     const pausa = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-    const decir = async (texto, idioma = 'es-ES', ritmo = 0.88) => {
-      if (stopRef.current) return;
-      await hablar(texto, idioma, ritmo);
+    const decir = async (texto, idioma = "es-ES", ritmo = 0.86) => {
+      if (!stopRef.current) await hablar(texto, idioma, ritmo);
     };
-    const contexto = obtenerContextoProfesor(d);
-
-    await decir('Vamos a practicar con una situación real.', 'es-ES');
-    await decir(contexto.lugar, 'es-ES');
-    await decir(contexto.pregunta, 'es-ES');
-    await decir('Haz una pausa e intenta responder tú primero.', 'es-ES');
-    await pausa(5000);
-    if (stopRef.current) return;
-
-    await decir('Aquí tienes tres maneras naturales de decirlo.', 'es-ES');
-    for (let i = 0; i < contexto.opciones.length; i++) {
+    await decir("Bienvenido al Modo Profesor. Hoy vas a escuchar una conversación larga y natural entre dos personas que se conocen por primera vez. Puedes leer todo el diálogo en la pantalla. En cada turno, piensa tu respuesta antes de escuchar las opciones.");
+    await decir("No necesitas memorizar frases difíciles. Vamos a practicar respuestas cortas que puedes usar en la vida real. Empezamos.");
+    for (let i = 0; i < guionProfesorLargo.length; i++) {
       if (stopRef.current) return;
-      const [en, es] = contexto.opciones[i];
-      await decir(`Opción ${i + 1}.`, 'es-ES');
-      await decir(en, 'en-US', Math.min(0.86, velocidad));
-      await decir(`Significa: ${es}`, 'es-ES');
-      await pausa(650);
-    }
-    await decir('Si pensaste en una de estas respuestas, lo hiciste muy bien. También puedes usar otras frases correctas.', 'es-ES');
-
-    // Explicamos una frase central de las opciones, palabra por palabra.
-    const fraseElegida = contexto.opciones.find(([en]) => /could i see the menu|hello|hi! how are you|what would you like/i.test(en)) || contexto.opciones[0];
-    await decir('Ahora vamos a escoger una frase y aprender cómo funciona.', 'es-ES');
-    await decir(fraseElegida[0], 'en-US', Math.min(0.84, velocidad));
-    for (const [palabra, significado] of obtenerExplicaciones(fraseElegida[0], fraseElegida[1])) {
+      const t = guionProfesorLargo[i];
+      await decir(`Parte ${i + 1}. ${t.speaker} dice:`, "es-ES");
+      await decir(t.en, "en-US", Math.min(0.82, velocidad));
+      await decir(`En español: ${t.es}`, "es-ES");
+      await decir(t.prompt, "es-ES");
+      await decir("Haz una pausa. Piensa tu respuesta antes de continuar.", "es-ES");
+      await pausa(5000);
       if (stopRef.current) return;
-      await decir(palabra, 'en-US', 0.74);
-      await decir(`${palabra} significa ${significado}.`, 'es-ES', 0.86);
-      await pausa(250);
-    }
-    await decir(`Ahora, todo junto quiere decir: ${fraseElegida[1]}.`, 'es-ES');
-    await decir('Escucha la frase completa una vez más.', 'es-ES');
-    await decir(fraseElegida[0], 'en-US', Math.min(0.82, velocidad));
-    await decir('Repite la frase en voz alta. Tienes un momento para practicar.', 'es-ES');
-    await pausa(3000);
-
-    // Continuamos el diálogo con preguntas y respuestas distintas, no con la misma frase repetida.
-    await decir('Muy bien. Continuemos la conversación paso a paso.', 'es-ES');
-    for (let i = 0; i < contexto.siguientes.length; i++) {
-      if (stopRef.current) return;
-      const [escena, preguntaEn, preguntaEs, respuestas] = contexto.siguientes[i];
-      await decir(`Siguiente situación. ${escena}`, 'es-ES');
-      await decir(preguntaEn, 'en-US', Math.min(0.84, velocidad));
-      await decir(`En español: ${preguntaEs}`, 'es-ES');
-      await decir('¿Qué responderías? Piensa unos segundos.', 'es-ES');
-      await pausa(3500);
-      for (let j = 0; j < respuestas.length; j++) {
+      await decir("Puedes responder de estas tres maneras. Escucha y elige la que más te guste.");
+      for (let j = 0; j < t.answers.length; j++) {
         if (stopRef.current) return;
-        await decir(`Respuesta ${j + 1}.`, 'es-ES');
-        await decir(respuestas[j], 'en-US', Math.min(0.83, velocidad));
-        await pausa(250);
+        await decir(`Respuesta ${j + 1} en inglés.`, "es-ES");
+        await decir(t.answers[j][0], "en-US", Math.min(0.82, velocidad));
+        await decir(`Significa: ${t.answers[j][1]}`, "es-ES");
+        await pausa(350);
       }
-      await decir('Muy bien. Elige la respuesta que encaje con lo que quieres comunicar.', 'es-ES');
-      await pausa(500);
+      await decir(`Si respondiste diciendo “${t.answers[t.focus || 0][0]}”, ¡muy bien! Es una respuesta sencilla y natural.`, "es-ES");
+      const elegida = t.answers[t.focus || 0];
+      await decir("Vamos a aprender esta respuesta palabra por palabra.", "es-ES");
+      for (const [palabra, significado] of obtenerExplicaciones(elegida[0], elegida[1])) {
+        if (stopRef.current) return;
+        await decir(palabra, "en-US", 0.72);
+        await decir(`${palabra} significa ${significado}.`, "es-ES", 0.84);
+        await pausa(180);
+      }
+      await decir(`En conjunto, “${elegida[0]}” significa: ${elegida[1]}.`, "es-ES");
+      await decir("Repite la respuesta en voz alta. No importa si necesitas intentarlo más de una vez.", "es-ES");
+      await pausa(3000);
     }
     if (stopRef.current) return;
-    await decir('Terminamos esta práctica. Cuando estés listo, pasaremos a la siguiente frase del diálogo.', 'es-ES');
-    await pausa(450);
+    await decir("¡Excelente trabajo! Has terminado una conversación completa: te presentaste, hablaste de tu país, tu trabajo, tus pasatiempos, tu familia, hiciste planes y te despediste. Practica estas frases poco a poco y verás cómo te salen con más naturalidad.");
   };
 
   const reproducirTodo = async () => {
@@ -1375,6 +1304,15 @@ export default function Historias({ volver = () => {} }) {
     stopRef.current = false;
 
     setReproduciendo(true);
+
+    if (modo === "profesor") {
+      try {
+        await reproducirGuionProfesorLargo();
+      } finally {
+        setReproduciendo(false);
+      }
+      return;
+    }
 
     for (let i = linea; i < capitulo.dialogue.length; i++) {
 
@@ -1630,33 +1568,29 @@ export default function Historias({ volver = () => {} }) {
 
 
           <div className="hist-dialogue">
-
-            {capitulo.dialogue.map((d, i) => (
-
+            {modo === "profesor" ? (
+              <>
+                <h3>Conversación completa: conocer a alguien por primera vez</h3>
+                <p className="hist-spanish">Lee el diálogo completo. En el audio, el profesor hace una pausa para que pienses, te muestra tres respuestas y explica una respuesta fácil palabra por palabra.</p>
+                {guionProfesorLargo.map((t, i) => (
+                  <article key={`profesor-largo-${i}`} className="hist-line">
+                    <div className="hist-speaker">{i + 1}. {t.speaker}</div>
+                    <p className="hist-english">{t.en}</p>
+                    <p className="hist-spanish">{t.es}</p>
+                    <p><strong>Ahora tú:</strong> {t.prompt}</p>
+                    <ol>{t.answers.map((a, j) => <li key={j}><span className="hist-english">{a[0]}</span><br/><span className="hist-spanish">{a[1]}</span>{j === (t.focus || 0) ? <p><strong>Expresión para recordar:</strong> {a[0]}</p> : null}</li>)}</ol>
+                  </article>
+                ))}
+              </>
+            ) : capitulo.dialogue.map((d, i) => (
               <article key={`${capitulo.id}-${i}`} className={`hist-line ${linea === i ? "current" : ""}`}>
-
                 <div className="hist-speaker">{d.speaker}</div>
-
                 <p className="hist-english">{d.en}</p>
-
                 <p className="hist-spanish">{d.es}</p>
-
-                <button className="hist-small-play" onClick={() => reproducirLinea(i, "en")}>
-
-                  🔊 Inglés
-
-                </button>
-
-                <button className="hist-small-play" onClick={() => reproducirLinea(i, "es")}>
-
-                  🔊 Español
-
-                </button>
-
+                <button className="hist-small-play" onClick={() => reproducirLinea(i, "en")}>🔊 Inglés</button>
+                <button className="hist-small-play" onClick={() => reproducirLinea(i, "es")}>🔊 Español</button>
               </article>
-
             ))}
-
           </div>
 
 
