@@ -9114,7 +9114,7 @@ zIndex:"9999"
               style={{ cursor: "pointer" }}
             >
               <img src="/historias.png" alt="Historias" />
-              <h3>HISTORIAS</h3>
+             
               <p>Escucha, entiende y piensa en inglés</p>
             </div>
 
