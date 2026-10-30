@@ -1,45 +1,46 @@
-
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
 
-  if (req.method !== "POST" && req.method !== "GET") {
+  if (req.method !== "GET" && req.method !== "POST") {
     res.setHeader("Allow", "GET, POST");
     return res.status(405).json({ error: "Método no permitido." });
   }
 
   const apiKey = process.env.ELEVENLABS_API_KEY?.trim();
-  const englishVoiceId =
-    process.env.ELEVENLABS_ENGLISH_VOICE_ID?.trim();
-  const spanishVoiceId =
-    process.env.ELEVENLABS_SPANISH_VOICE_ID?.trim();
+  const englishVoiceId = process.env.ELEVENLABS_ENGLISH_VOICE_ID?.trim();
+  const spanishVoiceId = process.env.ELEVENLABS_SPANISH_VOICE_ID?.trim();
+
+  const getConfig = (idioma) => {
+    const esEspanol = String(idioma).toLowerCase().startsWith("es");
+
+    return {
+      esEspanol,
+      voiceId: esEspanol ? spanishVoiceId : englishVoiceId,
+      modelId: "eleven_multilingual_v2",
+    };
+  };
 
   if (req.method === "GET") {
-    const idioma = String(req.query?.test || "en").toLowerCase();
-    const esEspanol = idioma.startsWith("es");
-    const voiceId = esEspanol ? spanishVoiceId : englishVoiceId;
+    const { esEspanol, voiceId, modelId } = getConfig(req.query?.test || "en");
     const missing = [];
 
     if (!apiKey) missing.push("ELEVENLABS_API_KEY");
 
-    if (esEspanol && !spanishVoiceId) {
-      missing.push("ELEVENLABS_SPANISH_VOICE_ID");
-    }
-
-    if (!esEspanol && !englishVoiceId) {
-      missing.push("ELEVENLABS_ENGLISH_VOICE_ID");
+    if (!voiceId) {
+      missing.push(
+        esEspanol
+          ? "ELEVENLABS_SPANISH_VOICE_ID"
+          : "ELEVENLABS_ENGLISH_VOICE_ID"
+      );
     }
 
     return res.status(missing.length ? 503 : 200).json({
       ok: missing.length === 0,
       provider: "elevenlabs",
       idioma: esEspanol ? "español" : "inglés",
+      model: modelId,
       voiceConfigured: Boolean(voiceId),
       missing,
-      message: missing.length
-        ? `Falta configuración para la voz en ${
-            esEspanol ? "español" : "inglés"
-          }.`
-        : `La voz en ${esEspanol ? "español" : "inglés"} está configurada.`,
     });
   }
 
@@ -57,11 +58,11 @@ export default async function handler(req, res) {
     });
   }
 
-  const esEspanol = String(idioma).toLowerCase().startsWith("es");
-  const voiceId = esEspanol ? spanishVoiceId : englishVoiceId;
+  const { esEspanol, voiceId, modelId } = getConfig(idioma);
 
   if (!apiKey || !voiceId) {
     const missing = [];
+
     if (!apiKey) missing.push("ELEVENLABS_API_KEY");
 
     if (!voiceId) {
@@ -73,7 +74,7 @@ export default async function handler(req, res) {
     }
 
     return res.status(503).json({
-      error: "Faltan variables necesarias para generar audio.",
+      error: "Falta la configuración de ElevenLabs.",
       missing,
     });
   }
@@ -90,7 +91,7 @@ export default async function handler(req, res) {
         },
         body: JSON.stringify({
           text: texto.trim(),
-          model_id: "eleven_multilingual_v2",
+          model_id: modelId,
           voice_settings: {
             stability: 0.45,
             similarity_boost: 0.8,
@@ -108,17 +109,15 @@ export default async function handler(req, res) {
       let mensaje = detail;
 
       try {
-        const parsed = JSON.parse(detail);
-        mensaje =
-          parsed?.detail?.message ||
-          parsed?.detail ||
-          parsed?.message ||
-          detail;
+        const json = JSON.parse(detail);
+        mensaje = json?.detail?.message || json?.detail || json?.message || detail;
 
         if (typeof mensaje !== "string") {
           mensaje = JSON.stringify(mensaje);
         }
-      } catch {}
+      } catch {
+        // Conserva el mensaje original.
+      }
 
       return res.status(502).json({
         error: "ElevenLabs rechazó la solicitud de audio.",
@@ -128,17 +127,24 @@ export default async function handler(req, res) {
     }
 
     const audio = Buffer.from(await response.arrayBuffer());
+
+    if (!audio.length) {
+      return res.status(502).json({
+        error: "ElevenLabs devolvió un audio vacío.",
+      });
+    }
+
     res.setHeader("Content-Type", "audio/mpeg");
+    res.setHeader("X-TTS-Provider", "elevenlabs");
+    res.setHeader("X-TTS-Model", modelId);
+
     return res.status(200).send(audio);
   } catch (error) {
     console.error("Error conectando con ElevenLabs:", error);
 
     return res.status(500).json({
-      error: "No se pudo conectar con el servicio de voz.",
-      detail:
-        error instanceof Error
-          ? error.message
-          : "Error desconocido",
+      error: "No se pudo conectar con ElevenLabs.",
+      detail: error instanceof Error ? error.message : "Error desconocido",
     });
   }
 }
