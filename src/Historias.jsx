@@ -964,30 +964,367 @@ const limpiarTexto = (texto) =>
 
 
 
-// Guion largo del Modo Profesor: conversación continua para practicar durante unos 10 minutos.
-const guionProfesorLargo = [
-  { speaker: "Daniel", en: "Hi! I don't think we've met before. I'm Daniel.", es: "¡Hola! Creo que no nos hemos conocido antes. Soy Daniel.", prompt: "Acabas de conocer a Daniel. ¿Cómo te presentarías?", answers: [["Hi, I'm Sofia. Nice to meet you.", "Hola, soy Sofía. Mucho gusto."], ["Hello! My name is Sofia.", "¡Hola! Me llamo Sofía."], ["Hey, I'm Sofia. What's your name?", "Hola, soy Sofía. ¿Cómo te llamas?"]], focus: 0 },
-  { speaker: "Sofia", en: "Nice to meet you, too. How are you today?", es: "Mucho gusto también. ¿Cómo estás hoy?", prompt: "Daniel te pregunta cómo estás. ¿Qué responderías?", answers: [["I'm good, thank you. And you?", "Estoy bien, gracias. ¿Y tú?"], ["I'm doing well.", "Estoy muy bien."], ["Pretty good, thanks.", "Bastante bien, gracias."]], focus: 0 },
-  { speaker: "Daniel", en: "I'm doing well, thanks. Is this your first time here?", es: "Estoy bien, gracias. ¿Es tu primera vez aquí?", prompt: "Quieres decir que sí, es tu primera vez. ¿Cómo lo dirías?", answers: [["Yes, it's my first time here.", "Sí, es mi primera vez aquí."], ["Yes, I'm new here.", "Sí, soy nuevo aquí."], ["It is. I'm looking around.", "Sí. Estoy conociendo el lugar."]], focus: 0 },
-  { speaker: "Sofia", en: "Welcome! Where are you from?", es: "¡Bienvenido! ¿De dónde eres?", prompt: "Te pregunta de dónde eres. ¿Cómo contestarías?", answers: [["I'm from Colombia.", "Soy de Colombia."], ["I'm originally from Medellín.", "Soy originalmente de Medellín."], ["I'm from Colombia, but I live here now.", "Soy de Colombia, pero ahora vivo aquí."]], focus: 0 },
-  { speaker: "Daniel", en: "Oh, nice! Which city are you from?", es: "¡Qué bien! ¿De qué ciudad eres?", prompt: "Quieres decir que eres de Medellín. ¿Qué frase usarías?", answers: [["I'm from Medellín.", "Soy de Medellín."], ["I grew up in Medellín.", "Crecí en Medellín."], ["Medellín is my hometown.", "Medellín es mi ciudad natal."]], focus: 0 },
-  { speaker: "Sofia", en: "I've heard about Medellín. What do you do for work?", es: "He oído hablar de Medellín. ¿En qué trabajas?", prompt: "Te pregunta a qué te dedicas. Elige una respuesta sencilla.", answers: [["I run a small business.", "Tengo un pequeño negocio."], ["I work in cleaning services.", "Trabajo en servicios de limpieza."], ["I'm working on a new project.", "Estoy trabajando en un proyecto nuevo."]], focus: 0 },
-  { speaker: "Daniel", en: "That's interesting. Do you like your job?", es: "Qué interesante. ¿Te gusta tu trabajo?", prompt: "Quieres decir que sí, que te gusta mucho. ¿Cómo lo dirías?", answers: [["Yes, I like it a lot.", "Sí, me gusta mucho."], ["Yes, it's interesting.", "Sí, es interesante."], ["I do. Every day is different.", "Sí. Cada día es diferente."]], focus: 0 },
-  { speaker: "Sofia", en: "Are you learning anything new these days?", es: "¿Estás aprendiendo algo nuevo estos días?", prompt: "Estás aprendiendo inglés. ¿Qué responderías?", answers: [["I'm learning English.", "Estoy aprendiendo inglés."], ["I'm trying to improve my English.", "Estoy intentando mejorar mi inglés."], ["I practice a little every day.", "Practico un poco todos los días."]], focus: 0 },
-  { speaker: "Daniel", en: "That's great! How long have you been learning English?", es: "¡Qué bien! ¿Cuánto tiempo llevas aprendiendo inglés?", prompt: "Quieres decir que llevas unos meses. Usa una frase fácil.", answers: [["I've been learning for a few months.", "Llevo unos meses aprendiendo."], ["For about six months.", "Desde hace unos seis meses."], ["I'm still a beginner.", "Todavía soy principiante."]], focus: 2 },
-  { speaker: "Sofia", en: "Don't worry. You're doing well. What do you like to do in your free time?", es: "No te preocupes. Lo estás haciendo bien. ¿Qué te gusta hacer en tu tiempo libre?", prompt: "Quieres hablar de tus pasatiempos. ¿Qué dirías?", answers: [["I like listening to music.", "Me gusta escuchar música."], ["I enjoy watching movies.", "Disfruto ver películas."], ["I like going for walks.", "Me gusta salir a caminar."]], focus: 0 },
-  { speaker: "Daniel", en: "What kind of music do you like?", es: "¿Qué tipo de música te gusta?", prompt: "Te gusta la música tranquila. ¿Cómo responderías?", answers: [["I like relaxing music.", "Me gusta la música relajante."], ["I listen to many kinds of music.", "Escucho muchos tipos de música."], ["I love Latin music.", "Me encanta la música latina."]], focus: 0 },
-  { speaker: "Sofia", en: "Do you have a big family?", es: "¿Tienes una familia grande?", prompt: "Quieres decir que tienes dos hermanos. ¿Qué frase es fácil de recordar?", answers: [["I have two brothers.", "Tengo dos hermanos."], ["My family is pretty big.", "Mi familia es bastante grande."], ["I have a small family.", "Tengo una familia pequeña."]], focus: 0 },
-  { speaker: "Daniel", en: "Do you get to see your family often?", es: "¿Puedes ver a tu familia a menudo?", prompt: "Quieres decir que hablas con tu familia cada semana.", answers: [["We talk every week.", "Hablamos cada semana."], ["I call them on weekends.", "Los llamo los fines de semana."], ["I visit when I can.", "Los visito cuando puedo."]], focus: 0 },
-  { speaker: "Sofia", en: "What food do you like?", es: "¿Qué comida te gusta?", prompt: "Quieres decir que te gusta la comida colombiana.", answers: [["I like Colombian food.", "Me gusta la comida colombiana."], ["I love arepas.", "Me encantan las arepas."], ["I enjoy trying new food.", "Disfruto probar comida nueva."]], focus: 0 },
-  { speaker: "Daniel", en: "Would you like to get a coffee sometime?", es: "¿Te gustaría tomar un café algún día?", prompt: "Aceptas la invitación de forma amable.", answers: [["Sure, I'd love to.", "Claro, me encantaría."], ["That sounds great.", "Eso suena genial."], ["Yes, that would be nice.", "Sí, estaría bien."]], focus: 0 },
-  { speaker: "Sofia", en: "Great! Are you free this Saturday?", es: "¡Genial! ¿Estás libre este sábado?", prompt: "Quieres decir que sí, estás libre el sábado.", answers: [["Yes, I'm free on Saturday.", "Sí, estoy libre el sábado."], ["Saturday works for me.", "El sábado me queda bien."], ["I think so. What time?", "Creo que sí. ¿A qué hora?"]], focus: 0 },
-  { speaker: "Daniel", en: "How about three in the afternoon?", es: "¿Qué tal a las tres de la tarde?", prompt: "La hora te parece perfecta. ¿Cómo contestarías?", answers: [["Three is perfect.", "Las tres está perfecto."], ["That works for me.", "Me queda bien."], ["Sounds good. See you then.", "Me parece bien. Nos vemos entonces."]], focus: 1 },
-  { speaker: "Sofia", en: "Would you like to exchange phone numbers?", es: "¿Te gustaría intercambiar números de teléfono?", prompt: "Aceptas intercambiar números.", answers: [["Sure, here's my number.", "Claro, aquí tienes mi número."], ["Of course. Let me get my phone.", "Claro. Déjame sacar mi teléfono."], ["Yes, that would be great.", "Sí, estaría muy bien."]], focus: 0 },
-  { speaker: "Daniel", en: "Thanks. I'll send you a message later.", es: "Gracias. Te enviaré un mensaje más tarde.", prompt: "Quieres decir que está bien y que hablarán luego.", answers: [["Okay, talk to you later.", "Está bien, hablamos luego."], ["Great. Have a good day!", "Genial. ¡Que tengas un buen día!"], ["Thanks. See you on Saturday.", "Gracias. Nos vemos el sábado."]], focus: 0 },
-  { speaker: "Sofia", en: "It was really nice meeting you, Daniel.", es: "Fue un gusto conocerte, Daniel.", prompt: "Quieres despedirte de manera amable.", answers: [["It was nice meeting you, too.", "También fue un gusto conocerte."], ["Have a great day!", "¡Que tengas un excelente día!"], ["See you soon!", "¡Hasta pronto! "]], focus: 0 },
-  { speaker: "Daniel", en: "You too, Sofia. See you Saturday!", es: "Igualmente, Sofía. ¡Nos vemos el sábado!", prompt: "Responde para cerrar la conversación.", answers: [["See you Saturday!", "¡Nos vemos el sábado!"], ["Take care!", "¡Cuídate!"], ["Bye! Have a good one.", "¡Chao! Que te vaya bien."]], focus: 0 }
-];
+// Conversaciones exclusivas por categoría. Cada tema adapta la situación al capítulo elegido.
+const escenariosProfesor = {
+  "Vida diaria": { lugar:"una actividad cotidiana del vecindario", persona:"Alex", items:[
+    ["Hi! How is your day going?","¡Hola! ¿Cómo va tu día?","Quieres decir que va bien.","My day is going well, thanks.","Mi día va bien, gracias."],
+    ["What are you doing today?","¿Qué estás haciendo hoy?","Vas a hacer unas compras.","I'm going shopping today.","Hoy voy a hacer compras."],
+    ["Do you need anything from the store?","¿Necesitas algo de la tienda?","Quieres pedir leche.","Yes, I need some milk.","Sí, necesito leche."],
+    ["How do you usually get around?","¿Cómo te desplazas normalmente?","Normalmente caminas.","I usually walk.","Normalmente camino."],
+    ["What time do you start your day?","¿A qué hora empiezas tu día?","Empiezas a las siete.","I start at seven.","Empiezo a las siete."],
+    ["Do you have plans for this evening?","¿Tienes planes para esta tarde?","Vas a descansar en casa.","I'm going to relax at home.","Voy a descansar en casa."],
+    ["Would you like some help?","¿Te gustaría recibir ayuda?","Agradeces la ayuda.","Yes, that would be great.","Sí, eso estaría muy bien."],
+    ["Is there anything else you need?","¿Necesitas algo más?","Dices que no, gracias.","No, that's everything. Thank you.","No, eso es todo. Gracias."],
+    ["It was nice talking to you.","Fue agradable hablar contigo.","Te despides amablemente.","It was nice talking to you, too.","También fue agradable hablar contigo."],
+    ["Have a good rest of your day!","¡Que tengas un buen resto del día!","Le deseas lo mismo.","You too. Take care!","Igualmente. ¡Cuídate!"]]},
+  "Familia": { lugar:"una reunión familiar", persona:"Laura", items:[
+    ["How is your family doing?","¿Cómo está tu familia?","Dices que todos están bien.","Everyone is doing well, thank you.","Todos están bien, gracias."],
+    ["Do you have any brothers or sisters?","¿Tienes hermanos?","Dices que tienes dos hermanos.","I have two brothers.","Tengo dos hermanos."],
+    ["What are their names?","¿Cómo se llaman?","Dices que se llaman Mateo y Andrés.","Their names are Mateo and Andres.","Se llaman Mateo y Andrés."],
+    ["Do you see them often?","¿Los ves a menudo?","Hablas con ellos cada semana.","We talk every week.","Hablamos cada semana."],
+    ["What do you usually do together?","¿Qué hacen juntos normalmente?","Les gusta compartir comidas.","We enjoy having meals together.","Disfrutamos comer juntos."],
+    ["Are you visiting your parents soon?","¿Vas a visitar pronto a tus padres?","Esperas visitarlos el próximo mes.","I hope to visit them next month.","Espero visitarlos el próximo mes."],
+    ["What is your favorite family memory?","¿Cuál es tu recuerdo familiar favorito?","Recuerdas una celebración.","My favorite memory is a family celebration.","Mi recuerdo favorito es una celebración familiar."],
+    ["Do you have family traditions?","¿Tienen tradiciones familiares?","Se reúnen los domingos.","We get together on Sundays.","Nos reunimos los domingos."],
+    ["Please say hello to your family for me.","Por favor, saluda a tu familia de mi parte.","Dices que lo harás.","Of course. I'll tell them.","Claro. Se lo diré."],
+    ["It was lovely catching up.","Fue muy bonito ponerse al día.","Te despides con cariño.","It was lovely seeing you, too.","También fue muy bonito verte."]]},
+  "Comida": { lugar:"una cocina donde preparan una comida", persona:"Chris", items:[
+    ["What are you making today?","¿Qué estás preparando hoy?","Preparas una pasta sencilla.","I'm making a simple pasta dish.","Estoy preparando un plato sencillo de pasta."],
+    ["What ingredients do we need?","¿Qué ingredientes necesitamos?","Necesitan tomates y queso.","We need tomatoes and cheese.","Necesitamos tomates y queso."],
+    ["Could you wash the vegetables?","¿Puedes lavar las verduras?","Aceptas ayudar.","Sure, I'll wash them.","Claro, las lavaré."],
+    ["How much salt should I add?","¿Cuánta sal debo agregar?","Dices que solo un poco.","Just a little, please.","Solo un poco, por favor."],
+    ["Should we cook the pasta now?","¿Cocinamos la pasta ahora?","Dices que sí.","Yes, let's cook it now.","Sí, cocinémosla ahora."],
+    ["Does it need more time?","¿Necesita más tiempo?","Dices que cinco minutos.","It needs five more minutes.","Necesita cinco minutos más."],
+    ["Would you like to taste the sauce?","¿Quieres probar la salsa?","Aceptas probarla.","Yes, let me try it.","Sí, déjame probarla."],
+    ["What do you think?","¿Qué te parece?","Dices que está deliciosa.","It's delicious. I love it.","Está deliciosa. Me encanta."],
+    ["Can you set the table?","¿Puedes poner la mesa?","Dices que sí, ahora mismo.","Of course. I'll do it now.","Por supuesto. Lo hago ahora."],
+    ["Dinner is ready!","¡La cena está lista!","Invitas a todos a sentarse.","Great! Let's eat together.","¡Genial! Comamos juntos."]]},
+  "Restaurantes": { lugar:"un restaurante", persona:"el camarero y una persona de tu mesa", items:[
+    ["Good evening! Do you have a reservation?","¡Buenas noches! ¿Tiene una reservación?","Dices que sí, a nombre de García.","Yes, under Garcia.","Sí, a nombre de García."],
+    ["How many people are in your party?","¿Cuántas personas vienen?","Son dos personas.","A table for two, please.","Una mesa para dos, por favor."],
+    ["Would you like to see the menu?","¿Desea ver el menú?","Pides el menú amablemente.","Could I see the menu, please?","¿Podría ver el menú, por favor?"],
+    ["Can I get you something to drink?","¿Le traigo algo de beber?","Pides agua.","Water, please.","Agua, por favor."],
+    ["Are you ready to order?","¿Está listo para ordenar?","Pides pollo con arroz.","I'd like the chicken with rice.","Quisiera el pollo con arroz."],
+    ["Would you like anything else?","¿Desea algo más?","Dices que no, gracias.","No, that's all for now.","No, eso es todo por ahora."],
+    ["How is your meal?","¿Qué tal está su comida?","Dices que está muy buena.","It's very good, thank you.","Está muy buena, gracias."],
+    ["Would you like dessert?","¿Desea un postre?","Pides ver las opciones.","Could I see the dessert menu?","¿Podría ver el menú de postres?"],
+    ["Would you like the check?","¿Desea la cuenta?","Pides la cuenta.","Yes, could we have the check, please?","Sí, ¿nos trae la cuenta, por favor?"],
+    ["Thank you for coming. Have a nice evening!","Gracias por venir. ¡Que tenga buena noche!","Agradeces y te despides.","Thank you. We had a great time.","Gracias. La pasamos muy bien."]]},
+  "Compras": { lugar:"una tienda de ropa", persona:"la dependienta", items:[
+    ["Hello! Can I help you find something?","¡Hola! ¿Puedo ayudarle a encontrar algo?","Buscas una camisa.","Yes, I'm looking for a shirt.","Sí, estoy buscando una camisa."],
+    ["What size do you need?","¿Qué talla necesita?","Necesitas talla mediana.","I need a medium.","Necesito una mediana."],
+    ["What color would you like?","¿Qué color le gustaría?","Prefieres azul.","I'd like a blue one.","Me gustaría una azul."],
+    ["Would you like to try it on?","¿Quiere probársela?","Aceptas.","Yes, where is the fitting room?","Sí, ¿dónde está el probador?"],
+    ["How does it fit?","¿Cómo le queda?","Dices que queda bien.","It fits well, thank you.","Me queda bien, gracias."],
+    ["Would you like to see another style?","¿Quiere ver otro estilo?","Pides ver uno más sencillo.","Yes, something more simple, please.","Sí, algo más sencillo, por favor."],
+    ["This one is on sale today.","Este está en oferta hoy.","Preguntas cuánto cuesta.","How much is it?","¿Cuánto cuesta?"],
+    ["It's twenty dollars.","Cuesta veinte dólares.","Dices que te parece bien.","That sounds good. I'll take it.","Me parece bien. Me lo llevo."],
+    ["Would you like a bag?","¿Quiere una bolsa?","Aceptas una bolsa.","Yes, please. Thank you.","Sí, por favor. Gracias."],
+    ["You can pay at the register.","Puede pagar en la caja.","Preguntas si puedes pagar con tarjeta.","Can I pay by card?","¿Puedo pagar con tarjeta?"]]},
+  "Transporte": { lugar:"una estación de transporte público", persona:"un empleado de la estación", items:[
+    ["Where are you trying to go?","¿A dónde intenta llegar?","Vas al centro.","I'm going downtown.","Voy al centro."],
+    ["Are you taking the train or the bus?","¿Vas en tren o en autobús?","Prefieres el tren.","I'm taking the train.","Voy a tomar el tren."],
+    ["Do you have a ticket?","¿Tienes un boleto?","Todavía no lo tienes.","Not yet. Where can I buy one?","Todavía no. ¿Dónde puedo comprar uno?"],
+    ["You can use the machine over there.","Puedes usar la máquina de allí.","Preguntas cuánto cuesta.","How much is a ticket?","¿Cuánto cuesta un boleto?"],
+    ["Which line do you need?","¿Qué línea necesitas?","Preguntas por la línea azul.","Do I need the blue line?","¿Necesito la línea azul?"],
+    ["Yes, change at the next station.","Sí, haz transbordo en la próxima estación.","Pides que repita más despacio.","Could you say that more slowly, please?","¿Podría decirlo más despacio, por favor?"],
+    ["The platform is downstairs.","El andén está abajo.","Agradeces la indicación.","Thank you for your help.","Gracias por su ayuda."],
+    ["The train arrives in five minutes.","El tren llega en cinco minutos.","Confirmas el andén.","Is this the right platform?","¿Este es el andén correcto?"],
+    ["Yes, you're in the right place.","Sí, estás en el lugar correcto.","Dices que ya entendiste.","Great, I understand now.","Genial, ahora entiendo."],
+    ["Have a safe trip!","¡Buen viaje!","Te despides.","Thanks. Have a nice day!","Gracias. ¡Que tenga buen día!"]]},
+  "Viajes": { lugar:"el aeropuerto y la llegada a una ciudad nueva", persona:"un agente de viajes", items:[
+    ["Good morning. May I see your passport?","Buenos días. ¿Puedo ver su pasaporte?","Entregas tu pasaporte.","Of course. Here you are.","Por supuesto. Aquí tiene."],
+    ["What is the purpose of your visit?","¿Cuál es el motivo de su visita?","Vienes de vacaciones.","I'm here on vacation.","Estoy aquí de vacaciones."],
+    ["How long will you be staying?","¿Cuánto tiempo se quedará?","Te quedarás una semana.","I'll be staying for one week.","Me quedaré una semana."],
+    ["Where will you be staying?","¿Dónde se hospedará?","En un hotel del centro.","At a hotel downtown.","En un hotel del centro."],
+    ["Do you have any bags to check?","¿Tiene maletas para facturar?","Tienes una maleta.","Yes, I have one suitcase.","Sí, tengo una maleta."],
+    ["Here is your boarding pass.","Aquí está su tarjeta de embarque.","Preguntas por la puerta.","Which gate should I go to?","¿A qué puerta debo ir?"],
+    ["Your flight boards at six.","Su vuelo aborda a las seis.","Confirmas la hora.","So, boarding starts at six?","Entonces, ¿el abordaje empieza a las seis?"],
+    ["Do you need help finding the gate?","¿Necesita ayuda para encontrar la puerta?","Dices que sí, por favor.","Yes, please. That would help.","Sí, por favor. Eso ayudaría."],
+    ["The gate is just around the corner.","La puerta está a la vuelta de la esquina.","Agradeces.","Thank you. I appreciate it.","Gracias. Se lo agradezco."],
+    ["Enjoy your trip!","¡Disfrute su viaje!","Te despides.","Thank you. Have a great day!","Gracias. ¡Que tenga un gran día!"]]},
+  "Trabajo": { lugar:"tu primer día en una nueva oficina", persona:"tu compañero Jordan", items:[
+    ["Good morning! Are you the new team member?","¡Buenos días! ¿Eres el nuevo miembro del equipo?","Te presentas.","Yes, I'm Alex. Nice to meet you.","Sí, soy Alex. Mucho gusto."],
+    ["What will your role be?","¿Cuál será tu puesto?","Trabajarás en atención al cliente.","I'll be working in customer service.","Trabajaré en atención al cliente."],
+    ["Have you worked here before?","¿Has trabajado aquí antes?","Es tu primer día.","No, today is my first day.","No, hoy es mi primer día."],
+    ["Would you like a quick tour?","¿Quieres un recorrido rápido?","Aceptas agradecido.","Yes, that would be helpful. Thank you.","Sí, eso sería útil. Gracias."],
+    ["Do you know how to use this system?","¿Sabes cómo usar este sistema?","Necesitas que te lo expliquen.","Not yet. Could you show me?","Todavía no. ¿Podrías mostrarme?"],
+    ["When is the team meeting?","¿Cuándo es la reunión del equipo?","Preguntas si es a las diez.","Is it at ten o'clock?","¿Es a las diez?"],
+    ["Yes. Please bring your notes.","Sí. Por favor, trae tus notas.","Confirmas que las llevarás.","Sure, I'll bring them.","Claro, las llevaré."],
+    ["Do you have any questions about the project?","¿Tienes preguntas sobre el proyecto?","Preguntas cuál es la prioridad.","What should I focus on first?","¿En qué debo concentrarme primero?"],
+    ["Start with the customer report.","Empieza con el informe de clientes.","Dices que entendiste.","Got it. I'll start with that.","Entendido. Empezaré con eso."],
+    ["Welcome to the team!","¡Bienvenido al equipo!","Agradeces la bienvenida.","Thanks. I'm happy to be here.","Gracias. Estoy feliz de estar aquí."]]},
+  "Salud": { lugar:"una consulta en una clínica", persona:"la recepcionista y el médico", items:[
+    ["Hello. Do you have an appointment?","Hola. ¿Tiene una cita?","Tienes una cita a las diez.","Yes, I have an appointment at ten.","Sí, tengo una cita a las diez."],
+    ["What is your full name?","¿Cuál es su nombre completo?","Dices tu nombre.","My name is Alex Rivera.","Me llamo Alex Rivera."],
+    ["What brings you in today?","¿Qué le trae por aquí hoy?","Te duele la cabeza.","I have a headache.","Tengo dolor de cabeza."],
+    ["When did it start?","¿Cuándo comenzó?","Comenzó ayer.","It started yesterday.","Comenzó ayer."],
+    ["Do you have a fever?","¿Tiene fiebre?","Dices que no.","No, I don't.","No, no tengo."],
+    ["Are you taking any medication?","¿Está tomando algún medicamento?","Dices que no tomas ninguno.","No, I'm not taking any medication.","No, no estoy tomando ningún medicamento."],
+    ["Does anything make the pain worse?","¿Algo empeora el dolor?","Dices que la luz fuerte.","Bright light makes it worse.","La luz fuerte lo empeora."],
+    ["I'll examine you now.","Voy a examinarle ahora.","Aceptas.","Okay, thank you.","Está bien, gracias."],
+    ["Do you understand the instructions?","¿Entiende las instrucciones?","Pides que las repita.","Could you explain that again, please?","¿Podría explicarlo otra vez, por favor?"],
+    ["Of course. Take care.","Por supuesto. Cuídese.","Agradeces la atención.","Thank you for your help.","Gracias por su ayuda."]]},
+  "Estudios": { lugar:"el primer día de clases", persona:"tu compañera Emma", items:[
+    ["Hi! Are you in this class?","¡Hola! ¿Estás en esta clase?","Confirmas que sí.","Yes, this is my first class.","Sí, esta es mi primera clase."],
+    ["What are you studying?","¿Qué estás estudiando?","Estudias inglés.","I'm studying English.","Estoy estudiando inglés."],
+    ["Why are you learning it?","¿Por qué lo estás aprendiendo?","Lo necesitas para trabajar y viajar.","I need it for work and travel.","Lo necesito para trabajar y viajar."],
+    ["How do you practice at home?","¿Cómo practicas en casa?","Escuchas y repites frases.","I listen and repeat sentences.","Escucho y repito oraciones."],
+    ["Would you like to study together?","¿Te gustaría estudiar juntos?","Aceptas.","Sure, that sounds like a good idea.","Claro, me parece una buena idea."],
+    ["Which day works for you?","¿Qué día te viene bien?","El sábado.","Saturday works for me.","El sábado me viene bien."],
+    ["Should we meet at the library?","¿Nos encontramos en la biblioteca?","Te parece perfecto.","Perfect. I'll meet you there.","Perfecto. Nos vemos allí."],
+    ["Do you have the homework?","¿Tienes la tarea?","La tienes en tu cuaderno.","Yes, I have it in my notebook.","Sí, la tengo en mi cuaderno."],
+    ["Can you help me with this question?","¿Puedes ayudarme con esta pregunta?","Ofreces ayuda.","Of course. Let's do it together.","Por supuesto. Hagámoslo juntos."],
+    ["See you in class!","¡Nos vemos en clase!","Te despides.","See you. Have a great day!","Nos vemos. ¡Que tengas un gran día!"]]},
+  "Amistad": { lugar:"un encuentro con un nuevo amigo", persona:"Sam", items:[
+    ["What do you enjoy doing on weekends?","¿Qué disfrutas hacer los fines de semana?","Te gusta salir a caminar.","I like going for walks.","Me gusta salir a caminar."],
+    ["Do you prefer movies or concerts?","¿Prefieres películas o conciertos?","Prefieres películas.","I prefer watching movies.","Prefiero ver películas."],
+    ["Have you seen any good movies lately?","¿Has visto buenas películas últimamente?","Viste una comedia.","I watched a funny comedy.","Vi una comedia divertida."],
+    ["Would you like to try a new café?","¿Te gustaría probar una cafetería nueva?","Aceptas la invitación.","Sure, I'd love to try it.","Claro, me encantaría probarla."],
+    ["What kind of coffee do you like?","¿Qué tipo de café te gusta?","Te gusta el café con leche.","I like coffee with milk.","Me gusta el café con leche."],
+    ["Do you play any sports?","¿Practicas algún deporte?","Juegas fútbol a veces.","I play soccer sometimes.","Juego fútbol a veces."],
+    ["Are you free next weekend?","¿Estás libre el próximo fin de semana?","Crees que sí y preguntas el plan.","I think so. What's the plan?","Creo que sí. ¿Cuál es el plan?"],
+    ["Let's go to the park.","Vamos al parque.","Te parece una buena idea.","That sounds like fun.","Eso suena divertido."],
+    ["I'll text you the details.","Te enviaré los detalles por mensaje.","Agradeces.","Great. Thanks for inviting me.","Genial. Gracias por invitarme."],
+    ["I'm glad we became friends.","Me alegra que nos hayamos hecho amigos.","Respondes con amabilidad.","Me too. See you soon!","A mí también. ¡Hasta pronto!"]]},
+  "Eventos": { lugar:"una fiesta donde conoces a los invitados", persona:"Taylor", items:[
+    ["Hi! How do you know the host?","¡Hola! ¿Cómo conoces al anfitrión?","Dices que es un amigo del trabajo.","He's a friend from work.","Es un amigo del trabajo."],
+    ["Have you been to this event before?","¿Has venido antes a este evento?","Es tu primera vez.","No, this is my first time.","No, esta es mi primera vez."],
+    ["Would you like something to drink?","¿Te gustaría algo de beber?","Pides agua con gas.","Sparkling water, please.","Agua con gas, por favor."],
+    ["Do you know many people here?","¿Conoces a muchas personas aquí?","Conoces solo a unas pocas.","I only know a few people.","Solo conozco a unas pocas personas."],
+    ["What do you do?","¿A qué te dedicas?","Dices que trabajas en un negocio pequeño.","I run a small business.","Tengo un pequeño negocio."],
+    ["The music is great, isn't it?","La música está genial, ¿verdad?","Estás de acuerdo.","Yes, I really like it.","Sí, me gusta mucho."],
+    ["Would you like to meet my friends?","¿Te gustaría conocer a mis amigos?","Aceptas.","Sure, I'd like that.","Claro, me gustaría."],
+    ["Are you enjoying the party?","¿Estás disfrutando la fiesta?","Dices que sí, mucho.","Yes, I'm having a great time.","Sí, la estoy pasando muy bien."],
+    ["We are taking a group photo.","Vamos a tomar una foto grupal.","Te unes a la foto.","Great! I'll join you.","¡Genial! Me uno a ustedes."],
+    ["It was great meeting you tonight.","Fue genial conocerte esta noche.","Te despides.","You too. Enjoy the rest of the evening.","Igualmente. Disfruta el resto de la noche."]]},
+  "Emergencias": { lugar:"una situación en la que necesitas ayuda urgente", persona:"una persona que puede ayudarte", items:[
+    ["Are you okay? What happened?","¿Estás bien? ¿Qué pasó?","Dices que necesitas ayuda.","I need help, please.","Necesito ayuda, por favor."],
+    ["Is anyone hurt?","¿Hay alguien herido?","Dices que una persona está herida.","Yes, someone is hurt.","Sí, alguien está herido."],
+    ["Where are you right now?","¿Dónde estás ahora?","Das la ubicación.","I'm outside the main entrance.","Estoy afuera de la entrada principal."],
+    ["Should I call emergency services?","¿Debo llamar a emergencias?","Pides que llamen ahora.","Yes, please call now.","Sí, por favor llame ahora."],
+    ["Can you tell me your phone number?","¿Puedes decirme tu número de teléfono?","Ofreces tu número despacio.","Yes. I'll say it slowly.","Sí. Lo diré despacio."],
+    ["Stay where you are. Help is coming.","Quédate donde estás. La ayuda viene en camino.","Confirmas que esperarás.","Okay. I'll stay here.","Está bien. Me quedaré aquí."],
+    ["Do you know what caused the problem?","¿Sabes qué causó el problema?","Explicas que no lo sabes.","I'm not sure what happened.","No estoy seguro de lo que pasó."],
+    ["Can you describe the person?","¿Puedes describir a la persona?","Das una descripción sencilla.","He is wearing a blue jacket.","Lleva una chaqueta azul."],
+    ["The emergency team is here.","El equipo de emergencia está aquí.","Dices que gracias por ayudar.","Thank you for coming so quickly.","Gracias por venir tan rápido."],
+    ["You're safe now. Take a deep breath.","Ahora estás a salvo. Respira profundo.","Respondes que lo harás.","Okay. Thank you for helping me.","Está bien. Gracias por ayudarme."]]},
+  "Relaciones": { lugar:"una conversación honesta con alguien cercano", persona:"Jamie", items:[
+    ["Can we talk for a moment?","¿Podemos hablar un momento?","Aceptas escuchar.","Of course. What's on your mind?","Por supuesto. ¿Qué tienes en mente?"],
+    ["I've been feeling a little distant lately.","Últimamente me he sentido un poco distante.","Preguntas qué sucede.","Is something bothering you?","¿Hay algo que te preocupe?"],
+    ["I think we need to spend more time together.","Creo que necesitamos pasar más tiempo juntos.","Dices que estás de acuerdo.","I understand. I feel the same way.","Entiendo. Siento lo mismo."],
+    ["What could we do differently?","¿Qué podríamos hacer diferente?","Propones cenar juntos sin teléfonos.","We could have dinner without our phones.","Podríamos cenar sin nuestros teléfonos."],
+    ["That sounds like a good idea.","Eso suena como una buena idea.","Propones hacerlo el viernes.","Let's try it on Friday.","Probémoslo el viernes."],
+    ["Can we be honest with each other?","¿Podemos ser honestos el uno con el otro?","Dices que sí, es importante.","Yes. That's very important to me.","Sí. Eso es muy importante para mí."],
+    ["I'm sorry if I hurt your feelings.","Lo siento si herí tus sentimientos.","Aceptas la disculpa.","Thank you for saying that.","Gracias por decirlo."],
+    ["I want us to understand each other.","Quiero que nos entendamos.","Dices que tú también.","I want that too.","Yo también quiero eso."],
+    ["Can we start again and take it slowly?","¿Podemos empezar de nuevo y tomarlo con calma?","Aceptas intentarlo.","Yes, let's take it one step at a time.","Sí, vayamos paso a paso."],
+    ["Thank you for listening.","Gracias por escuchar.","Agradeces la conversación.","Thank you for being honest with me.","Gracias por ser sincero conmigo."]]},
+  "Negocios y finanzas": { lugar:"una reunión para hablar de una oportunidad de negocio", persona:"Morgan", items:[
+    ["What kind of business are you running?","¿Qué tipo de negocio tienes?","Explicas que tienes una pequeña empresa.","I run a small company.","Tengo una pequeña empresa."],
+    ["Who are your main customers?","¿Quiénes son tus principales clientes?","Son clientes locales.","Most of our customers are local.","La mayoría de nuestros clientes son locales."],
+    ["What are your goals for this year?","¿Cuáles son tus metas para este año?","Quieres aumentar las ventas.","We want to increase our sales.","Queremos aumentar nuestras ventas."],
+    ["How much are you planning to invest?","¿Cuánto planeas invertir?","Aún estás calculando el presupuesto.","I'm still working on the budget.","Todavía estoy trabajando en el presupuesto."],
+    ["Do you have a business plan?","¿Tienes un plan de negocio?","Dices que sí y lo puedes compartir.","Yes, I can share the plan with you.","Sí, puedo compartir el plan contigo."],
+    ["When do you expect to start?","¿Cuándo esperas comenzar?","El próximo mes.","We expect to start next month.","Esperamos comenzar el próximo mes."],
+    ["What are the biggest risks?","¿Cuáles son los mayores riesgos?","Mencionas los costos y el tiempo.","Costs and timing are the main risks.","Los costos y el tiempo son los principales riesgos."],
+    ["How will you measure success?","¿Cómo medirás el éxito?","Revisarás ingresos y clientes.","We'll track revenue and new customers.","Seguiremos los ingresos y los nuevos clientes."],
+    ["Can you send me the numbers?","¿Puedes enviarme las cifras?","Dices que las enviarás hoy.","Sure, I'll send them today.","Claro, las enviaré hoy."],
+    ["It was good discussing this with you.","Fue bueno hablar de esto contigo.","Agradeces la reunión.","Thank you for your time. I'll follow up soon.","Gracias por tu tiempo. Haré seguimiento pronto."]]},
+  "Tecnología e innovación": { lugar:"una tienda donde te ayudan con un teléfono nuevo", persona:"el asesor", items:[
+    ["What seems to be the problem with your phone?","¿Cuál parece ser el problema con tu teléfono?","La batería se descarga rápido.","The battery runs out quickly.","La batería se descarga rápido."],
+    ["When did you first notice it?","¿Cuándo lo notaste por primera vez?","Hace unos días.","A few days ago.","Hace unos días."],
+    ["Have you tried restarting it?","¿Has intentado reiniciarlo?","Todavía no.","No, I haven't tried that yet.","No, todavía no lo he intentado."],
+    ["Would you like us to check the settings?","¿Quieres que revisemos la configuración?","Sí, por favor.","Yes, please. That would be helpful.","Sí, por favor. Eso sería útil."],
+    ["Do you have a backup of your photos?","¿Tienes una copia de seguridad de tus fotos?","Dices que sí, en la nube.","Yes, they're backed up in the cloud.","Sí, tienen copia en la nube."],
+    ["The software needs an update.","El software necesita una actualización.","Preguntas cuánto tardará.","How long will the update take?","¿Cuánto tardará la actualización?"],
+    ["About twenty minutes.","Unos veinte minutos.","Dices que puedes esperar.","That's fine. I can wait.","Está bien. Puedo esperar."],
+    ["Would you like help setting up the new feature?","¿Quieres ayuda para configurar la nueva función?","Aceptas.","Yes, please show me how it works.","Sí, por favor muéstreme cómo funciona."],
+    ["Is everything working now?","¿Todo funciona ahora?","Confirmas que sí.","Yes, everything is working. Thank you.","Sí, todo funciona. Gracias."],
+    ["Let us know if you need anything else.","Avísanos si necesitas algo más.","Te despides.","I will. Thanks for your help.","Lo haré. Gracias por su ayuda."]]},
+  "Geografía y viajes": { lugar:"una oficina de información turística en una ciudad nueva", persona:"un guía local", items:[
+    ["Is this your first visit to the city?","¿Es tu primera visita a la ciudad?","Dices que sí.","Yes, it's my first visit.","Sí, es mi primera visita."],
+    ["What would you like to see?","¿Qué te gustaría conocer?","Quieres visitar el centro histórico.","I'd like to visit the old town.","Me gustaría visitar el casco antiguo."],
+    ["Are you interested in museums?","¿Te interesan los museos?","Sí, especialmente los de historia.","Yes, especially history museums.","Sí, especialmente los museos de historia."],
+    ["How do you plan to get there?","¿Cómo planeas llegar?","En autobús.","I'll take the bus.","Tomaré el autobús."],
+    ["Would you like a map?","¿Te gustaría un mapa?","Aceptas.","Yes, a map would be great.","Sí, un mapa estaría genial."],
+    ["Do you want to try the local food?","¿Quieres probar la comida local?","Te gustaría probarla.","I'd love to try the local food.","Me encantaría probar la comida local."],
+    ["How many days are you staying?","¿Cuántos días te quedarás?","Tres días.","I'm staying for three days.","Me quedaré tres días."],
+    ["The best view is from the hill.","La mejor vista es desde la colina.","Preguntas cómo llegar.","How can I get there?","¿Cómo puedo llegar allí?"],
+    ["You can walk there in fifteen minutes.","Puedes caminar hasta allí en quince minutos.","Agradeces el consejo.","Thanks for the recommendation.","Gracias por la recomendación."],
+    ["Enjoy exploring our city!","¡Disfruta explorando nuestra ciudad!","Te despides.","Thank you. I'm excited to explore.","Gracias. Estoy emocionado por conocerla."]]},
+  "Mente y aprendizaje": { lugar:"una sesión para aprender una habilidad nueva", persona:"la instructora", items:[
+    ["What would you like to learn?","¿Qué te gustaría aprender?","Quieres mejorar tu inglés.","I'd like to improve my English.","Me gustaría mejorar mi inglés."],
+    ["What is the hardest part for you?","¿Qué parte es la más difícil para ti?","Hablar te cuesta más.","Speaking is the hardest part for me.","Hablar es lo más difícil para mí."],
+    ["How often do you practice?","¿Con qué frecuencia practicas?","Practicas todos los días.","I practice every day.","Practico todos los días."],
+    ["Do you prefer listening or reading?","¿Prefieres escuchar o leer?","Prefieres escuchar.","I prefer listening.","Prefiero escuchar."],
+    ["What helps you remember new words?","¿Qué te ayuda a recordar palabras nuevas?","Repetirlas en frases.","Repeating them in sentences helps me.","Repetirlas en oraciones me ayuda."],
+    ["Would you like to try a short exercise?","¿Te gustaría intentar un ejercicio corto?","Aceptas.","Yes, let's try it.","Sí, intentémoslo."],
+    ["Can you use this word in a sentence?","¿Puedes usar esta palabra en una oración?","Dices que vas a intentarlo.","I'll give it a try.","Lo intentaré."],
+    ["What did you learn today?","¿Qué aprendiste hoy?","Aprendiste expresiones nuevas.","I learned some useful expressions.","Aprendí algunas expresiones útiles."],
+    ["What will you practice tomorrow?","¿Qué practicarás mañana?","Practicarás preguntas.","I'll practice asking questions.","Practicaré hacer preguntas."],
+    ["Small steps make a big difference.","Los pequeños pasos hacen una gran diferencia.","Agradeces el ánimo.","Thank you. I'll keep practicing.","Gracias. Seguiré practicando."]]},
+  "Ciencia y naturaleza": { lugar:"una visita a un parque natural", persona:"la guía", items:[
+    ["What kind of birds live here?","¿Qué tipo de aves viven aquí?","Preguntas por las aves de la zona.","What birds can we see here?","¿Qué aves podemos ver aquí?"],
+    ["The lake is home to many species.","El lago es hogar de muchas especies.","Preguntas si podemos acercarnos.","Can we get closer to the lake?","¿Podemos acercarnos al lago?"],
+    ["Please stay on the marked path.","Por favor, permanece en el sendero señalado.","Dices que seguirás las indicaciones.","Of course. I'll stay on the path.","Por supuesto. Me quedaré en el sendero."],
+    ["Have you studied plants before?","¿Has estudiado plantas antes?","Dices que conoces algunas.","I've learned about a few plants.","He aprendido sobre algunas plantas."],
+    ["Why are these trees important?","¿Por qué son importantes estos árboles?","Mencionas que dan sombra y hogar a animales.","They provide shade and shelter for animals.","Dan sombra y refugio a los animales."],
+    ["Do you see the clouds moving?","¿Ves las nubes moverse?","Dices que parece que va a llover.","It looks like it's going to rain.","Parece que va a llover."],
+    ["We should protect clean water.","Debemos proteger el agua limpia.","Estás de acuerdo.","I agree. Water is very important.","Estoy de acuerdo. El agua es muy importante."],
+    ["Would you like to join the next nature walk?","¿Te gustaría unirte a la próxima caminata natural?","Preguntas cuándo será.","When is the next walk?","¿Cuándo es la próxima caminata?"],
+    ["It's next Sunday morning.","Es el próximo domingo por la mañana.","Dices que intentarás asistir.","I'll try to be there.","Intentaré estar allí."],
+    ["Thanks for exploring with us.","Gracias por explorar con nosotros.","Agradeces el recorrido.","Thank you. I learned a lot.","Gracias. Aprendí mucho."]]},
+  "Historia y civilizaciones": { lugar:"un museo de historia", persona:"el guía", items:[
+    ["What period are we looking at?","¿Qué período estamos viendo?","Preguntas por la época de la exposición.","Which historical period is this?","¿Qué período histórico es este?"],
+    ["This city was an important trading center.","Esta ciudad fue un centro comercial importante.","Preguntas qué productos comerciaban.","What goods did people trade?","¿Qué productos comerciaba la gente?"],
+    ["They traded food, cloth, and tools.","Comerciaban alimentos, telas y herramientas.","Preguntas cómo viajaban.","How did they travel between cities?","¿Cómo viajaban entre ciudades?"],
+    ["Many people traveled by horse or boat.","Muchas personas viajaban a caballo o en barco.","Dices que debió ser difícil.","That must have been difficult.","Eso debió ser difícil."],
+    ["What can this building tell us?","¿Qué puede contarnos este edificio?","Preguntas por su arquitectura.","Can you explain its architecture?","¿Puede explicar su arquitectura?"],
+    ["It shows how people lived at that time.","Muestra cómo vivía la gente en esa época.","Preguntas si se puede tomar una foto.","Can I take a picture?","¿Puedo tomar una foto?"],
+    ["Yes, but please do not use flash.","Sí, pero por favor no uses flash.","Aceptas la regla.","No problem. I won't use flash.","No hay problema. No usaré flash."],
+    ["Which object interests you most?","¿Qué objeto te interesa más?","Eliges una herramienta antigua.","The old tool interests me the most.","La herramienta antigua es la que más me interesa."],
+    ["What did you learn from the visit?","¿Qué aprendiste de la visita?","Dices que aprendiste cómo vivían.","I learned how people lived in the past.","Aprendí cómo vivía la gente en el pasado."],
+    ["Thank you for joining the tour.","Gracias por unirte al recorrido.","Agradeces la explicación.","Thank you for explaining everything.","Gracias por explicarlo todo."]]},
+  "Filosofía y pensamiento": { lugar:"un club de conversación sobre ideas", persona:"Casey", items:[
+    ["What does happiness mean to you?","¿Qué significa la felicidad para ti?","Dices que es disfrutar las cosas sencillas.","Happiness means enjoying simple things.","La felicidad significa disfrutar las cosas sencillas."],
+    ["Do you think money can buy happiness?","¿Crees que el dinero puede comprar la felicidad?","Dices que ayuda, pero no lo es todo.","Money helps, but it isn't everything.","El dinero ayuda, pero no lo es todo."],
+    ["What makes someone trustworthy?","¿Qué hace que alguien sea digno de confianza?","Hablas de la honestidad.","Honesty makes someone trustworthy.","La honestidad hace que alguien sea digno de confianza."],
+    ["Is failure always a bad thing?","¿Fracasar siempre es algo malo?","Dices que se puede aprender.","No. We can learn from failure.","No. Podemos aprender del fracaso."],
+    ["How do you make an important decision?","¿Cómo tomas una decisión importante?","Piensas antes de decidir.","I take my time before deciding.","Me tomo mi tiempo antes de decidir."],
+    ["Why should we respect different opinions?","¿Por qué debemos respetar opiniones diferentes?","Porque cada persona tiene otra experiencia.","Everyone has different experiences.","Cada persona tiene experiencias diferentes."],
+    ["What would you change in the world?","¿Qué cambiarías del mundo?","Te gustaría más comprensión.","I'd like people to understand each other more.","Me gustaría que las personas se entendieran más."],
+    ["Do you agree that learning never ends?","¿Estás de acuerdo en que aprender nunca termina?","Dices que sí.","Yes, we can always learn something new.","Sí, siempre podemos aprender algo nuevo."],
+    ["That's a thoughtful answer.","Esa es una respuesta reflexiva.","Agradeces y preguntas su opinión.","Thank you. What's your opinion?","Gracias. ¿Cuál es tu opinión?"],
+    ["I enjoyed hearing your ideas.","Disfruté escuchar tus ideas.","Te despides.","I enjoyed sharing them. See you soon.","Disfruté compartirlas. Hasta pronto."]]},
+  "Matemáticas y lógica": { lugar:"una sesión de ejercicios de lógica", persona:"el instructor", items:[
+    ["Can you find the pattern?","¿Puedes encontrar el patrón?","Dices que vas a observar los números.","Let me look at the numbers.","Déjame mirar los números."],
+    ["What number comes next?","¿Qué número sigue?","Das tu respuesta.","I think the next number is twelve.","Creo que el siguiente número es doce."],
+    ["How did you get that answer?","¿Cómo obtuviste esa respuesta?","Explicas que sumaste tres.","I added three each time.","Sumé tres cada vez."],
+    ["Can you solve it another way?","¿Puedes resolverlo de otra manera?","Dices que lo intentarás.","I'll try another method.","Intentaré otro método."],
+    ["Which information is missing?","¿Qué información falta?","Preguntas por el dato final.","We need the final number.","Necesitamos el número final."],
+    ["Does this conclusion follow the clues?","¿Esta conclusión sigue las pistas?","Dices que sí, por esta razón.","Yes, because the clues support it.","Sí, porque las pistas lo respaldan."],
+    ["What would happen if we changed the rule?","¿Qué pasaría si cambiáramos la regla?","El resultado sería diferente.","The result would be different.","El resultado sería diferente."],
+    ["Can you explain your reasoning clearly?","¿Puedes explicar claramente tu razonamiento?","Dices que sí.","Yes. First, I checked the pattern.","Sí. Primero revisé el patrón."],
+    ["Would you like one more challenge?","¿Te gustaría un reto más?","Aceptas.","Yes, I'm ready for another one.","Sí, estoy listo para otro."],
+    ["Great thinking today.","Pensaste muy bien hoy.","Agradeces.","Thank you. I enjoyed the challenge.","Gracias. Disfruté el reto."]]},
+  "Arte y literatura": { lugar:"una galería de arte", persona:"la curadora", items:[
+    ["What do you think of this painting?","¿Qué piensas de esta pintura?","Dices que te gustan sus colores.","I love the colors in this painting.","Me encantan los colores de esta pintura."],
+    ["What do you think the artist is showing?","¿Qué crees que muestra el artista?","Crees que muestra una ciudad.","I think it shows a city.","Creo que muestra una ciudad."],
+    ["Do you enjoy visiting galleries?","¿Disfrutas visitar galerías?","Dices que sí, cuando tienes tiempo.","Yes, when I have time.","Sí, cuando tengo tiempo."],
+    ["Which style do you prefer?","¿Qué estilo prefieres?","Prefieres el arte moderno.","I prefer modern art.","Prefiero el arte moderno."],
+    ["Have you read this author's work?","¿Has leído la obra de este autor?","Todavía no.","Not yet. Is it a good book?","Todavía no. ¿Es un buen libro?"],
+    ["It's a story about courage and friendship.","Es una historia sobre valentía y amistad.","Dices que te interesa leerla.","That sounds interesting. I'd like to read it.","Suena interesante. Me gustaría leerla."],
+    ["Would you like a recommendation?","¿Te gustaría una recomendación?","Aceptas.","Yes, please recommend a book.","Sí, por favor recomiéndame un libro."],
+    ["This one is a popular choice.","Esta es una opción popular.","Preguntas dónde puedes comprarlo.","Where can I find it?","¿Dónde puedo encontrarlo?"],
+    ["The bookstore is across the street.","La librería está al otro lado de la calle.","Agradeces la información.","Thank you. I'll take a look.","Gracias. Iré a mirar."],
+    ["Enjoy the exhibition!","¡Disfruta la exposición!","Te despides.","Thank you. Have a lovely day.","Gracias. Que tenga un lindo día."]]},
+  "Sociedad y cultura": { lugar:"un encuentro multicultural", persona:"Avery", items:[
+    ["Where did you grow up?","¿Dónde creciste?","Dices que creciste en Colombia.","I grew up in Colombia.","Crecí en Colombia."],
+    ["What do you miss about your hometown?","¿Qué extrañas de tu ciudad?","Extrañas la comida y la familia.","I miss the food and my family.","Extraño la comida y a mi familia."],
+    ["What is a typical celebration there?","¿Cuál es una celebración típica allí?","Mencionas las fiestas familiares.","Family celebrations are very common.","Las celebraciones familiares son muy comunes."],
+    ["What would you recommend to a visitor?","¿Qué recomendarías a un visitante?","Recomiendas probar comida local.","I recommend trying the local food.","Recomiendo probar la comida local."],
+    ["Do people have different customs here?","¿La gente tiene costumbres diferentes aquí?","Dices que sí, y sigues aprendiendo.","Yes, and I'm still learning about them.","Sí, y todavía estoy aprendiendo sobre ellas."],
+    ["What do you enjoy about this community?","¿Qué disfrutas de esta comunidad?","Te gusta conocer gente.","I enjoy meeting new people.","Disfruto conocer gente nueva."],
+    ["Would you like to join our cultural day?","¿Te gustaría participar en nuestro día cultural?","Aceptas con gusto.","I'd be happy to join.","Me gustaría participar."],
+    ["Could you share a tradition from your country?","¿Podrías compartir una tradición de tu país?","Dices que sí, con mucho gusto.","Of course. I'd love to share one.","Por supuesto. Me encantaría compartir una."],
+    ["Thank you for sharing your culture.","Gracias por compartir tu cultura.","Agradeces la invitación.","Thank you for making me feel welcome.","Gracias por hacerme sentir bienvenido."],
+    ["See you at the next event!","¡Nos vemos en el próximo evento!","Te despides.","See you there. Take care!","Nos vemos allí. ¡Cuídate!"]]},
+  "Vida práctica y bienestar": { lugar:"una conversación sobre organizar la semana", persona:"Robin", items:[
+    ["How do you organize your week?","¿Cómo organizas tu semana?","Usas una lista.","I use a simple list.","Uso una lista sencilla."],
+    ["What do you do first in the morning?","¿Qué haces primero por la mañana?","Preparas el desayuno.","I prepare breakfast first.","Primero preparo el desayuno."],
+    ["Do you take breaks during the day?","¿Tomas descansos durante el día?","Sí, cada pocas horas.","Yes, every few hours.","Sí, cada pocas horas."],
+    ["What helps you stay focused?","¿Qué te ayuda a concentrarte?","Apagar las notificaciones.","Turning off notifications helps me.","Apagar las notificaciones me ayuda."],
+    ["Do you like walking outside?","¿Te gusta caminar al aire libre?","Sí, especialmente por la tarde.","Yes, especially in the afternoon.","Sí, especialmente por la tarde."],
+    ["Would you like to take a short break?","¿Te gustaría tomar un descanso corto?","Aceptas.","Sure. A short break sounds good.","Claro. Un descanso corto suena bien."],
+    ["What is one goal for this week?","¿Cuál es una meta para esta semana?","Quieres terminar un proyecto.","I want to finish a project.","Quiero terminar un proyecto."],
+    ["How will you make time for it?","¿Cómo sacarás tiempo para eso?","Lo harás por las mañanas.","I'll work on it in the mornings.","Trabajaré en eso por las mañanas."],
+    ["That sounds like a good plan.","Ese parece un buen plan.","Dices que lo intentarás.","I'll do my best. Thank you.","Haré lo mejor que pueda. Gracias."],
+    ["Have a balanced week!","¡Que tengas una semana equilibrada!","Te despides.","You too. Take care.","Igualmente. Cuídate."]]},
+  "Inglés y comunicación": { lugar:"una práctica de conversación en inglés", persona:"la profesora", items:[
+    ["How do you ask someone to speak slowly?","¿Cómo le pides a alguien que hable despacio?","Pides que hable más despacio.","Could you speak more slowly, please?","¿Podría hablar más despacio, por favor?"],
+    ["What do you say when you don't understand?","¿Qué dices cuando no entiendes?","Pides una explicación.","I don't understand. Could you explain?","No entiendo. ¿Podría explicarlo?"],
+    ["How do you ask someone to repeat a word?","¿Cómo pides que repitan una palabra?","Pides que repita la palabra.","Could you repeat that word?","¿Podría repetir esa palabra?"],
+    ["How do you spell your first name?","¿Cómo deletreas tu nombre?","Dices que lo deletrearás.","I'll spell it for you.","Te lo voy a deletrear."],
+    ["What do you say when you need a moment?","¿Qué dices cuando necesitas un momento?","Pides un segundo.","Just a moment, please.","Un momento, por favor."],
+    ["How do you check that you understood correctly?","¿Cómo confirmas que entendiste bien?","Repites lo que escuchaste.","So, you mean tomorrow, right?","Entonces, quiere decir mañana, ¿verdad?"],
+    ["What do you say when someone helps you?","¿Qué dices cuando alguien te ayuda?","Agradeces la ayuda.","Thank you. I appreciate your help.","Gracias. Aprecio su ayuda."],
+    ["How do you politely interrupt?","¿Cómo interrumpes amablemente?","Pides permiso para hablar.","Excuse me, may I ask something?","Disculpe, ¿puedo preguntar algo?"],
+    ["What do you say when you need an example?","¿Qué dices cuando necesitas un ejemplo?","Pides un ejemplo.","Could you give me an example?","¿Podría darme un ejemplo?"],
+    ["You're communicating more confidently.","Te estás comunicando con más confianza.","Agradeces y dices que seguirás practicando.","Thank you. I'll keep practicing.","Gracias. Seguiré practicando."]]},
+  "Arte y literatura": { lugar:"una galería de arte", persona:"la curadora", items:[
+    ["What do you think of this painting?","¿Qué piensas de esta pintura?","Dices que te gustan sus colores.","I love the colors in this painting.","Me encantan los colores de esta pintura."],
+    ["What do you think the artist is showing?","¿Qué crees que muestra el artista?","Crees que muestra una ciudad.","I think it shows a city.","Creo que muestra una ciudad."],
+    ["Do you enjoy visiting galleries?","¿Disfrutas visitar galerías?","Dices que sí, cuando tienes tiempo.","Yes, when I have time.","Sí, cuando tengo tiempo."],
+    ["Which style do you prefer?","¿Qué estilo prefieres?","Prefieres el arte moderno.","I prefer modern art.","Prefiero el arte moderno."],
+    ["Have you read this author's work?","¿Has leído la obra de este autor?","Todavía no.","Not yet. Is it a good book?","Todavía no. ¿Es un buen libro?"],
+    ["It's a story about courage and friendship.","Es una historia sobre valentía y amistad.","Dices que te interesa leerla.","That sounds interesting. I'd like to read it.","Suena interesante. Me gustaría leerla."],
+    ["Would you like a recommendation?","¿Te gustaría una recomendación?","Aceptas.","Yes, please recommend a book.","Sí, por favor recomiéndame un libro."],
+    ["This one is a popular choice.","Esta es una opción popular.","Preguntas dónde puedes comprarlo.","Where can I find it?","¿Dónde puedo encontrarlo?"],
+    ["The bookstore is across the street.","La librería está al otro lado de la calle.","Agradeces la información.","Thank you. I'll take a look.","Gracias. Iré a mirar."],
+    ["Enjoy the exhibition!","¡Disfruta la exposición!","Te despides.","Thank you. Have a lovely day.","Gracias. Que tenga un lindo día."]]},
+  "Sociedad y cultura": { lugar:"un encuentro multicultural", persona:"Avery", items:[
+    ["Where did you grow up?","¿Dónde creciste?","Dices que creciste en Colombia.","I grew up in Colombia.","Crecí en Colombia."],
+    ["What do you miss about your hometown?","¿Qué extrañas de tu ciudad?","Extrañas la comida y la familia.","I miss the food and my family.","Extraño la comida y a mi familia."],
+    ["What is a typical celebration there?","¿Cuál es una celebración típica allí?","Mencionas las fiestas familiares.","Family celebrations are very common.","Las celebraciones familiares son muy comunes."],
+    ["What would you recommend to a visitor?","¿Qué recomendarías a un visitante?","Recomiendas probar comida local.","I recommend trying the local food.","Recomiendo probar la comida local."],
+    ["Do people have different customs here?","¿La gente tiene costumbres diferentes aquí?","Dices que sí, y sigues aprendiendo.","Yes, and I'm still learning about them.","Sí, y todavía estoy aprendiendo sobre ellas."],
+    ["What do you enjoy about this community?","¿Qué disfrutas de esta comunidad?","Te gusta conocer gente.","I enjoy meeting new people.","Disfruto conocer gente nueva."],
+    ["Would you like to join our cultural day?","¿Te gustaría participar en nuestro día cultural?","Aceptas con gusto.","I'd be happy to join.","Me gustaría participar."],
+    ["Could you share a tradition from your country?","¿Podrías compartir una tradición de tu país?","Dices que sí, con mucho gusto.","Of course. I'd love to share one.","Por supuesto. Me encantaría compartir una."],
+    ["Thank you for sharing your culture.","Gracias por compartir tu cultura.","Agradeces la invitación.","Thank you for making me feel welcome.","Gracias por hacerme sentir bienvenido."],
+    ["See you at the next event!","¡Nos vemos en el próximo evento!","Te despides.","See you there. Take care!","Nos vemos allí. ¡Cuídate!"]]},
+  "Vida práctica y bienestar": { lugar:"una conversación sobre organizar la semana", persona:"Robin", items:[
+    ["How do you organize your week?","¿Cómo organizas tu semana?","Usas una lista.","I use a simple list.","Uso una lista sencilla."],
+    ["What do you do first in the morning?","¿Qué haces primero por la mañana?","Preparas el desayuno.","I prepare breakfast first.","Primero preparo el desayuno."],
+    ["Do you take breaks during the day?","¿Tomas descansos durante el día?","Sí, cada pocas horas.","Yes, every few hours.","Sí, cada pocas horas."],
+    ["What helps you stay focused?","¿Qué te ayuda a concentrarte?","Apagar las notificaciones.","Turning off notifications helps me.","Apagar las notificaciones me ayuda."],
+    ["Do you like walking outside?","¿Te gusta caminar al aire libre?","Sí, especialmente por la tarde.","Yes, especially in the afternoon.","Sí, especialmente por la tarde."],
+    ["Would you like to take a short break?","¿Te gustaría tomar un descanso corto?","Aceptas.","Sure. A short break sounds good.","Claro. Un descanso corto suena bien."],
+    ["What is one goal for this week?","¿Cuál es una meta para esta semana?","Quieres terminar un proyecto.","I want to finish a project.","Quiero terminar un proyecto."],
+    ["How will you make time for it?","¿Cómo sacarás tiempo para eso?","Lo harás por las mañanas.","I'll work on it in the mornings.","Trabajaré en eso por las mañanas."],
+    ["That sounds like a good plan.","Ese parece un buen plan.","Dices que lo intentarás.","I'll do my best. Thank you.","Haré lo mejor que pueda. Gracias."],
+    ["Have a balanced week!","¡Que tengas una semana equilibrada!","Te despides.","You too. Take care.","Igualmente. Cuídate."]]},
+  "Inglés y comunicación": { lugar:"una práctica de conversación en inglés", persona:"la profesora", items:[
+    ["How do you ask someone to speak slowly?","¿Cómo le pides a alguien que hable despacio?","Pides que hable más despacio.","Could you speak more slowly, please?","¿Podría hablar más despacio, por favor?"],
+    ["What do you say when you don't understand?","¿Qué dices cuando no entiendes?","Pides una explicación.","I don't understand. Could you explain?","No entiendo. ¿Podría explicarlo?"],
+    ["How do you ask someone to repeat a word?","¿Cómo pides que repitan una palabra?","Pides que repita la palabra.","Could you repeat that word?","¿Podría repetir esa palabra?"],
+    ["How do you spell your first name?","¿Cómo deletreas tu nombre?","Dices que lo deletrearás.","I'll spell it for you.","Te lo voy a deletrear."],
+    ["What do you say when you need a moment?","¿Qué dices cuando necesitas un momento?","Pides un segundo.","Just a moment, please.","Un momento, por favor."],
+    ["How do you check that you understood correctly?","¿Cómo confirmas que entendiste bien?","Repites lo que escuchaste.","So, you mean tomorrow, right?","Entonces, quiere decir mañana, ¿verdad?"],
+    ["What do you say when someone helps you?","¿Qué dices cuando alguien te ayuda?","Agradeces la ayuda.","Thank you. I appreciate your help.","Gracias. Aprecio su ayuda."],
+    ["How do you politely interrupt?","¿Cómo interrumpes amablemente?","Pides permiso para hablar.","Excuse me, may I ask something?","Disculpe, ¿puedo preguntar algo?"],
+    ["What do you say when you need an example?","¿Qué dices cuando necesitas un ejemplo?","Pides un ejemplo.","Could you give me an example?","¿Podría darme un ejemplo?"],
+    ["You're communicating more confidently.","Te estás comunicando con más confianza.","Agradeces y dices que seguirás practicando.","Thank you. I'll keep practicing.","Gracias. Seguiré practicando."]]},
+
+};
+
+const crearGuionProfesor = (capitulo) => {
+  const base = escenariosProfesor[capitulo.category];
+  const titulo = capitulo.title || "esta situación";
+  // Si una categoría no tiene todavía un guion editorial propio, usa las líneas
+  // del capítulo seleccionado como base. Así no cae en la conversación de saludos.
+  const items = base?.items || (capitulo.dialogue || []).slice(0, 20).map((linea, index) => [
+    linea.en,
+    linea.es,
+    `En esta parte de “${titulo}”, piensa cómo continuar la conversación.`,
+    index % 2 === 0 ? "I understand. Thank you." : "Could you tell me more, please?",
+    index % 2 === 0 ? "Entiendo. Gracias." : "¿Podría contarme un poco más, por favor?"
+  ]);
+  const interlocutor = base?.persona || "Tu interlocutor";
+  return items.map((item, index) => ({
+    speaker: index % 2 === 0 ? interlocutor : "Tú escuchas",
+    en: item[0], es: item[1],
+    prompt: `${item[2]} Tema de hoy: ${titulo}. ¿Cómo responderías en esta situación?`,
+    answers: [[item[3], item[4]], [
+      index % 2 === 0 ? "Yes, please. Thank you." : "I understand. Thank you.",
+      index % 2 === 0 ? "Sí, por favor. Gracias." : "Entiendo. Gracias."
+    ], [
+      index % 2 === 0 ? "Could you help me, please?" : "That sounds good to me.",
+      index % 2 === 0 ? "¿Podría ayudarme, por favor?" : "Eso me parece bien."
+    ]], focus: 0
+  }));
+};
 
 export default function Historias({ volver = () => {} }) {
 
@@ -1018,6 +1355,7 @@ export default function Historias({ volver = () => {} }) {
 
 
   const capitulo = capitulos.find((c) => c.id === capituloId) || capitulos[0];
+  const guionProfesorActual = useMemo(() => crearGuionProfesor(capitulo), [capitulo]);
 
   const categorias = useMemo(
 
@@ -1262,11 +1600,11 @@ export default function Historias({ volver = () => {} }) {
     const decir = async (texto, idioma = "es-ES", ritmo = 0.86) => {
       if (!stopRef.current) await hablar(texto, idioma, ritmo);
     };
-    await decir("Bienvenido al Modo Profesor. Hoy vas a escuchar una conversación larga y natural entre dos personas que se conocen por primera vez. Puedes leer todo el diálogo en la pantalla. En cada turno, piensa tu respuesta antes de escuchar las opciones.");
+    await decir(`Bienvenido al Modo Profesor. Hoy practicaremos una conversación completa sobre ${capitulo.title}, dentro de la categoría ${capitulo.category}. Lee el diálogo en pantalla. En cada turno piensa tu respuesta antes de escuchar tres opciones.`);
     await decir("No necesitas memorizar frases difíciles. Vamos a practicar respuestas cortas que puedes usar en la vida real. Empezamos.");
-    for (let i = 0; i < guionProfesorLargo.length; i++) {
+    for (let i = 0; i < guionProfesorActual.length; i++) {
       if (stopRef.current) return;
-      const t = guionProfesorLargo[i];
+      const t = guionProfesorActual[i];
       await decir(`Parte ${i + 1}. ${t.speaker} dice:`, "es-ES");
       await decir(t.en, "en-US", Math.min(0.82, velocidad));
       await decir(`En español: ${t.es}`, "es-ES");
@@ -1296,7 +1634,7 @@ export default function Historias({ volver = () => {} }) {
       await pausa(3000);
     }
     if (stopRef.current) return;
-    await decir("¡Excelente trabajo! Has terminado una conversación completa: te presentaste, hablaste de tu país, tu trabajo, tus pasatiempos, tu familia, hiciste planes y te despediste. Practica estas frases poco a poco y verás cómo te salen con más naturalidad.");
+    await decir(`¡Excelente trabajo! Has terminado la conversación sobre ${capitulo.title}. Practica estas frases sencillas y úsalas en situaciones reales.`);
   };
 
   const reproducirTodo = async () => {
@@ -1570,9 +1908,9 @@ export default function Historias({ volver = () => {} }) {
           <div className="hist-dialogue">
             {modo === "profesor" ? (
               <>
-                <h3>Conversación completa: conocer a alguien por primera vez</h3>
-                <p className="hist-spanish">Lee el diálogo completo. En el audio, el profesor hace una pausa para que pienses, te muestra tres respuestas y explica una respuesta fácil palabra por palabra.</p>
-                {guionProfesorLargo.map((t, i) => (
+                <h3>Conversación completa: {capitulo.title}</h3>
+                <p className="hist-spanish">Lee el diálogo completo de esta categoría. En el audio, el profesor hace una pausa para que pienses, ofrece tres respuestas y explica una frase sencilla palabra por palabra.</p>
+                {guionProfesorActual.map((t, i) => (
                   <article key={`profesor-largo-${i}`} className="hist-line">
                     <div className="hist-speaker">{i + 1}. {t.speaker}</div>
                     <p className="hist-english">{t.en}</p>
