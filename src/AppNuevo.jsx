@@ -9114,8 +9114,6 @@ zIndex:"9999"
               style={{ cursor: "pointer" }}
             >
               <img src="/historias.png" alt="Historias" />
-              
-              <p>Escucha, entiende y piensa en inglés</p>
             </div>
 
 
@@ -9126,7 +9124,6 @@ zIndex:"9999"
               onClick={() => setModo("mazo")}
             >
               <img src="/game.png" />
-              <span>🎮 MAZO</span>
             </div>
 
             {/* 🌆 CIUDAD */}
