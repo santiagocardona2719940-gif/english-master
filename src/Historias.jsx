@@ -1241,6 +1241,17 @@ const escenariosProfesor = {
     ["How will you make time for it?","¿Cómo sacarás tiempo para eso?","Lo harás por las mañanas.","I'll work on it in the mornings.","Trabajaré en eso por las mañanas."],
     ["That sounds like a good plan.","Ese parece un buen plan.","Dices que lo intentarás.","I'll do my best. Thank you.","Haré lo mejor que pueda. Gracias."],
     ["Have a balanced week!","¡Que tengas una semana equilibrada!","Te despides.","You too. Take care.","Igualmente. Cuídate."]]},
+  "Entretenimiento y cultura pop": { lugar:"una charla después de ver una película y visitar una exposición interactiva", persona:"Jordan", items:[
+    ["Did you enjoy the movie last night?","¿Disfrutaste la película de anoche?","Dices que sí, especialmente por la historia.","Yes, especially the story. It kept me interested.","Sí, especialmente la historia. Mantuvo mi interés."],
+    ["Which character did you like the most?","¿Qué personaje te gustó más?","Mencionas al personaje principal por su valentía.","I liked the main character because she was brave.","Me gustó el personaje principal porque era valiente."],
+    ["What did you think of the ending?","¿Qué te pareció el final?","Dices que fue inesperado, pero tuvo sentido.","It was unexpected, but it made sense.","Fue inesperado, pero tuvo sentido."],
+    ["Are you following any good series?","¿Estás siguiendo alguna buena serie?","Recomiendas una serie de misterio.","I'm watching a mystery series. I recommend it.","Estoy viendo una serie de misterio. La recomiendo."],
+    ["Do you prefer watching at home or at the cinema?","¿Prefieres ver películas en casa o en el cine?","Prefieres el cine por la pantalla y el sonido.","I prefer the cinema because of the big screen and sound.","Prefiero el cine por la pantalla grande y el sonido."],
+    ["Have you listened to the new album?","¿Has escuchado el nuevo álbum?","Dices que escuchaste algunas canciones.","I've heard a few songs, and I like them.","He escuchado algunas canciones y me gustan."],
+    ["What kind of music do you usually listen to?","¿Qué tipo de música escuchas normalmente?","Explicas que depende de tu estado de ánimo.","It depends on my mood. I listen to different styles.","Depende de mi estado de ánimo. Escucho diferentes estilos."],
+    ["Would you like to go to the festival this weekend?","¿Te gustaría ir al festival este fin de semana?","Aceptas y preguntas a qué hora empieza.","That sounds fun. What time does it start?","Suena divertido. ¿A qué hora empieza?"],
+    ["The doors open at six, and the first show starts at seven.","Las puertas abren a las seis y el primer espectáculo empieza a las siete.","Dices que llegarás un poco antes.","Great. I'll get there a little early.","Genial. Llegaré un poco temprano."],
+    ["I'll send you the tickets. See you there!","Te enviaré las entradas. ¡Nos vemos allí!","Agradeces y confirmas el plan.","Thanks! I'm looking forward to it.","¡Gracias! Tengo muchas ganas de ir."]] },
   "Inglés y comunicación": { lugar:"una práctica de conversación en inglés", persona:"la profesora", items:[
     ["How do you ask someone to speak slowly?","¿Cómo le pides a alguien que hable despacio?","Pides que hable más despacio.","Could you speak more slowly, please?","¿Podría hablar más despacio, por favor?"],
     ["What do you say when you don't understand?","¿Qué dices cuando no entiendes?","Pides una explicación.","I don't understand. Could you explain?","No entiendo. ¿Podría explicarlo?"],
@@ -1285,6 +1296,17 @@ const escenariosProfesor = {
     ["How will you make time for it?","¿Cómo sacarás tiempo para eso?","Lo harás por las mañanas.","I'll work on it in the mornings.","Trabajaré en eso por las mañanas."],
     ["That sounds like a good plan.","Ese parece un buen plan.","Dices que lo intentarás.","I'll do my best. Thank you.","Haré lo mejor que pueda. Gracias."],
     ["Have a balanced week!","¡Que tengas una semana equilibrada!","Te despides.","You too. Take care.","Igualmente. Cuídate."]]},
+  "Entretenimiento y cultura pop": { lugar:"una charla después de ver una película y visitar una exposición interactiva", persona:"Jordan", items:[
+    ["Did you enjoy the movie last night?","¿Disfrutaste la película de anoche?","Dices que sí, especialmente por la historia.","Yes, especially the story. It kept me interested.","Sí, especialmente la historia. Mantuvo mi interés."],
+    ["Which character did you like the most?","¿Qué personaje te gustó más?","Mencionas al personaje principal por su valentía.","I liked the main character because she was brave.","Me gustó el personaje principal porque era valiente."],
+    ["What did you think of the ending?","¿Qué te pareció el final?","Dices que fue inesperado, pero tuvo sentido.","It was unexpected, but it made sense.","Fue inesperado, pero tuvo sentido."],
+    ["Are you following any good series?","¿Estás siguiendo alguna buena serie?","Recomiendas una serie de misterio.","I'm watching a mystery series. I recommend it.","Estoy viendo una serie de misterio. La recomiendo."],
+    ["Do you prefer watching at home or at the cinema?","¿Prefieres ver películas en casa o en el cine?","Prefieres el cine por la pantalla y el sonido.","I prefer the cinema because of the big screen and sound.","Prefiero el cine por la pantalla grande y el sonido."],
+    ["Have you listened to the new album?","¿Has escuchado el nuevo álbum?","Dices que escuchaste algunas canciones.","I've heard a few songs, and I like them.","He escuchado algunas canciones y me gustan."],
+    ["What kind of music do you usually listen to?","¿Qué tipo de música escuchas normalmente?","Explicas que depende de tu estado de ánimo.","It depends on my mood. I listen to different styles.","Depende de mi estado de ánimo. Escucho diferentes estilos."],
+    ["Would you like to go to the festival this weekend?","¿Te gustaría ir al festival este fin de semana?","Aceptas y preguntas a qué hora empieza.","That sounds fun. What time does it start?","Suena divertido. ¿A qué hora empieza?"],
+    ["The doors open at six, and the first show starts at seven.","Las puertas abren a las seis y el primer espectáculo empieza a las siete.","Dices que llegarás un poco antes.","Great. I'll get there a little early.","Genial. Llegaré un poco temprano."],
+    ["I'll send you the tickets. See you there!","Te enviaré las entradas. ¡Nos vemos allí!","Agradeces y confirmas el plan.","Thanks! I'm looking forward to it.","¡Gracias! Tengo muchas ganas de ir."]] },
   "Inglés y comunicación": { lugar:"una práctica de conversación en inglés", persona:"la profesora", items:[
     ["How do you ask someone to speak slowly?","¿Cómo le pides a alguien que hable despacio?","Pides que hable más despacio.","Could you speak more slowly, please?","¿Podría hablar más despacio, por favor?"],
     ["What do you say when you don't understand?","¿Qué dices cuando no entiendes?","Pides una explicación.","I don't understand. Could you explain?","No entiendo. ¿Podría explicarlo?"],
@@ -1304,11 +1326,12 @@ const crearGuionEscucha = (capitulo) => {
   // El modo escucha reutiliza el diálogo propio de la categoría, pero elimina
   // preguntas, opciones y explicaciones: solo conversación en inglés y traducción.
   if (base?.items?.length) {
-    return base.items.map((item, index) => ({
-      speaker: index % 2 === 0 ? base.persona : "Tú",
-      en: item[0],
-      es: item[1]
-    }));
+    // Cada situación se convierte en un intercambio completo: pregunta del
+    // interlocutor + respuesta del estudiante, ambas con traducción.
+    return base.items.flatMap((item, index) => ([
+      { speaker: base.persona || "Interlocutor", en: item[0], es: item[1] },
+      { speaker: "Tú", en: item[3], es: item[4] }
+    ]));
   }
   return (capitulo.dialogue || []).map((linea) => ({
     speaker: linea.speaker,
