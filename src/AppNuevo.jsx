@@ -9113,17 +9113,7 @@ zIndex:"9999"
               onClick={() => setModo("historias")}
               style={{ cursor: "pointer" }}
             >
-              <img
-                src="/historias.png"
-                alt="Historias"
-                style={{
-                  width: "110px",
-                  height: "110px",
-                  objectFit: "contain",
-                  display: "block",
-                  margin: "0 auto"
-                }}
-              />
+              <img src="/historias.png" alt="Historias" />
               <h3>HISTORIAS</h3>
               <p>Escucha, entiende y piensa en inglés</p>
             </div>
