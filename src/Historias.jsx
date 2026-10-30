@@ -1299,6 +1299,24 @@ const escenariosProfesor = {
 
 };
 
+const crearGuionEscucha = (capitulo) => {
+  const base = escenariosProfesor[capitulo.category];
+  // El modo escucha reutiliza el diálogo propio de la categoría, pero elimina
+  // preguntas, opciones y explicaciones: solo conversación en inglés y traducción.
+  if (base?.items?.length) {
+    return base.items.map((item, index) => ({
+      speaker: index % 2 === 0 ? base.persona : "Tú",
+      en: item[0],
+      es: item[1]
+    }));
+  }
+  return (capitulo.dialogue || []).map((linea) => ({
+    speaker: linea.speaker,
+    en: linea.en,
+    es: linea.es
+  }));
+};
+
 const crearGuionProfesor = (capitulo) => {
   const base = escenariosProfesor[capitulo.category];
   const titulo = capitulo.title || "esta situación";
@@ -1356,6 +1374,7 @@ export default function Historias({ volver = () => {} }) {
 
   const capitulo = capitulos.find((c) => c.id === capituloId) || capitulos[0];
   const guionProfesorActual = useMemo(() => crearGuionProfesor(capitulo), [capitulo]);
+  const guionEscuchaActual = useMemo(() => crearGuionEscucha(capitulo), [capitulo]);
 
   const categorias = useMemo(
 
@@ -1652,6 +1671,25 @@ export default function Historias({ volver = () => {} }) {
       return;
     }
 
+    if (modo === "escucha") {
+      try {
+        for (let i = linea; i < guionEscuchaActual.length; i++) {
+          if (stopRef.current) break;
+          const d = guionEscuchaActual[i];
+          setLinea(i);
+          await hablar(d.en, "en-US", velocidad);
+          if (stopRef.current) break;
+          await new Promise((resolve) => setTimeout(resolve, 300));
+          await hablar(d.es, "es-ES", 0.92);
+          if (stopRef.current) break;
+          await new Promise((resolve) => setTimeout(resolve, 550));
+        }
+      } finally {
+        setReproduciendo(false);
+      }
+      return;
+    }
+
     for (let i = linea; i < capitulo.dialogue.length; i++) {
 
       if (stopRef.current) break;
@@ -1847,12 +1885,13 @@ export default function Historias({ volver = () => {} }) {
 
           <h2>{String(capitulo.id).padStart(3, "0")} · {capitulo.title}</h2>
 
-          <p className="hist-subtitle">Conversación práctica de la vida real. En Modo profesor escucharás la frase, su explicación, una pausa para practicar y una felicitación antes de continuar.</p>
+          <p className="hist-subtitle">Elige cómo practicar: escucha el diálogo completo en inglés y español, o activa el Modo Profesor para responder preguntas y aprender frase por frase.</p>
 
 
 
           <div className="hist-mode-row">
 
+            <button className={modo === "escucha" ? "selected" : ""} onClick={() => setModo("escucha")}>🎧 Modo escucha</button>
             <button className={modo === "dialogo" ? "selected" : ""} onClick={() => setModo("dialogo")}>🇺🇸 Inglés + español</button>
 
             <button className={modo === "espanol" ? "selected" : ""} onClick={() => setModo("espanol")}>🇪🇸 Español primero</button>
@@ -1906,7 +1945,19 @@ export default function Historias({ volver = () => {} }) {
 
 
           <div className="hist-dialogue">
-            {modo === "profesor" ? (
+            {modo === "escucha" ? (
+              <>
+                <h3>Diálogo para escuchar: {capitulo.title}</h3>
+                <p className="hist-spanish">Escucha cada intervención en inglés y luego su traducción al español. Sin preguntas ni interrupciones.</p>
+                {guionEscuchaActual.map((d, i) => (
+                  <article key={`escucha-${capitulo.id}-${i}`} className={`hist-line ${linea === i ? "current" : ""}`}>
+                    <div className="hist-speaker">{d.speaker}</div>
+                    <p className="hist-english">{d.en}</p>
+                    <p className="hist-spanish">{d.es}</p>
+                  </article>
+                ))}
+              </>
+            ) : modo === "profesor" ? (
               <>
                 <h3>Conversación completa: {capitulo.title}</h3>
                 <p className="hist-spanish">Lee el diálogo completo de esta categoría. En el audio, el profesor hace una pausa para que pienses, ofrece tres respuestas y explica una frase sencilla palabra por palabra.</p>
