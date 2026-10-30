@@ -14,6 +14,7 @@ import { cartasIniciales } from "./chessCards.js"
 import { historia } from "./historia.js";
 import { cartasHistoria } from "../public/cartasHistoria/assets/cartasHistoria.js";
 import Historias from "./Historias.jsx";
+import AdminPanel from "./AdminPanel.jsx";
 import "./Historias.css";
 
 import './App.css'
@@ -9070,6 +9071,11 @@ onClick={()=>setModo("menu")}
         <Historias volver={() => setModo("menu")} />
       )}
 
+      {/* 🔐 ADMINISTRACIÓN PRIVADA */}
+      {modo === "admin" && (
+        <AdminPanel volver={() => setModo("menu")} />
+      )}
+
       {/* 🏠 MENU */}
       {modo === "menu" && (
         <>
@@ -9205,6 +9211,27 @@ boxShadow:
 👑
 </button>
           </div>
+          <button
+            type="button"
+            onClick={() => setModo("admin")}
+            aria-label="Administrar contenido"
+            title="Administrar contenido"
+            style={{
+              position: "fixed",
+              right: "18px",
+              bottom: "18px",
+              zIndex: 10000,
+              border: "1px solid rgba(255,215,0,.55)",
+              borderRadius: "12px",
+              padding: "10px 14px",
+              color: "#ffd700",
+              background: "rgba(12,12,18,.92)",
+              cursor: "pointer",
+              fontWeight: 700
+            }}
+          >
+            ⚙️ Administrar
+          </button>
         </>
       )}
 
