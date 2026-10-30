@@ -15,6 +15,9 @@ export default function AdminPanel({ volver = () => {} }) {
   const [guardando, setGuardando] = useState(false);
   const [error, setError] = useState("");
   const [mensaje, setMensaje] = useState("");
+  const [ideaIA, setIdeaIA] = useState("");
+  const [cantidadIA, setCantidadIA] = useState("10");
+  const [generandoIA, setGenerandoIA] = useState(false);
   const [items, setItems] = useState([]);
   const [editandoId, setEditandoId] = useState(null);
   const [form, setForm] = useState({
@@ -87,6 +90,56 @@ export default function AdminPanel({ volver = () => {} }) {
     setMensaje("");
     setError("");
     window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const generarConIA = async () => {
+    if (!ideaIA.trim()) {
+      setError("Escribe una idea para la historia.");
+      return;
+    }
+    setGenerandoIA(true);
+    setError("");
+    setMensaje("");
+    try {
+      const { data: authData } = await supabase.auth.getSession();
+      const token = authData?.session?.access_token;
+      if (!token) throw new Error("Tu sesión terminó. Cierra sesión e inicia nuevamente.");
+
+      const respuesta = await fetch("/api/generate-story", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+          apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+        },
+        body: JSON.stringify({ idea: ideaIA.trim(), level: form.level, lines: Number(cantidadIA) }),
+      });
+      const resultado = await respuesta.json().catch(() => ({}));
+      if (!respuesta.ok) throw new Error(resultado.error || "No se pudo generar la historia.");
+
+      setEditandoId(null);
+      setForm((prev) => ({
+        ...prev,
+        title: resultado.title || "Nueva historia",
+        category: resultado.category || "Vida diaria",
+        level: resultado.level || prev.level,
+        dialogue: Array.isArray(resultado.dialogue) && resultado.dialogue.length
+          ? resultado.dialogue.map((line) => ({
+              speaker: line.speaker || "Narrador",
+              en: line.en || "",
+              es: line.es || "",
+            }))
+          : [lineaVacia()],
+        published: false,
+      }));
+      setMensaje("¡Historia creada! Revísala y después pulsa Guardar historia.");
+      setIdeaIA("");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (err) {
+      setError(err.message || "Ocurrió un error al generar la historia.");
+    } finally {
+      setGenerandoIA(false);
+    }
   };
 
   const guardar = async (event) => {
@@ -182,6 +235,34 @@ export default function AdminPanel({ volver = () => {} }) {
 
       <div className="admin-layout">
         <section className="admin-editor">
+          <section className="admin-line" style={{ marginBottom: 24, border: "1px solid rgba(50, 220, 220, .35)", background: "rgba(20, 180, 180, .06)" }}>
+            <span className="admin-kicker">CREACIÓN INTELIGENTE</span>
+            <h2 style={{ marginTop: 6 }}>✨ Crear historia con IA</h2>
+            <p className="admin-muted">Escribe una idea. La IA preparará el título y el diálogo en inglés y español.</p>
+            <label>¿De qué quieres la historia?</label>
+            <textarea value={ideaIA} onChange={(e) => setIdeaIA(e.target.value)} placeholder="Ej. Un joven llega a Nueva York y busca su primer trabajo..." rows="3" />
+            <div className="admin-fields-row">
+              <div>
+                <label>Nivel de inglés</label>
+                <select value={form.level} onChange={(e) => cambiarCampo("level", e.target.value)}>
+                  {NIVELES.map((n) => <option key={n}>{n}</option>)}
+                </select>
+              </div>
+              <div>
+                <label>Número de líneas</label>
+                <select value={cantidadIA} onChange={(e) => setCantidadIA(e.target.value)}>
+                  <option value="8">8 líneas</option>
+                  <option value="10">10 líneas</option>
+                  <option value="15">15 líneas</option>
+                  <option value="20">20 líneas</option>
+                </select>
+              </div>
+            </div>
+            <button type="button" className="admin-primary" onClick={generarConIA} disabled={generandoIA || !ideaIA.trim()}>
+              {generandoIA ? "Creando tu historia..." : "✨ Generar historia"}
+            </button>
+            <p className="admin-footnote">La historia aparecerá abajo para que puedas revisarla. No se publica ni se guarda hasta que tú lo decidas.</p>
+          </section>
           <div className="admin-section-heading">
             <div><span className="admin-kicker">{editandoId ? "EDITANDO" : "NUEVO CONTENIDO"}</span><h2>{editandoId ? "Editar historia" : "Crear historia"}</h2></div>
             <button type="button" className="admin-secondary" onClick={nuevo}>Limpiar</button>
